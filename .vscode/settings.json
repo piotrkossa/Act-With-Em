@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "files3d.sln"
+    "dotnet.defaultSolution": "Act With Em.sln"
 }
