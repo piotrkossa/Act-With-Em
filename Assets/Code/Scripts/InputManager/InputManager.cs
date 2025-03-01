@@ -32,6 +32,11 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
         }
     }
 
+    private void OnDisable() {
+        _gameInput.Player.Disable();
+        _gameInput.UI.Disable();
+    }
+
     private void SetUIInput() {
         _gameInput.Player.Disable();
         _gameInput.UI.Enable();
