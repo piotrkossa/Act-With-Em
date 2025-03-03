@@ -144,7 +144,7 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 30
+  m_CookingOptions: 14
   m_Mesh: {fileID: -462981019419857548, guid: bc732ef17fdc8d244bc15f377ef4a941, type: 3}
 --- !u!1 &1058840360
 GameObject:
@@ -548,7 +548,7 @@ Camera:
   far clip plane: 1000
   field of view: 75
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 13.43
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -572,8 +572,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1238418385}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.20334353, y: -0.12181371, z: 0.02552241, w: -0.97116506}
+  m_LocalPosition: {x: -14.47151, y: 31.541948, z: -57.721188}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
