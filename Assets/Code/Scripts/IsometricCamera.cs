@@ -6,8 +6,12 @@ public class IsometricCamera : MonoBehaviour
     public Transform target; // Obiekt, za którym ma pod¹¿aæ kamera
     public Vector3 offset = new Vector3(0, 10, -10); // Przesuniêcie kamery wzglêdem celu
     [Range(0.01f, 1f)]
-    public float smoothSpeed = 0.125f; // P³ynnoœæ pod¹¿ania kamery
-    public float orthoSize = 5f; // Rozmiar ortograficzny kamery
+    public float smoothTime = 0.125f; // Czas wyg³adzania ruchu kamery (mniejsza wartoœæ = szybsza reakcja)
+    public float orthoSize = 5f;      // Rozmiar ortograficzny kamery
+    public float lookAheadDistance = 2f; // Odleg³oœæ przesuniêcia kamery w kierunku ruchu gracza
+
+    private Vector3 velocity = Vector3.zero; // zmienna pomocnicza do SmoothDamp
+    private Vector3 lastTargetPosition;      // zapamiêtana poprzednia pozycja celu
 
     void Start()
     {
@@ -15,19 +19,43 @@ public class IsometricCamera : MonoBehaviour
         Camera.main.orthographic = true;
         Camera.main.orthographicSize = orthoSize;
 
-        // Ustawienie izometrycznego k¹ta widzenia
-        // Typowa konfiguracja: obrót o 30 stopni wokó³ osi X i 45 stopni wokó³ osi Y
+        // Ustawienie k¹ta dla efektu izometrycznego
         transform.rotation = Quaternion.Euler(30f, 45f, 0f);
+
+        // Zainicjuj zapamiêtan¹ pozycjê
+        if (target != null)
+        {
+            lastTargetPosition = target.position;
+        }
     }
 
     void LateUpdate()
     {
-        // Jeœli zosta³ przypisany cel, kamera p³ynnie pod¹¿a za nim
-        if (target != null)
+        if (target == null) return;
+
+        // Obliczamy bazow¹ pozycjê kamery
+        Vector3 targetPosition = target.position + offset;
+
+        // Wyliczamy wektor ruchu gracza miêdzy klatkami
+        Vector3 movementDirection = (target.position - lastTargetPosition);
+
+        // Jeœli gracz siê poruszy³, dodajemy look-ahead
+        if (movementDirection.sqrMagnitude > 0.001f)
         {
-            Vector3 desiredPosition = target.position + offset;
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-            transform.position = smoothedPosition;
+            // normalizujemy wektor, ¿eby dodaæ zawsze tê sam¹ odleg³oœæ w przód
+            movementDirection.Normalize();
+            targetPosition += movementDirection * lookAheadDistance;
         }
+
+        // P³ynne przesuniêcie kamery w pozycjê docelow¹
+        transform.position = Vector3.SmoothDamp(
+            transform.position,
+            targetPosition,
+            ref velocity,
+            smoothTime
+        );
+
+        // Zapamiêtujemy obecn¹ pozycjê gracza na nastêpn¹ klatkê
+        lastTargetPosition = target.position;
     }
 }

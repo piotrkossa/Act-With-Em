@@ -5,6 +5,14 @@ public class PlayerController : MonoBehaviour
     [Header("Ustawienia ruchu")]
     public float speed = 5f; // Szybkoœæ poruszania siê gracza
 
+    private Rigidbody rb;
+    private Vector3 inputVector; // przechowuje dane wejœciowe pobrane w Update
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
     void Update()
     {
         // Pobranie danych wejœciowych z klawiatury
@@ -21,13 +29,17 @@ public class PlayerController : MonoBehaviour
         camRight.Normalize();
 
         // Wyliczenie kierunku ruchu gracza na podstawie wejœcia i ustawieñ kamery
-        Vector3 movement = (camRight * moveX + camForward * moveZ);
-        if (movement.magnitude > 1)
+        inputVector = (camRight * moveX + camForward * moveZ);
+        if (inputVector.magnitude > 1)
         {
-            movement.Normalize();
+            inputVector.Normalize();
         }
+    }
 
-        // Przemieszczenie gracza w przestrzeni œwiata
-        transform.Translate(movement * speed * Time.deltaTime, Space.World);
+    void FixedUpdate()
+    {
+        // Nowa pozycja gracza przy uwzglêdnieniu ruchu i prêdkoœci
+        Vector3 newPos = rb.position + inputVector * speed * Time.fixedDeltaTime;
+        rb.MovePosition(newPos);
     }
 }
