@@ -61,7 +61,7 @@ public class Tween<T>: HTween
     #region Private Management Methods
 
     private bool CheckIfDestroyed() {
-        if(!_target.TryGetTarget(out object target) || (UnityEngine.Object)target == null) {
+        if(!_target.TryGetTarget(out object target) || (target is UnityEngine.Object && (UnityEngine.Object)target == null)) {
             return true;
         }
 

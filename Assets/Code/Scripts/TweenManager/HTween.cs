@@ -6,4 +6,10 @@ public interface HTween {
     void Kill();
 
     bool isActive {get;}
+    
+    public void SetEasing(Easings ease);
+
+    public void SetUnscaledTime();
+
+    public void SetOnComplete(Action action);
 }
