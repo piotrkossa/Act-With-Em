@@ -29,6 +29,7 @@ public class TweenManager : MonoBehaviour
         get {
             if (_instance == null) {
                 _instance = new GameObject("TweenManager").AddComponent<TweenManager>();
+                DontDestroyOnLoad(_instance);
             }
 
             return _instance;
