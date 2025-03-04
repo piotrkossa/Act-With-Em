@@ -1,0 +1,37 @@
+using UnityEngine;
+
+public class menu : MonoBehaviour
+{
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void ContinueGame() {
+        
+    }
+
+    public void NewGame() {
+
+    }
+
+    public void LoadGame() {
+
+    }
+
+    public void Settings() {
+
+    }
+    
+    public void ExitGame() {
+        Debug.Log("exit");
+        Application.Quit();
+    }
+}
