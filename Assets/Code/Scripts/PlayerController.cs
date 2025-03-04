@@ -15,22 +15,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Pobranie danych wejœciowych z klawiatury
-        float moveX = Input.GetAxis("Horizontal"); // ruch w lewo/prawo
-        float moveZ = Input.GetAxis("Vertical");   // ruch do przodu/ty³u
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
 
-        // Pobranie kierunków ruchu wzglêdem kamery, aby sterowanie by³o intuicyjne
-        Transform cam = Camera.main.transform;
-        Vector3 camForward = cam.forward;
-        camForward.y = 0; // ignorujemy pionow¹ sk³adow¹
-        camForward.Normalize();
-        Vector3 camRight = cam.right;
-        camRight.y = 0;
-        camRight.Normalize();
+        // Tworzymy wektor wejœciowy
+        inputVector = new Vector3(moveX, 0f, moveZ);
 
-        // Wyliczenie kierunku ruchu gracza na podstawie wejœcia i ustawieñ kamery
-        inputVector = (camRight * moveX + camForward * moveZ);
-        if (inputVector.magnitude > 1)
+        // Jeœli wektor jest d³u¿szy ni¿ 1, normalizujemy (¿eby nie przekraczaæ maksymalnej prêdkoœci)
+        if (inputVector.magnitude > 1f)
         {
             inputVector.Normalize();
         }
