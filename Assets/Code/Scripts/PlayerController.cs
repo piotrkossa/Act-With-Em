@@ -1,37 +1,20 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Ustawienia ruchu")]
-    public float speed = 5f; // Szybkoœæ poruszania siê gracza
+    [SerializeField] private float speed = 5f; // Szybkosc poruszania sie gracza
 
     private Rigidbody rb;
-    private Vector3 inputVector; // przechowuje dane wejœciowe pobrane w Update
 
-    void Start()
+    private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = this.GetComponent<Rigidbody>();
+        InputManager.Instance.MoveEvent += DirectionGetter;
     }
 
-    void Update()
-    {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
-
-        // Tworzymy wektor wejœciowy
-        inputVector = new Vector3(moveX, 0f, moveZ);
-
-        // Jeœli wektor jest d³u¿szy ni¿ 1, normalizujemy (¿eby nie przekraczaæ maksymalnej prêdkoœci)
-        if (inputVector.magnitude > 1f)
-        {
-            inputVector.Normalize();
-        }
-    }
-
-    void FixedUpdate()
-    {
-        // Nowa pozycja gracza przy uwzglêdnieniu ruchu i prêdkoœci
-        Vector3 newPos = rb.position + inputVector * speed * Time.fixedDeltaTime;
-        rb.MovePosition(newPos);
+    private void DirectionGetter(Vector2 dir) {
+        rb.linearVelocity = new Vector3(dir.x, 0, dir.y) * speed;
     }
 }
