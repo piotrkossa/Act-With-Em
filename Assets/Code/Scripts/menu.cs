@@ -1,18 +1,10 @@
 using UnityEngine;
 
-public class menu : MonoBehaviour
+public class Menu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private GameObject menu;
+    [SerializeField] private GameObject settings;
 
     public void ContinueGame() {
         
@@ -27,7 +19,8 @@ public class menu : MonoBehaviour
     }
 
     public void Settings() {
-
+        menu.SetActive(false);
+        settings.SetActive(true);
     }
     
     public void ExitGame() {
