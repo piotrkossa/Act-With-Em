@@ -1,41 +1,43 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class MeleeAttack : MonoBehaviour
 {
     //public Animator animator;
-    public Transform attackPoint; 
-    public float attackRange = 1f;
-    public int attackDamage = 100;
-    public LayerMask enemyLayers;
+    private Transform thisTransform; 
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private int attackDamage = 100;
+    [SerializeField] private LayerMask destroyableMask;
 
-    void Update()
+    //buffer na wykryte collidery
+    private Collider[] colliderBuffer = new Collider [10];
+    private int collidersCount;
+
+    private void Start()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Attack();
-            Debug.Log("chigga");
-        }
+        thisTransform = this.transform;
+        InputManager.Instance.AttackEvent += Attack;
     }
 
-    void Attack()
+    private void Attack()
     {
         //animator.SetTrigger("Attack");
 
-        
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, layerMask: Physics.AllLayers, QueryTriggerInteraction.Collide);
-
-        foreach (Collider enemy in hitEnemies)
-        {
-            Debug.Log(enemy.transform.name);
-            enemy.transform.GetComponent<EnemyHealth>()?.TakeDamage(attackDamage);
-        }
+        DealDamageToSurroundingObjects();
     }
 
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        if (attackPoint == null) return;
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(this.transform.position, attackRange);
+    }
+
+    private void DealDamageToSurroundingObjects() {
+        collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position, attackRange, colliderBuffer, destroyableMask);
+
+        for (int i = 0; i < collidersCount; i++)
+        {
+            if (colliderBuffer[i].TryGetComponent(out EnemyHealth component))
+                component.TakeDamage(attackDamage);
+        }
     }
 }

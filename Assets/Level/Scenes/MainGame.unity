@@ -129,7 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 398564785}
   - component: {fileID: 398564786}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: miecz
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,37 +206,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1006408210
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1006408211}
-  m_Layer: 0
-  m_Name: AttackPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1006408211
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1006408210}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.39, y: 0.56, z: 0.35}
-  m_LocalScale: {x: 100, y: 100, z: 100}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1058840362}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1058840360
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +220,7 @@ GameObject:
   - component: {fileID: 1058840366}
   - component: {fileID: 1058840368}
   - component: {fileID: 1058840369}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +240,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1006408211}
   - {fileID: 1342244538}
   - {fileID: 398564785}
   m_Father: {fileID: 0}
@@ -299,7 +267,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -309,7 +277,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.45, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &1058840367
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -336,7 +304,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 116
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!114 &1058840368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,12 +317,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef1f017bde2091e45bfd5c09ecbbced5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPoint: {fileID: 1006408211}
   attackRange: 2
   attackDamage: 25
-  enemyLayers:
+  destroyableMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!95 &1058840369
 Animator:
   serializedVersion: 7
@@ -388,9 +355,9 @@ GameObject:
   - component: {fileID: 1083792278}
   - component: {fileID: 1083792277}
   - component: {fileID: 1083792276}
-  - component: {fileID: 1083792279}
   - component: {fileID: 1083792280}
-  m_Layer: 0
+  - component: {fileID: 1083792279}
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -474,7 +441,7 @@ Transform:
   m_GameObject: {fileID: 1083792275}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1193922, y: 1.11, z: -2.586}
+  m_LocalPosition: {x: 0.1193922, y: 1.3, z: -2.586}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -490,16 +457,16 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 1
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1083792280
 Rigidbody:
@@ -517,17 +484,17 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!1 &1234755880
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,7 +626,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1342244538}
   - component: {fileID: 1342244539}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +732,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -981,7 +948,7 @@ GameObject:
   - component: {fileID: 2102228950}
   - component: {fileID: 2102228949}
   - component: {fileID: 2102228951}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: drzewka_1_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
