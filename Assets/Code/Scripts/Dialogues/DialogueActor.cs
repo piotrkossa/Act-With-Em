@@ -1,11 +1,15 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class DialogueActivator : MonoBehaviour
+public class DialogueActor : MonoBehaviour
 {
+    public new string name;
     public Dialogue dialogue;
     private bool isPlayerInRange = false;
 
+    public void SpeakTo()
+    {
+        DialogueManager.Instance.StartDialogue(name, dialogue.rootNode);
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -27,10 +31,9 @@ public class DialogueActivator : MonoBehaviour
 
     public void TriggerDialogue()
     {
-
         if (isPlayerInRange)
         {
-            FindFirstObjectByType<DialogueManager>().StartDialogue(dialogue);
+            FindFirstObjectByType<DialogueActor>().SpeakTo();
         }
     }
 }

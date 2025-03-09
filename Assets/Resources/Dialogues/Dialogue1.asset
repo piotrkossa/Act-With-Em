@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d53579c71203b343aeaf8bfe075f212, type: 3}
+  m_Name: Dialogue1
+  m_EditorClassIdentifier: 
+  rootNode:
+    dialogueText: "Hej, nazywam sie D\u017Cordz Flojd. Nie moge oddychac"
+    responses:
+    - responseText: Chuj mnie to niggusie. Zastrzele cie
+      nextNode:
+        dialogueText: Nie. Ja nie jestem czarny
+        responses:
+        - responseText: Jak kurwa nie umieraj
+          nextNode:
+            dialogueText: 
+            responses: []
+        - responseText: Okej. oszczedze cie
+          nextNode:
+            dialogueText: 
+            responses: []
+    - responseText: WOOOO KOCHAM CIE
+      nextNode:
+        dialogueText: Ja ciebie nie krzaku
+        responses:
+        - responseText: no kurwa mac
+          nextNode:
+            dialogueText: 
+            responses: []

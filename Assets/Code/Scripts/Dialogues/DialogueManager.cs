@@ -1,64 +1,77 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI nameText;
-    [SerializeField] TextMeshProUGUI dialogueText;
+    public static DialogueManager Instance { get; private set; }
 
+    [Header("UI References")]
+    [SerializeField] GameObject dialogueBox;
+    [SerializeField] TextMeshProUGUI dialogNameText, dialogLineText;
+    [SerializeField] GameObject responseButtonPrefab;
+    [SerializeField] Transform responsesLayout;
     [SerializeField] Animator animator;
 
-    private Queue<string> sentences;
-
-    void Start()
+    private void Awake()
     {
-        sentences = new Queue<string>();
-    }
-
-    public void StartDialogue(Dialogue dialogue)
-    {
-        animator.SetBool("IsOpen", true);
-
-        nameText.text = dialogue.name;
-
-        sentences.Clear();
-
-        foreach (string sentence in dialogue.sentences)
+        if (Instance == null)
         {
-            sentences.Enqueue(sentence);
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
 
-        DisplayNextSentence();
+        HideDialogue();
     }
 
-    public void DisplayNextSentence()
+    public void StartDialogue(string title, DialogueNode node)
     {
-        if (sentences.Count == 0)
+        ShowDialogue();
+
+        dialogNameText.text = title;
+        dialogLineText.text = node.dialogueText;
+
+        foreach (Transform child in responsesLayout)
         {
-            EndDialogue();
-            return;
+            Destroy(child.gameObject);
         }
 
-        string sentence = sentences.Dequeue();
-        StopAllCoroutines();
-        StartCoroutine(TypeSentence(sentence));
-    }
-
-    IEnumerator TypeSentence (string sentence)
-    {
-        dialogueText.text = "";
-        foreach (char letter in sentence.ToCharArray())
+        foreach (DialogueResponse response in node.responses)
         {
-            dialogueText.text += letter;
-            yield return new WaitForSeconds(0.05f);
+            GameObject buttonObj = Instantiate(responseButtonPrefab, responsesLayout);
+            buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = response.responseText;
+
+            buttonObj.GetComponent<Button>().onClick.AddListener(() => SelectResponse(response, title));
         }
     }
 
-    public void EndDialogue()
+    public void SelectResponse(DialogueResponse response, string title)
+    {
+        if (!response.nextNode.IsLastNode())
+        {
+            StartDialogue(title, response.nextNode);
+        }
+        else
+        {
+            HideDialogue();
+        }
+    }
+
+    public void HideDialogue()
     {
         animator.SetBool("IsOpen", false);
+    }
+
+    private void ShowDialogue()
+    {
+        animator.SetBool("IsOpen", true);
+    }
+
+    public bool IsDialogueActive()
+    {
+        return dialogueBox.activeSelf;
     }
 }
