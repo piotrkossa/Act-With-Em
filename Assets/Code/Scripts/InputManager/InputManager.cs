@@ -53,6 +53,8 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     public event Action AttackEvent;
     public event Action DodgeEvent;
     public event Action PauseEvent;
+    public event Action InteractEvent;
+
 
     // UI
     public event Action ResumeEvent;
@@ -89,6 +91,14 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
         if (context.phase == InputActionPhase.Performed) {
             ResumeEvent?.Invoke();
             SetPlayerInput();
+        }
+    }
+
+    void GameInput.IPlayerActions.OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            InteractEvent?.Invoke();
         }
     }
 }
