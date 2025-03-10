@@ -4,13 +4,23 @@ public class Health : MonoBehaviour
 {
     public float maxHealth = 100f;
     private float currentHealth;
-    public Rigidbody2D rb;
+    public Rigidbody rb;
     public float knockbackForce = 5f;
 
     private void Start()
     {
+            if (rb == null)
+        {
+            rb = GetComponent<Rigidbody>();
+            if (rb == null)
+            {
+                rb = gameObject.AddComponent<Rigidbody>(); // Dodaje Rigidbody, jeśli nie istnieje
+            }
+        }        
+
         currentHealth = maxHealth;
-        if (rb == null) rb = GetComponent<Rigidbody2D>();
+        if (rb == null) rb = GetComponent<Rigidbody>();
+
     }
 
     public void TakeDamage(float damage, Vector2 attackPosition)
@@ -28,7 +38,7 @@ public class Health : MonoBehaviour
         if (rb != null)
         {
             Vector2 knockbackDirection = (transform.position - (Vector3)attackPosition).normalized;
-            rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+            rb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
         }
     }
 
