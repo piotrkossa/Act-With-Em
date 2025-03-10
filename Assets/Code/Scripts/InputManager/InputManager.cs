@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputManager", menuName = "ScriptableObjects/InputManager")]
-public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions
+public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions, GameInput.IDialogueActions
 {
     [SerializeField] private Asset _object;
     
@@ -17,6 +17,7 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
             }
             return _instance;
         }
+        private set {}
     }
 
     private GameInput _gameInput;
@@ -27,6 +28,7 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
 
             _gameInput.Player.SetCallbacks(this);
             _gameInput.UI.SetCallbacks(this);
+            _gameInput.Dialogue.SetCallbacks(this);
             
             SetPlayerInput();
         }
@@ -35,15 +37,28 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     private void OnDisable() {
         _gameInput.Player.Disable();
         _gameInput.UI.Disable();
+        _gameInput.Dialogue.Disable();
     }
 
-    private void SetUIInput() {
-        _gameInput.Player.Disable();
+
+    public void SetUIInput() {
         _gameInput.UI.Enable();
+
+        _gameInput.Player.Disable();
+        _gameInput.Dialogue.Disable();
     }
 
-    private void SetPlayerInput() {
+    public void SetPlayerInput() {
         _gameInput.Player.Enable();
+    
+        _gameInput.Dialogue.Disable();
+        _gameInput.UI.Disable();
+    }
+
+    public void SetDialogueInput() {
+        _gameInput.Dialogue.Enable();
+
+        _gameInput.Player.Disable();
         _gameInput.UI.Disable();
     }
 
@@ -55,11 +70,16 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     public event Action PauseEvent;
     public event Action InteractEvent;
 
-
     // UI
     public event Action ResumeEvent;
 
+    // Dialogue
+    public event Action OnSkipEvent;
 
+
+    #region Input Interface Implementations
+
+    //Player
     void GameInput.IPlayerActions.OnMove(InputAction.CallbackContext context)
     {
         MoveEvent?.Invoke(context.ReadValue<Vector2>());
@@ -81,16 +101,6 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     {
         if (context.phase == InputActionPhase.Performed) {
             PauseEvent?.Invoke();
-            SetUIInput();
-        }
-    }
-
-
-    void GameInput.IUIActions.OnResume(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed) {
-            ResumeEvent?.Invoke();
-            SetPlayerInput();
         }
     }
 
@@ -101,4 +111,24 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
             InteractEvent?.Invoke();
         }
     }
+
+
+    // UI
+    void GameInput.IUIActions.OnResume(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) {
+            ResumeEvent?.Invoke();
+        }
+    }
+
+
+    // Dialogue
+    void GameInput.IDialogueActions.OnSkip(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) {
+            OnSkipEvent?.Invoke();
+        }
+    }
+
+    #endregion
 }
