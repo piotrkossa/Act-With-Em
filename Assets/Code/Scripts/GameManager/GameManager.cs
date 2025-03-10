@@ -37,7 +37,7 @@ public class GameManager: MonoBehaviour
     }
 
 
-    public static void ChangeState(GameStates gameState) {
+    public static void SetState(GameStates gameState) {
         switch (gameState) {
             case GameStates.Player:
                 Instance.SetPlayer();

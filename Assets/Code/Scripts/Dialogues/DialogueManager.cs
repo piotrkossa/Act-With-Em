@@ -62,11 +62,13 @@ public class DialogueManager : MonoBehaviour
 
     public void HideDialogue()
     {
+        GameManager.SetState(GameStates.Player);
         animator.SetBool("IsOpen", false);
     }
 
     private void ShowDialogue()
     {
+        GameManager.SetState(GameStates.Dialogue);
         animator.SetBool("IsOpen", true);
     }
 
