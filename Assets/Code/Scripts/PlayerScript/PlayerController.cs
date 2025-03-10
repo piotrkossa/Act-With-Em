@@ -8,13 +8,16 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
+    private Vector2 inputDirection = Vector2.zero;
+
     private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
-        InputManager.Instance.MoveEvent += DirectionGetter;
+        InputManager.Instance.MoveEvent += (direction) => {inputDirection = direction;};
     }
 
-    private void DirectionGetter(Vector2 dir) {
-        rb.linearVelocity = new Vector3(dir.x, 0, dir.y) * speed;
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = new Vector3(inputDirection.x, 0, inputDirection.y) * speed;
     }
 }

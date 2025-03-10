@@ -6,22 +6,27 @@ public class MeleeAttack : MonoBehaviour
     private Transform thisTransform; 
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private int attackDamage = 100;
-    [SerializeField] private LayerMask destroyableMask;
+    [SerializeField] private LayerMask enemyLayers;
 
-    //buffer na wykryte collidery
-    private Collider[] colliderBuffer = new Collider [10];
+    private Collider[] colliderBuffer = new Collider[10];
     private int collidersCount;
 
     private void Start()
     {
         thisTransform = this.transform;
-        InputManager.Instance.AttackEvent += Attack;
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Attack();
+        }
     }
 
     private void Attack()
     {
         //animator.SetTrigger("Attack");
-
         DealDamageToSurroundingObjects();
     }
 
@@ -31,13 +36,16 @@ public class MeleeAttack : MonoBehaviour
         Gizmos.DrawWireSphere(this.transform.position, attackRange);
     }
 
-    private void DealDamageToSurroundingObjects() {
-        collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position, attackRange, colliderBuffer, destroyableMask);
+    private void DealDamageToSurroundingObjects()
+    {
+        collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position, attackRange, colliderBuffer, enemyLayers);
 
         for (int i = 0; i < collidersCount; i++)
         {
-            if (colliderBuffer[i].TryGetComponent(out EnemyHealth component))
-                component.TakeDamage(attackDamage);
+            if (colliderBuffer[i].TryGetComponent(out Health healthComponent))
+            {
+                healthComponent.TakeDamage(attackDamage, thisTransform.position);
+            }
         }
     }
 }
