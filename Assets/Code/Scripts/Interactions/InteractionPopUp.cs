@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class InteractionPopUp : MonoBehaviour
@@ -5,15 +6,11 @@ public class InteractionPopUp : MonoBehaviour
     [SerializeField] private GameObject indicatorPrefab;
     [SerializeField] private Collider interactiveCollider;
     [SerializeField] private GameObject interactiveObject;
+    [SerializeField] private string interactionText;
     [SerializeField] private float yOffset = 2f;
     
     private GameObject currentIndicator;
-
-    private void Start()
-    {
-        indicatorPrefab.SetActive(false);
-        Debug.Log("Set off");
-    }
+    private TextMeshProUGUI textMeshPro;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -24,11 +21,10 @@ public class InteractionPopUp : MonoBehaviour
                 interactiveObject.transform.position.y + yOffset,
                 interactiveObject.transform.position.z
             );
-            Debug.Log("pozycja");
-            indicatorPrefab.transform.position = newPos;
-            currentIndicator = Instantiate(indicatorPrefab);
+            currentIndicator = Instantiate(indicatorPrefab, newPos, Quaternion.identity);
+            textMeshPro = currentIndicator.GetComponentInChildren<TextMeshProUGUI>();
+            textMeshPro.text = interactionText;
             currentIndicator.SetActive(true);
-            Debug.Log("wlaczone");
         }
     }
 

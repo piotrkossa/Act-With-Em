@@ -617,6 +617,7 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 9068906076991216280, guid: 67f3894fe99175e4eadb0a3c6882f484, type: 3}
   interactiveCollider: {fileID: 633177460}
   interactiveObject: {fileID: 633177454}
+  interactionText: Niger
   yOffset: 2
 --- !u!1 &867916704
 GameObject:
