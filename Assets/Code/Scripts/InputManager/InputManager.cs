@@ -13,7 +13,7 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     public static InputManager Instance {
         get {
             if (_instance == null) {
-                _instance = Resources.Load<InputManager>("ScriptableObjects/InputManager");
+                _instance = Resources.Load<InputManager>("InputManager/InputManager");
             }
             return _instance;
         }
