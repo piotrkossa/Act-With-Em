@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Act with em.sln"
+    "dotnet.defaultSolution": "Act With Em.sln"
 }

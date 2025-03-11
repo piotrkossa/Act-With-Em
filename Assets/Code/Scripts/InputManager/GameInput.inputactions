@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "InvOpen",
+                    "type": "Button",
+                    "id": "66f6fb54-fb5b-493b-a2e3-88b53e906a06",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -150,6 +159,17 @@
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "69e78359-4182-4791-878f-33dcbe0ecf4c",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "InvOpen",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -204,6 +224,34 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Skip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Inventory",
+            "id": "c269d03b-d91b-4109-b428-ab44d21d5480",
+            "actions": [
+                {
+                    "name": "InvClose",
+                    "type": "Button",
+                    "id": "709a9816-7403-4063-aa07-ae1f1e0bd19f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0d54045e-a3c1-4995-97a4-519e6fe5b500",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "InvClose",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

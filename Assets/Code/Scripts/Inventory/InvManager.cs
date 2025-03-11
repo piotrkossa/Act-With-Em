@@ -12,6 +12,11 @@ public class InvManager : MonoBehaviour
         _slots = _slotGrid.GetComponentsInChildren<InvSlot>();
         playerInventory.onItemAdded += AddItem;
         playerInventory.onItemRemoved += RemoveItem;
+
+        InputManager.Instance.OnInvEnter += () => {this.gameObject.SetActive(true); GameManager.SetState(GameStates.Inventory);};
+        InputManager.Instance.OnInvExit  += () => {this.gameObject.SetActive(false); GameManager.SetState(GameStates.Player);};
+
+        this.gameObject.SetActive(false);
     }
 
     private void AddItem(Item item) {
