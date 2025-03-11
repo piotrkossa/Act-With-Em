@@ -3,7 +3,8 @@ using UnityEngine;
 public enum GameStates {
     Player,
     Dialogue,
-    Pause
+    Pause,
+    Inventory
 }
 
 public class GameManager: MonoBehaviour
@@ -36,6 +37,11 @@ public class GameManager: MonoBehaviour
         InputManager.Instance.SetDialogueInput();
     }
 
+    private void SetInventory() {
+        GameState = GameStates.Inventory;
+        InputManager.Instance.SetInventoryInput();
+    }
+
 
     public static void SetState(GameStates gameState) {
         switch (gameState) {
@@ -49,6 +55,10 @@ public class GameManager: MonoBehaviour
 
             case GameStates.Pause:
                 Instance.SetPause();
+                break;
+                
+            case GameStates.Inventory:
+                Instance.SetInventory();
                 break;
         }
     }

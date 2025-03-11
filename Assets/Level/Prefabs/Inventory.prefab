@@ -285,6 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &1230198671269733307
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,6 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &1409386684618395345
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &2013302137782520829
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,6 +837,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &2168355936411867639
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,6 +1198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &2671123027438948579
 GameObject:
   m_ObjectHideFlags: 0
@@ -1465,6 +1470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &3378761697344359514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,6 +1606,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &3816886391742776803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1611,6 +1618,7 @@ GameObject:
   - component: {fileID: 6885928487635246219}
   - component: {fileID: 1791451243104942927}
   - component: {fileID: 2541609585200649492}
+  - component: {fileID: 5404345896676904907}
   m_Layer: 5
   m_Name: MouseSlot
   m_TagString: Untagged
@@ -1659,7 +1667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1675,6 +1683,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5404345896676904907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3816886391742776803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef28e8537d052944eacd68ce948362dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4336926039500507877
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,6 +1966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &4489388808827353392
 GameObject:
   m_ObjectHideFlags: 0
@@ -2435,6 +2456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 4483714745775243820}
+  _mouseSlot: {fileID: 5404345896676904907}
 --- !u!1 &8282092595129560096
 GameObject:
   m_ObjectHideFlags: 0
@@ -2447,6 +2469,7 @@ GameObject:
   - component: {fileID: 7731126325007396107}
   - component: {fileID: 8925912768295043806}
   - component: {fileID: 3672704126558549840}
+  - component: {fileID: 1060854849990497910}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -2540,6 +2563,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1060854849990497910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8282092595129560096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827b14ab7a63e7540a7cc5fc3990eaa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventory: {fileID: 0}
+  _slotGrid: {fileID: 5274168034336988567}
 --- !u!1 &8650346194576264481
 GameObject:
   m_ObjectHideFlags: 0
