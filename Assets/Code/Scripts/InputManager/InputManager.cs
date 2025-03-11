@@ -3,7 +3,7 @@ using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[CreateAssetMenu(fileName = "InputManager", menuName = "ScriptableObjects/InputManager")]
+[CreateAssetMenu(fileName = "InputManager", menuName = "InputManager/InputManager")]
 public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions, GameInput.IDialogueActions
 {
     [SerializeField] private Asset _object;

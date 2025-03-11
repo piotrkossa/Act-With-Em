@@ -22,7 +22,7 @@ public class QuestInfoSO : ScriptableObject
     [Header("Rewards")]
     public int goldReward;
     public int experienceReward;
-    public List<ItemSO> rewardItem;
+    public List<Item> rewardItem;
 
     private void OnValidate()
     {
