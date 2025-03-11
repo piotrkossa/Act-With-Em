@@ -798,6 +798,7 @@ GameObject:
   - component: {fileID: 1058840368}
   - component: {fileID: 1058840369}
   - component: {fileID: 1058840370}
+  - component: {fileID: 1058840371}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -938,6 +939,22 @@ MonoBehaviour:
   knockbackForce: 5
   knockbackTime: 0
   knockbackResistance: 0
+--- !u!114 &1058840371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058840360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68142a07e5bb1bf40b4f2db0d13d084d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashDistance: 10
+  dashCooldown: 5
+  dashDuration: 0.2
+  dashKey: 32
 --- !u!1 &1083792275
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,7 +1806,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2089446521}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20463432, y: 0.015288678, z: -0.0031966318, w: 0.97871387}
+  m_LocalRotation: {x: 0.20463432, y: 0.015288673, z: -0.0031966316, w: 0.9787139}
   m_LocalPosition: {x: -0.5, y: 7.062, z: -21.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2183,7 +2200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137569011}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20463432, y: 0.015288679, z: -0.0031966325, w: 0.97871387}
+  m_LocalRotation: {x: 0.20463434, y: 0.015288675, z: -0.0031966318, w: 0.97871387}
   m_LocalPosition: {x: -0.5, y: 7.062, z: -21.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
