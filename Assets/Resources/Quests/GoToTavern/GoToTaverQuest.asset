@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea4df6d398f22ce43a089f8b8b97eaf3, type: 3}
-  m_Name: GoToTavernQuest
+  m_Name: GoToTaverQuest
   m_EditorClassIdentifier: 
-  <id>k__BackingField: GoToTavernQuest
-  displayName: Go to the Tavern
-  levelRequirement: 1
+  <id>k__BackingField: GoToTaverQuest
+  displayName: Go To Tavern
+  levelRequirement: 0
   questPrerequisites: []
   questStepPrefabs:
-  - {fileID: 6475803858192590508, guid: e8867fc557b98274da1102c8fc25dc15, type: 3}
-  goldReward: 50
-  experienceReward: 250
+  - {fileID: 3984474017966710059, guid: c9a27eb681c3cf84288b6f20e6101ff7, type: 3}
+  goldReward: 250
+  experienceReward: 1000
   rewardItem: []
