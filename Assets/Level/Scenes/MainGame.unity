@@ -488,7 +488,6 @@ GameObject:
   m_Component:
   - component: {fileID: 633177455}
   - component: {fileID: 633177459}
-  - component: {fileID: 633177457}
   - component: {fileID: 633177461}
   - component: {fileID: 633177460}
   - component: {fileID: 633177462}
@@ -514,20 +513,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1922845053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &633177457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633177454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce8cdc01338fe774d8404418facb2041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: Geogre Flojd
-  dialogue: {fileID: 11400000, guid: 82d7be8759338c940a773f6466082045, type: 2}
 --- !u!212 &633177459
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -633,6 +618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee0640a6c914eb4884b64d3d272cfb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueKnotName: npc
   questInfoForPoint: {fileID: 11400000, guid: 6e59946b32ca0e34aa5b06deecf2ad8d, type: 2}
   startPoint: 1
   finishPoint: 0
@@ -682,6 +668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee0640a6c914eb4884b64d3d272cfb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueKnotName: 
   questInfoForPoint: {fileID: 11400000, guid: 6e59946b32ca0e34aa5b06deecf2ad8d, type: 2}
   startPoint: 0
   finishPoint: 1
@@ -2434,7 +2421,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2147379751}
-  - component: {fileID: 2147379750}
+  - component: {fileID: 2147379752}
   m_Layer: 0
   m_Name: DialogueManager
   m_TagString: Untagged
@@ -2442,24 +2429,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2147379750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2147379749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 018a07917680a424cbd61cd2114e2c33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueBox: {fileID: 260737878}
-  dialogNameText: {fileID: 1294751172}
-  dialogLineText: {fileID: 614694063}
-  responseButtonPrefab: {fileID: 2231184404665209577, guid: 88251926ea451254583901e2cd9de1d7, type: 3}
-  responsesLayout: {fileID: 965696351}
-  animator: {fileID: 260737882}
 --- !u!4 &2147379751
 Transform:
   m_ObjectHideFlags: 0
@@ -2475,6 +2444,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 377268351}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2147379752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2147379749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e78b8db02dd0174399d24069de729b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inkJson: {fileID: 4900000, guid: b4911f3c8b5e7d542863693d2c4d377b, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

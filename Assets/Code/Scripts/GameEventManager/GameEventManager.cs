@@ -5,13 +5,13 @@ public class GameEventManager : MonoBehaviour
     public static GameEventManager instance { get; private set; }
 
     public QuestEvent questEvents;
+    public DialogueEvents dialogueEvents;
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            // Opcjonalnie: DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -19,5 +19,6 @@ public class GameEventManager : MonoBehaviour
         }
 
         questEvents = new QuestEvent();
+        dialogueEvents = new DialogueEvents();
     }
 }
