@@ -6,6 +6,7 @@ public class QuestPoint : MonoBehaviour
     [Header("Dialogue(optiona)")]
     [SerializeField] private string dialogueKnotName;
 
+
     [Header("Quest")]
     [SerializeField] private QuestInfoSO questInfoForPoint;
 

@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
-public class DialogueChoiceButton : MonoBehaviour, ISelectHandler
+
+public class DialogueChoiceButton : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IPointerClickHandler
 {
     [Header("Components")]
     [SerializeField] private Button button;
@@ -13,7 +14,7 @@ public class DialogueChoiceButton : MonoBehaviour, ISelectHandler
     public void SetChoiceText(string choiceTextString)
     {
         choiceText.text = choiceTextString;
-    }    
+    }
 
     public void SetChoiceIndex(int choiceIndex)
     {
@@ -28,5 +29,18 @@ public class DialogueChoiceButton : MonoBehaviour, ISelectHandler
     public void OnSelect(BaseEventData eventData)
     {
         GameEventManager.instance.dialogueEvents.UpdateChoiceIndex(choiceIndex);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SelectButton();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            GameEventManager.instance.dialogueEvents.UpdateChoiceIndex(choiceIndex);
+        }
     }
 }

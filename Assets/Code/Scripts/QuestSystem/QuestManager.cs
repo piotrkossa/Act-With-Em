@@ -53,6 +53,7 @@ public class QuestManager : MonoBehaviour
             }
         }
 
+        Debug.Log(meetsRequirements);
         return meetsRequirements;
     }
 
