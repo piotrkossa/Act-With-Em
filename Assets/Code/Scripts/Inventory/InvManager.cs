@@ -5,6 +5,7 @@ public class InvManager : MonoBehaviour
 {
     [SerializeField] private PlayerInventory playerInventory;
     [SerializeField] private Transform _slotGrid;
+    [SerializeField] private GameObject _itemPrefab;
 
     private InvSlot[] _slots;
 
@@ -21,13 +22,22 @@ public class InvManager : MonoBehaviour
 
     private void AddItem(Item item) {
         foreach (InvSlot slot in _slots) {
-            if (slot.AddItem(item)) break;
+            if (slot.currentItem == null) {
+                InvItem newItem = Instantiate(_itemPrefab).GetComponent<InvItem>();
+                newItem.realItem = item;
+
+                slot.AddItem(newItem);
+                break;
+            }
         }
     }
 
     private void RemoveItem(Item item) {
         foreach (InvSlot slot in _slots) {
-            if (slot.RemoveItem(item)) break;
+            if (slot.currentItem == null) continue;
+            if (slot.currentItem.realItem.Id == item.Id) {
+                Destroy(slot.currentItem);
+            }
         }
     }
 }
