@@ -5,58 +5,29 @@ using UnityEngine.UI;
 
 public class InvSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Item _item {get; private set;} = null;
-    private Image _icon;
-    private RectTransform thisRectTransform;
+    private RectTransform thisRect;
 
+    //
     [SerializeField] private InvInfo itemInfo;
-    [SerializeField] private InvItemMove _mouseSlot;
+
+    //
+    public InvItem currentItem {get; set;} = null;
 
     private void Start() {
-        _icon = this.transform.GetChild(0).GetComponent<Image>();
-        thisRectTransform = this.GetComponent<RectTransform>();
-        this.GetComponent<Button>().onClick.AddListener(Clicked);
+        thisRect = this.GetComponent<RectTransform>();
     }
 
-    public bool AddItem(Item item) {
-        if (_item == null) {
-            _item = item;
-            FillSlot();
-            return true;
-        }
 
-        return false;
+    public void AddItem(InvItem item) {
+        currentItem = item;
+        item.transform.SetParent(this.transform);
+        ShowInfo();
     }
 
-    public bool RemoveItem(Item item) {
-        if (_item.Id == item.Id) {
-            _item = null;
-            EmptySlot();
-            return true;
-        }
-
-        return false;
-    }
-
-    public Item StealItem() {
-        Item itemBuffer = _item;
-        _item = null;
-        EmptySlot();
-        return itemBuffer;
-    }
-
-    private void FillSlot() {
-        _icon.sprite = _item.icon;
-    }
-
-    private void EmptySlot() {
-        _icon.sprite = null;
-    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_item != null)
-            itemInfo.Show(_item.name, _item.description, thisRectTransform.anchoredPosition);
+        ShowInfo();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -64,7 +35,8 @@ public class InvSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         itemInfo.Hide();
     }
 
-    private void Clicked() {
-        _mouseSlot.SlotClicked(this);
+    private void ShowInfo() {
+        if (currentItem != null)
+            itemInfo.Show(currentItem.realItem.name, currentItem.realItem.description, thisRect.anchoredPosition);
     }
 }
