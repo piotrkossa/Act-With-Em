@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using Ink.Runtime;
+using System.Collections.Generic;
 
 public class DialogueEvents
 {
@@ -9,6 +11,42 @@ public class DialogueEvents
         if (onEnterDialogue != null)
         {
             onEnterDialogue(knotName);
+        }
+    }
+
+    public event Action onDialogueStarted;
+    public void DialogueStarted()
+    {
+        if(onDialogueStarted != null)
+        {
+            onDialogueStarted();
+        }
+    }
+
+    public event Action onDialogueFinished;
+    public void DialogueFinished()
+    {
+        if (onDialogueFinished != null)
+        {
+            onDialogueFinished();
+        }
+    }
+
+    public event Action<string, List<Choice>> onDisplayDialogue;
+    public void DisplayDialogue(string dialogueLine, List<Choice> dialogueChoices)
+    {
+        if (onDisplayDialogue != null)
+        {
+            onDisplayDialogue(dialogueLine, dialogueChoices);
+        }
+    }
+
+    public event Action<int> onUpdateChoiceIndex;
+    public void UpdateChoiceIndex(int choiceIndex)
+    {
+        if (onUpdateChoiceIndex != null)
+        {
+            onUpdateChoiceIndex(choiceIndex);
         }
     }
 }

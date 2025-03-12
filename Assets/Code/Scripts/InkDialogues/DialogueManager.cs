@@ -9,6 +9,8 @@ public class DialogueManager : MonoBehaviour
 
     private Story story;
 
+    private int currentChoiceIndex = -1;
+
     private bool dialoguePlaying = false;
 
     private void Awake()
@@ -18,14 +20,21 @@ public class DialogueManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEventManager.instance.dialogueEvents.onEnterDialogue += StartDialogue;
+        GameEventManager.instance.dialogueEvents.onEnterDialogue += EnterDialogue;
         InputManager.Instance.OnSkipEvent += SkipPressed;
+        GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex += UpdateChoiceIndex;
     }
 
     private void OnDisable()
     {
-        GameEventManager.instance.dialogueEvents.onEnterDialogue -= StartDialogue;
+        GameEventManager.instance.dialogueEvents.onEnterDialogue -= EnterDialogue;
         InputManager.Instance.OnSkipEvent -= SkipPressed;
+        GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex -= UpdateChoiceIndex;
+    }
+
+    private void UpdateChoiceIndex(int choiceIndex)
+    {
+        this.currentChoiceIndex = choiceIndex;
     }
 
     private void SkipPressed()
@@ -37,7 +46,7 @@ public class DialogueManager : MonoBehaviour
         ContinueOrExitStory();
     }
 
-    public void StartDialogue(string knotName)
+    public void EnterDialogue(string knotName)
     {
         if (dialoguePlaying)
         {
@@ -45,6 +54,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         dialoguePlaying = true;
+
+        GameEventManager.instance.dialogueEvents.DialogueStarted();
 
         InputManager.Instance.SetDialogueInput();
 
@@ -63,12 +74,31 @@ public class DialogueManager : MonoBehaviour
 
     private void ContinueOrExitStory()
     {
+        if (story.currentChoices.Count > 0 && currentChoiceIndex != -1)
+        {
+            story.ChooseChoiceIndex(currentChoiceIndex);
+            currentChoiceIndex = -1;
+        }
+
         if(story.canContinue)
         {
             string dialogueLine = story.Continue();
-            Debug.Log(dialogueLine);
+
+            while(IsLineBlack(dialogueLine) && story.canContinue)
+            {
+                dialogueLine = story.Continue();
+            }
+
+            if (IsLineBlack(dialogueLine) && !story.canContinue)
+            {
+                ExitDialogue();
+            }
+            else
+            {
+                GameEventManager.instance.dialogueEvents.DisplayDialogue(dialogueLine, story.currentChoices);
+            }
         }
-        else
+        else if (story.currentChoices.Count == 0)
         {
             StartCoroutine(ExitDialogue());
         }
@@ -78,13 +108,18 @@ public class DialogueManager : MonoBehaviour
     {
         yield return null;
 
-        Debug.Log("Exiting Dialogue");
-
         dialoguePlaying = false;
+
+        GameEventManager.instance.dialogueEvents.DialogueFinished();
 
         InputManager.Instance.SetPlayerInput();
 
         story.ResetState();
+    }
+
+    private bool IsLineBlack(string dialogueLine)
+    {
+        return dialogueLine.Trim().Equals("") || dialogueLine.Trim().Equals("\n");
     }
 
 }
