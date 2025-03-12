@@ -3,7 +3,7 @@ EXTERNAL AdvanceQuest(questId)
 EXTERNAL FinishQuest(questId)
 
 //quest names
-VAR GoToTavernQuestId = "GoToTavernQuest"
+VAR GoToTavernQuestId = "GoToTavernQuest"   
 
 //quest states (quest id + "State")
 VAR GoToTavernQuestState = "REQUIREMENTS_NOT_MET"
