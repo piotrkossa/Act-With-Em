@@ -12,4 +12,6 @@ public interface HTween {
     public void SetUnscaledTime();
 
     public void SetOnComplete(Action action);
+
+    public void SetDelay(float delayyy);
 }

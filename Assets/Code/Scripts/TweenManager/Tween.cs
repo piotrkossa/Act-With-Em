@@ -42,9 +42,16 @@ public class Tween<T>: HTween
 
     private float elapsedTime;
 
+    private float delay = 0f;
+
     public void Update() {
         if (CheckIfDestroyed()) {
             Kill();
+            return;
+        }
+        
+        if (delay > 0f) {
+            delay -= getDeltaTime();
             return;
         }
 
@@ -149,6 +156,10 @@ public class Tween<T>: HTween
 
     public void SetOnComplete(Action action) {
         onComplete = action;
+    }
+
+    public void SetDelay(float delayyy) {
+        delay = delayyy;
     }
 
     #endregion

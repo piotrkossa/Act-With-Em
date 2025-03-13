@@ -11,6 +11,8 @@ public class InvItem : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
 
     private InvSlot originSlot;
 
+    public static bool isDragging = false;
+
     private void Start() {
         thisImage = this.GetComponent<Image>();
         thisRect = this.GetComponent<RectTransform>();
@@ -20,6 +22,7 @@ public class InvItem : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        isDragging = true;
         originSlot = thisRect.parent.GetComponent<InvSlot>();
         thisRect.SetParent(thisRect.root);
         thisImage.raycastTarget = false;
@@ -37,6 +40,7 @@ public class InvItem : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
         thisImage.color = Color.white;
 
         InvSlot desiredSlot = eventData.pointerEnter?.GetComponent<InvSlot>();
+        if (desiredSlot == null) desiredSlot = eventData.pointerEnter.transform.parent?.GetComponent<InvSlot>();
 
         if (desiredSlot != null) {
             if (desiredSlot.currentItem != null) {
@@ -47,11 +51,14 @@ public class InvItem : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
             }
 
             desiredSlot.AddItem(this);
+            desiredSlot.ShowInfo();
         }
         else {
             thisRect.SetParent(originSlot.transform);
+            thisRect.anchoredPosition = Vector2.zero;
         }
 
-        thisRect.anchoredPosition = Vector2.zero;
+
+        isDragging = false;
     }
 }

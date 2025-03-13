@@ -3,31 +3,46 @@ using UnityEngine;
 
 public class InvManager : MonoBehaviour
 {
-    [SerializeField] private PlayerInventory playerInventory;
+    [SerializeField] private PlayerDataSO playerData;
     [SerializeField] private Transform _slotGrid;
+    [SerializeField] private Transform _hotBarGrid;
     [SerializeField] private GameObject _itemPrefab;
 
     private InvSlot[] _slots;
+    private InvSlot[] _hotBar;
 
     private void Start() {
         _slots = _slotGrid.GetComponentsInChildren<InvSlot>();
-        playerInventory.onItemAdded += AddItem;
-        playerInventory.onItemRemoved += RemoveItem;
+        _hotBar = _hotBarGrid.GetComponentsInChildren<InvSlot>();
+        playerData.onItemAdded += AddItem;
+        playerData.onItemRemoved += RemoveItem;
 
         InputManager.Instance.OnInvEnter += () => {this.gameObject.SetActive(true); GameManager.SetState(GameStates.Inventory);};
         InputManager.Instance.OnInvExit  += () => {this.gameObject.SetActive(false); GameManager.SetState(GameStates.Player);};
 
+        playerData.test();
         this.gameObject.SetActive(false);
     }
 
+
     private void AddItem(Item item) {
+        foreach (InvSlot slot in _hotBar) {
+            if (slot.currentItem == null) {
+                InvItem newItem = Instantiate(_itemPrefab).GetComponent<InvItem>();
+                newItem.realItem = item;
+
+                slot.AddItem(newItem);
+                return;
+            }
+        }
+
         foreach (InvSlot slot in _slots) {
             if (slot.currentItem == null) {
                 InvItem newItem = Instantiate(_itemPrefab).GetComponent<InvItem>();
                 newItem.realItem = item;
 
                 slot.AddItem(newItem);
-                break;
+                return;
             }
         }
     }

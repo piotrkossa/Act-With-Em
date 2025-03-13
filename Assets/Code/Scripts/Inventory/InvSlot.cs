@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InvSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private RectTransform thisRect;
+    [SerializeField] private bool showInfoLeft;
 
     //
     [SerializeField] private InvInfo itemInfo;
@@ -21,13 +22,14 @@ public class InvSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void AddItem(InvItem item) {
         currentItem = item;
         item.transform.SetParent(this.transform);
-        ShowInfo();
+        item.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ShowInfo();
+        if(!InvItem.isDragging)
+            ShowInfo();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -35,8 +37,8 @@ public class InvSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         itemInfo.Hide();
     }
 
-    private void ShowInfo() {
+    public void ShowInfo() {
         if (currentItem != null)
-            itemInfo.Show(currentItem.realItem.name, currentItem.realItem.description, thisRect.anchoredPosition);
+            itemInfo.Show(currentItem.realItem.name, currentItem.realItem.description, thisRect.position, showInfoLeft);
     }
 }
