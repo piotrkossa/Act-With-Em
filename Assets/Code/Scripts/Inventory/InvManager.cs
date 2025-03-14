@@ -18,7 +18,7 @@ public class InvManager : MonoBehaviour
         playerData.onItemRemoved += RemoveItem;
 
         InputManager.Instance.OnInvEnter += () => {this.gameObject.SetActive(true); GameManager.SetState(GameStates.Inventory);};
-        InputManager.Instance.OnInvExit  += () => {this.gameObject.SetActive(false); GameManager.SetState(GameStates.Player);};
+        InputManager.Instance.OnInvExit  += () => {this.gameObject.SetActive(false); GameManager.SetState(GameStates.Player); playerData.SetHotBarItems(GetRealItems(_hotBar));};
 
         playerData.test();
         this.gameObject.SetActive(false);
@@ -32,6 +32,7 @@ public class InvManager : MonoBehaviour
                 newItem.realItem = item;
 
                 slot.AddItem(newItem);
+                playerData.SetHotBarItems(GetRealItems(_hotBar));
                 return;
             }
         }
@@ -54,5 +55,18 @@ public class InvManager : MonoBehaviour
                 Destroy(slot.currentItem);
             }
         }
+        playerData.SetHotBarItems(GetRealItems(_hotBar));
+    }
+
+    private Item[] GetRealItems(InvSlot[] slots) {
+        Item[] result = new Item[slots.Length];
+        for (int i = 0; i < slots.Length; i++) {
+            if (slots[i].currentItem == null) {
+                result[i] = null;
+                continue;
+            }
+            result[i] = slots[i].currentItem.realItem;
+        }
+        return result;
     }
 }

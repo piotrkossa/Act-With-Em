@@ -3,7 +3,7 @@ using UnityEngine;
 
 public interface HTween {
     void Update();
-    void Kill();
+    float Kill();
 
     bool isActive {get;}
     
@@ -14,4 +14,6 @@ public interface HTween {
     public void SetOnComplete(Action action);
 
     public void SetDelay(float delayyy);
+
+    public void StartAt(float t);
 }
