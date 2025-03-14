@@ -93,6 +93,9 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     // Inventory
     public event Action OnInvExit;
 
+    // HotBar
+    public event Action<int> OnHotBarItemChoosen;
+
 
     #region Input Interface Implementations
 
@@ -159,6 +162,27 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     {
         if (context.phase == InputActionPhase.Performed) {
             OnInvExit?.Invoke();
+        }
+    }
+
+    public void OnHotBar1(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) {
+            OnHotBarItemChoosen?.Invoke(0);
+        }
+    }
+
+    public void OnHotBar2(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) {
+            OnHotBarItemChoosen?.Invoke(1);
+        }
+    }
+
+    public void OnHotBar3(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) {
+            OnHotBarItemChoosen?.Invoke(2);
         }
     }
 

@@ -98,12 +98,13 @@ public class Tween<T>: HTween
 
     #region Control Methods
 
-    public void Kill() {
+    public float Kill() {
         isActive = false;
 
         _target = null;
         onComplete = null;
         onUpdate = null;
+        return elapsedTime;
     }
 
     public void SetEasing(Easings ease) {
@@ -162,6 +163,9 @@ public class Tween<T>: HTween
         delay = delayyy;
     }
 
+    public void StartAt(float t) {
+        elapsedTime = t;
+    }
     #endregion
 
     #region Easing Functions

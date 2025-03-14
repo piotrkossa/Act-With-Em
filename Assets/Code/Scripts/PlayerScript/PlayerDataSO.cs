@@ -20,6 +20,8 @@ public class PlayerDataSO : ScriptableObject
     // Items Set
     public HashSet<Item> items {get; private set;}
 
+    public Item currentHeldItem {get; private set;}
+
 
     // Health Events
     public event Action HealthUpdated;
@@ -27,6 +29,10 @@ public class PlayerDataSO : ScriptableObject
     // Item Events
     public event Action<Item> onItemAdded;
     public event Action<Item> onItemRemoved;
+
+    public event Action<Item[]> onHotBarUpdated;
+
+    public event Action onHeldItemChanged;
 
 
     public void test() {
@@ -58,6 +64,10 @@ public class PlayerDataSO : ScriptableObject
         return false;
     }
 
+    public void SetHotBarItems(Item[] items) {
+        onHotBarUpdated?.Invoke(items);
+    }
+
     public void UpdateHealth(int healthPoints) {  // Updates Player Health, Use Negative Intiger to Deal Damage
         int bufferHealth = Health + healthPoints;
 
@@ -69,5 +79,10 @@ public class PlayerDataSO : ScriptableObject
             Debug.Log("PlayerDataSO.cs: End Game");
         }
         HealthUpdated?.Invoke();
+    }
+
+    public void SetHeldItem(Item item) {
+        currentHeldItem = item;
+        onHeldItemChanged?.Invoke();
     }
 }
