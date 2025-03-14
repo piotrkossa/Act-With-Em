@@ -36,13 +36,15 @@ public class Health : MonoBehaviour
 
     private Coroutine _reset = null;
 
-    private void Knockback(Vector3 attackPosition) {
+    private void Knockback(Vector3 attackPosition)
+    {
         isKnocked = true;
 
         Vector3 knockbackDirection = (transform.position - attackPosition).normalized;
         knockbackDirection = new Vector3(knockbackDirection.x, 0f, knockbackDirection.z);
 
-        if (_reset != null) {
+        if (_reset != null)
+        {
             StopCoroutine(_reset);
         }
 
@@ -51,7 +53,8 @@ public class Health : MonoBehaviour
         _reset = StartCoroutine(Reset());
     }
 
-    private IEnumerator Reset() {
+    private IEnumerator Reset()
+    {
         yield return new WaitForSeconds(knockbackTime);
         rb.linearVelocity = Vector3.zero;
         isKnocked = false;
@@ -60,6 +63,6 @@ public class Health : MonoBehaviour
     private void Die()
     {
         Debug.Log(gameObject.name + " has died.");
-        //Destroy(gameObject);
+        // Destroy(gameObject); // Możesz odkomentować, jeśli chcesz zniszczyć obiekt po śmierci
     }
 }
