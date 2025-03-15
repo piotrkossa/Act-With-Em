@@ -1,28 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class TreeVisibility : MonoBehaviour
+public class CutoutObject : MonoBehaviour
 {
-    public Transform player;
-    public Camera playerCamera;
-    public Renderer treeRenderer;
+    [SerializeField]
+    private Transform targetObject;
 
-    void Update()
+    [SerializeField]
+    private LayerMask wallMask;
+
+    private Camera mainCamera;
+
+    private void Awake()
     {
-        RaycastHit hit;
-        // Raycast od kamery w stronê gracza
-        Vector3 direction = player.position - playerCamera.transform.position;
-        if (Physics.Raycast(playerCamera.transform.position, direction, out hit))
+        mainCamera = GetComponent<Camera>();
+    }
+
+    private void Update()
+    {
+        Vector2 cutoutPos = mainCamera.WorldToViewportPoint(targetObject.position);
+        cutoutPos.y /= (Screen.width / Screen.height);
+
+        Vector3 offset = targetObject.position - transform.position;
+        RaycastHit[] hitObjects = Physics.RaycastAll(transform.position, offset, offset.magnitude, wallMask);
+
+        for (int i = 0; i < hitObjects.Length; ++i)
         {
-            // Jeœli trafi w drzewo, sprawdŸ, czy to drzewo
-            if (hit.transform == transform)
+            Material[] materials = hitObjects[i].transform.GetComponent<Renderer>().materials;
+
+            for (int m = 0; m < materials.Length; ++m)
             {
-                // Ustaw drzewo jako niewidzialne
-                treeRenderer.material.color = new Color(1, 1, 1, 0); // Przezroczysty materia³
-            }
-            else
-            {
-                // Przywróæ widocznoœæ drzewa
-                treeRenderer.material.color = new Color(1, 1, 1, 1); // Pe³na widocznoœæ
+                materials[m].SetVector("_CutoutPos", cutoutPos);
+                materials[m].SetFloat("_CutoutSize", 0.1f);
+                materials[m].SetFloat("_FalloffSize", 0.05f);
             }
         }
     }

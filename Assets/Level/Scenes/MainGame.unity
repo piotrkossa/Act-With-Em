@@ -1083,9 +1083,21 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 2137569015}
+    - target: {fileID: 3711937898822929146, guid: 2d8ff08b9bcdde6468d4612f94cb1fc6, type: 3}
+      propertyPath: targetObject
+      value: 
+      objectReference: {fileID: 1058840362}
+    - target: {fileID: 3711937898822929146, guid: 2d8ff08b9bcdde6468d4612f94cb1fc6, type: 3}
+      propertyPath: wallMask.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 6033236921965221593, guid: 2d8ff08b9bcdde6468d4612f94cb1fc6, type: 3}
       propertyPath: m_Name
       value: drzewka_1_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6033236921965221593, guid: 2d8ff08b9bcdde6468d4612f94cb1fc6, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6033236921965221593, guid: 2d8ff08b9bcdde6468d4612f94cb1fc6, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -3103,6 +3115,7 @@ GameObject:
   - component: {fileID: 2137569014}
   - component: {fileID: 2137569013}
   - component: {fileID: 2137569012}
+  - component: {fileID: 2137569017}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -3260,6 +3273,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2137569017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137569011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eabc442b4429a0947a8fea5ef2a9b40e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 1058840362}
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &2147379749
 GameObject:
   m_ObjectHideFlags: 0
