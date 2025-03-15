@@ -55,7 +55,7 @@ public class Tween<T>: HTween
             return;
         }
 
-        elapsedTime += Mathf.Clamp01(getDeltaTime() / duration);
+        elapsedTime = Mathf.Clamp01(elapsedTime + (getDeltaTime() / duration));
 
         onUpdate?.Invoke(lerpFunc(easingFunc(elapsedTime)));
 

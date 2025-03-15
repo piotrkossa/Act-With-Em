@@ -20,7 +20,6 @@ public class InvManager : MonoBehaviour
         InputManager.Instance.OnInvEnter += () => {this.gameObject.SetActive(true); GameManager.SetState(GameStates.Inventory);};
         InputManager.Instance.OnInvExit  += () => {this.gameObject.SetActive(false); GameManager.SetState(GameStates.Player); playerData.SetHotBarItems(GetRealItems(_hotBar));};
 
-        playerData.test();
         this.gameObject.SetActive(false);
     }
 

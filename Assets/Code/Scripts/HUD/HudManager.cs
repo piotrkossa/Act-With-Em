@@ -11,6 +11,7 @@ public class HudManager : MonoBehaviour
         playerData.HealthUpdated += UpdateHealth;
 
         InputManager.Instance.OnHotBarItemChoosen += UpdateHeldItem;
+        playerData.test();
     }
 
     private void UpdateHotBar(Item[] items) {
