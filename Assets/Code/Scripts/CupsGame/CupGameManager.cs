@@ -6,6 +6,8 @@ public class CupGameManager : MonoBehaviour
 {
     [SerializeField] CupsGame cupGameHandler;
     private RectTransform allGameRect;
+    public InkDialogueVariables inkVariables;
+
 
     public static void StartCupGame() {
         Instantiate(Resources.Load<CupGameManager>("Prefabs/CupsGame"));
@@ -47,6 +49,7 @@ public class CupGameManager : MonoBehaviour
         await Awaitable.WaitForSecondsAsync(2f);
 
         GameManager.SetState(GameStates.Player);
+        inkVariables.SetGameResult(result);
         Debug.Log(result);
     }
 

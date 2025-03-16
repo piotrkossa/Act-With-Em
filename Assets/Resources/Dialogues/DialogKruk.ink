@@ -1,4 +1,4 @@
-=== start ===
+=== KrukDialog ===
 
 { GoToTavernQuestState:
     - "FINISHED": -> finished
@@ -46,9 +46,10 @@ Witaj, jestem Korvus. Z czym do mnie przychodzisz?
 
 = gra
 Ho ho, jeszcze jak!
+~ StartCupGame()
 
 // Rozpoczyna się gra w kubki
-{ gra_wygrana }:
+{ gra_wygrana == true }:
     Niemożliwe!
     Jeszcze nigdy wcześniej nie przegrałem!
     W końcu jakieś wyzwanie!
@@ -56,7 +57,7 @@ Ho ho, jeszcze jak!
     ~ FinishQuest(GoToTavernQuestId)
     -> END
 
-{ not gra_wygrana }:
+{ gra_wygrana == false }:
     "Niezła próba, ale mnie nie tak łatwo pokonać!"
     -> gra // Możliwość ponownej gry
 

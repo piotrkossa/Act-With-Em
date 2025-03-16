@@ -1,31 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class QuestManager : MonoBehaviour
 {
     private Dictionary<string, Quest> questMap;
-    public static QuestManager instance;
+
 
     private void Awake()
     {
-        PlayerPrefs.DeleteAll();
-        // Upewnij siê, ¿e jest tylko jedna instancja
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
-
-        // Usuñ tê liniê – nie chcesz resetowaæ zapisanych danych przy ka¿dej zmianie sceny!
-        // PlayerPrefs.DeleteAll();
-
         questMap = CreateQuestMap();
-        DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
@@ -33,9 +16,6 @@ public class QuestManager : MonoBehaviour
         GameEventManager.instance.questEvents.onStartQuest += StartQuest;
         GameEventManager.instance.questEvents.onAdvanceQuest += AdvanceQuest;
         GameEventManager.instance.questEvents.onFinishQuest += FinishQuest;
-
-        // Nas³uchiwanie na zmianê sceny
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -43,30 +23,10 @@ public class QuestManager : MonoBehaviour
         GameEventManager.instance.questEvents.onStartQuest -= StartQuest;
         GameEventManager.instance.questEvents.onAdvanceQuest -= AdvanceQuest;
         GameEventManager.instance.questEvents.onFinishQuest -= FinishQuest;
-
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Wczytaj stan questów po za³adowaniu sceny
-        LoadQuestState();
-        // Czekamy jedn¹ klatkê, by wszystkie QuestPoint ju¿ siê aktywowa³y
-        StartCoroutine(FireQuestStateChangeAfterFrame());
-    }
-
-    private IEnumerator FireQuestStateChangeAfterFrame()
-    {
-        yield return null;
-        foreach (Quest quest in questMap.Values)
-        {
-            GameEventManager.instance.questEvents.QuestStateChange(quest);
-        }
     }
 
     private void Start()
     {
-        // Wyœlij stan questów – mo¿e to byæ te¿ przydatne przy pierwszym uruchomieniu
         foreach (Quest quest in questMap.Values)
         {
             GameEventManager.instance.questEvents.QuestStateChange(quest);
@@ -78,7 +38,6 @@ public class QuestManager : MonoBehaviour
         Quest quest = GetQuestById(id);
         quest.state = state;
         GameEventManager.instance.questEvents.QuestStateChange(quest);
-        SaveQuestState();
     }
 
     private bool CheckRequirmentsMet(Quest quest)
@@ -94,7 +53,7 @@ public class QuestManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Requirements met: " + meetsRequirements);
+        Debug.Log(meetsRequirements);
         return meetsRequirements;
     }
 
@@ -119,6 +78,7 @@ public class QuestManager : MonoBehaviour
     private void AdvanceQuest(string id)
     {
         Quest quest = GetQuestById(id);
+
         quest.MoveToNextStep();
 
         if (quest.CurrentStepExists())
@@ -131,7 +91,7 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    public void FinishQuest(string id)
+    private void FinishQuest(string id)
     {
         Quest quest = GetQuestById(id);
         ClaimRewards(quest);
@@ -140,7 +100,7 @@ public class QuestManager : MonoBehaviour
 
     private void ClaimRewards(Quest quest)
     {
-        // TODO: dodaj logikê nagród, np. dodanie itemków do inventory
+        // TODO jak bedzie inventory dodwanie itemkow 
         Debug.Log("Odebrano nagrody!");
     }
 
@@ -167,34 +127,5 @@ public class QuestManager : MonoBehaviour
             Debug.LogError("ID not found in the Quest Map: " + id);
         }
         return quest;
-    }
-
-    public void SaveQuestState()
-    {
-        foreach (var quest in questMap.Values)
-        {
-            int questStateInt = (int)quest.state;
-            Debug.Log("Saving state: " + quest.info.id + " " + quest.state);
-            PlayerPrefs.SetInt(quest.info.id, questStateInt);
-        }
-        PlayerPrefs.Save();
-    }
-
-    public void LoadQuestState()
-    {
-        foreach (var quest in questMap.Values)
-        {
-            if (PlayerPrefs.HasKey(quest.info.id))
-            {
-                int savedStateInt = PlayerPrefs.GetInt(quest.info.id);
-                QuestState savedState = (QuestState)savedStateInt;
-                quest.state = savedState;
-                Debug.Log($"Loaded quest {quest.info.id} with state {savedState}");
-            }
-            else
-            {
-                Debug.LogWarning($"Quest {quest.info.id} has no saved state.");
-            }
-        }
     }
 }
