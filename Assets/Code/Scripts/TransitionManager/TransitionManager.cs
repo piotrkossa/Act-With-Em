@@ -19,20 +19,14 @@ public class TransitionManager : MonoBehaviour
     [SerializeField] private Image blackRect;
 
     public static IEnumerator FadeIn() {
-        Instance.gameObject.SetActive(true);
-
         Task task = Instance.InTransition();
 
         yield return new WaitUntil(() => task.IsCompleted == true);
     }
 
     public static IEnumerator FadeOut() {
-        Instance.gameObject.SetActive(true);
-
         Task task = Instance.OutTransition();
         yield return new WaitUntil(() => task.IsCompleted == true);
-
-        Instance.gameObject.SetActive(false);
     }
 
     private void Start() {
@@ -40,19 +34,22 @@ public class TransitionManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
+    private HTween tween = null;
+
     private async Task InTransition() {
+        if (tween != null && tween.isActive == true) tween.Kill();
         blackRect.color = Color.clear;
-        HTween tween = TweenManager.TUIColor(blackRect.gameObject, Color.black, 1.5f);
+        tween = TweenManager.TUIColor(blackRect.gameObject, Color.black, 1.5f);
         tween.SetEasing(Easings.EaseInQuad);
 
         await WaitForTween(tween);
     }
 
     private async Task OutTransition() {
+        if (tween != null || tween.isActive == true) tween.Kill();
         blackRect.color = Color.black;
-        await Awaitable.WaitForSecondsAsync(2.5f);
 
-        HTween tween = TweenManager.TUIColor(blackRect.gameObject, Color.clear, 1.5f);
+        tween = TweenManager.TUIColor(blackRect.gameObject, Color.clear, 1.5f);
         tween.SetEasing(Easings.EaseInQuad);
 
         await WaitForTween(tween);

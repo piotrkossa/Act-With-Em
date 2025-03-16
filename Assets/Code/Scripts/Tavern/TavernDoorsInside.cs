@@ -33,9 +33,9 @@ public class TavernDoorsInside : MonoBehaviour
     {
         // Rozpocz�cie animacji FadeIn
         yield return StartCoroutine(TransitionManager.FadeIn());
-
         // Zmiana pozycji gracza po zako�czeniu animacji FadeIn
         player.transform.position = new Vector3(7f, 1.38f, -13f);
+        yield return new WaitForSeconds(1.5f);
 
         // Rozpocz�cie animacji FadeOut
         yield return StartCoroutine(TransitionManager.FadeOut());
