@@ -23,11 +23,17 @@ public class CupGameManager : MonoBehaviour
 
         await WaitForTween(tween);
 
-        await Awaitable.WaitForSecondsAsync(1f);
+        bool result = false;
 
-        bool result = await cupGameHandler.PerformGame();
+        while (true) {
+            await Awaitable.WaitForSecondsAsync(1f);
 
-        await Awaitable.WaitForSecondsAsync(2f);
+            result = await cupGameHandler.PerformGame();
+
+            await Awaitable.WaitForSecondsAsync(2f);
+
+            if (result == true) break;
+        }
 
         tween = TweenManager.TUIPosition(allGameRect.gameObject, new Vector2(0, -1080), 2.5f);
         tween.SetEasing(Easings.EaseInOutQuad);
