@@ -3,9 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class QuestPoint : MonoBehaviour
 {
-    [Header("Dialogue(optiona)")]
+    [Header("Dialogue (opcj.)")]
     [SerializeField] private string dialogueKnotName;
-
 
     [Header("Quest")]
     [SerializeField] private QuestInfoSO questInfoForPoint;
@@ -13,7 +12,6 @@ public class QuestPoint : MonoBehaviour
     [Header("Config")]
     [SerializeField] private bool startPoint = true;
     [SerializeField] private bool finishPoint = true;
-
 
     private bool playersIsNear = false;
     private string questId;
@@ -30,12 +28,24 @@ public class QuestPoint : MonoBehaviour
         InputManager.Instance.InteractEvent += SubmitPressed;
     }
 
+    private void OnDisable()
+    {
+        GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
+        InputManager.Instance.InteractEvent -= SubmitPressed;
+    }
+
+    private void QuestStateChange(Quest quest)
+    {
+        if (quest.info.id.Equals(questId))
+        {
+            currentQuestState = quest.state;
+            Debug.Log($"QuestPoint {questId} updated state: {currentQuestState}");
+        }
+    }
+
     private void SubmitPressed()
     {
-        if (!playersIsNear)
-        {
-            return;
-        }
+        if (!playersIsNear) return;
 
         if (!dialogueKnotName.Equals(""))
         {
@@ -54,23 +64,9 @@ public class QuestPoint : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
-        GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
-        InputManager.Instance.InteractEvent -= SubmitPressed;
-    }
-
-    private void QuestStateChange(Quest quest)
-    {
-        if (quest.info.id.Equals(questId))
-        {
-            currentQuestState = quest.state;
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playersIsNear = true;
         }
@@ -78,7 +74,7 @@ public class QuestPoint : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             playersIsNear = false;
         }
