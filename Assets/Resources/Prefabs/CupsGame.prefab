@@ -266,6 +266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716529fb39d300c478a5a8d2837ae75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: cc454d63869f7a248b3d67d77525ac29, type: 2}
+  prize: {fileID: 11400000, guid: 31bf2f04130a3a64bb910b5a0af6c2ac, type: 2}
   cupGameHandler: {fileID: 1941554774443840916}
 --- !u!1 &4482442502623317531
 GameObject:

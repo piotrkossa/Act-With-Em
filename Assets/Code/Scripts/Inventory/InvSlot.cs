@@ -39,6 +39,6 @@ public class InvSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void ShowInfo() {
         if (currentItem != null)
-            itemInfo.Show(currentItem.realItem.name, currentItem.realItem.description, thisRect.position, showInfoLeft);
+            itemInfo.Show(currentItem.realItem.itemName, currentItem.realItem.description, thisRect.position, showInfoLeft);
     }
 }
