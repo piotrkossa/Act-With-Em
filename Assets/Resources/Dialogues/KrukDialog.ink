@@ -1,4 +1,4 @@
-=== start ===
+=== KrukDialog ===
 
 { GoToTavernQuestState:
     - "FINISHED": -> finished
@@ -40,25 +40,22 @@ Witaj, jestem Korvus. Z czym do mnie przychodzisz?
 * [Kim jest dowódca?]
     Nieważne kim, ważne że...
     Hmmm...
-    To może być lekko rasistowskie, ale mam ambiwalentne podejście do lisów...
+    To może być lekko rasistowskie, ale mam ambiwalentne podejście do lisósw...
     Zresztą, nieważne...
     -> END
 
 = gra
 Ho ho, jeszcze jak!
+~ StartCupGame()
+-> dalszarozmowa
 
-// Rozpoczyna się gra w kubki
-{ gra_wygrana }:
-    Niemożliwe!
-    Jeszcze nigdy wcześniej nie przegrałem!
-    W końcu jakieś wyzwanie!
-    Wpadnij kiedyś, jak będę miał inne gry. A na razie masz ode mnie nagrodę za uczciwą wygraną, powodzenia!
-    ~ FinishQuest(GoToTavernQuestId)
-    -> END
-
-{ not gra_wygrana }:
-    "Niezła próba, ale mnie nie tak łatwo pokonać!"
-    -> gra // Możliwość ponownej gry
+= dalszarozmowa
+Niemożliwe!
+Jeszcze nigdy wcześniej nie przegrałem!
+W końcu jakieś wyzwanie!
+Wpadnij kiedyś, jak będę miał inne gry. A na razie masz ode mnie nagrodę za uczciwą wygraną, powodzenia!
+~ FinishQuest(GoToTavernQuestId)
+-> END
 
 = finished
 Znasz już moją taktykę, zagramy dopiero, jak będę miał nowe gry.
