@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputManager", menuName = "InputManager/InputManager")]
-public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions, GameInput.IDialogueActions, GameInput.IInventoryActions
+public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions, GameInput.IDialogueActions, GameInput.IInventoryActions, GameInput.IMiniGameActions
 {
     [SerializeField] private Asset _object;
     
@@ -30,49 +30,53 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
             _gameInput.UI.SetCallbacks(this);
             _gameInput.Dialogue.SetCallbacks(this);
             _gameInput.Inventory.SetCallbacks(this);
+            _gameInput.MiniGame.SetCallbacks(this);
             
             SetPlayerInput();
         }
     }
 
     private void OnDisable() {
-        _gameInput.Player.Disable();
-        _gameInput.UI.Disable();
-        _gameInput.Dialogue.Disable();
-        _gameInput.Inventory.Disable();
+        DisableAll();
     }
 
 
     public void SetUIInput() {
-        _gameInput.UI.Enable();
+        DisableAll();
 
-        _gameInput.Player.Disable();
-        _gameInput.Dialogue.Disable();
-        _gameInput.Inventory.Disable();
+        _gameInput.UI.Enable();
     }
 
     public void SetPlayerInput() {
+        DisableAll();
+
         _gameInput.Player.Enable();
-    
-        _gameInput.Dialogue.Disable();
-        _gameInput.UI.Disable();
-        _gameInput.Inventory.Disable();
     }
 
     public void SetDialogueInput() {
-        _gameInput.Dialogue.Enable();
+        DisableAll();
 
-        _gameInput.Player.Disable();
-        _gameInput.UI.Disable();
-        _gameInput.Inventory.Disable();
+        _gameInput.Dialogue.Enable();
     }
 
     public void SetInventoryInput() {
-        _gameInput.Inventory.Enable();
+        DisableAll();
 
+        _gameInput.Inventory.Enable();
+    }
+
+    public void SetMiniGameInput() {
+        DisableAll();
+
+        _gameInput.MiniGame.Enable();
+    }
+
+    private void DisableAll() {
+        _gameInput.Inventory.Disable();
         _gameInput.Player.Disable();
         _gameInput.UI.Disable();
         _gameInput.Dialogue.Disable();
+        _gameInput.MiniGame.Disable();
     }
 
 
@@ -95,6 +99,9 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
 
     // HotBar
     public event Action<int> OnHotBarItemChoosen;
+
+    // MiniGame
+    public event Action OnMiniGameLeftClick;
 
 
     #region Input Interface Implementations
@@ -183,6 +190,13 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     {
         if (context.phase == InputActionPhase.Performed) {
             OnHotBarItemChoosen?.Invoke(2);
+        }
+    }
+
+    public void OnClick(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed) {
+            OnMiniGameLeftClick?.Invoke();
         }
     }
 
