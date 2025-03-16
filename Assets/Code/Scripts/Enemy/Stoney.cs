@@ -29,6 +29,7 @@ public class EnemyAI : MonoBehaviour
         startPosition = transform.position;
         rb = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
         health = GetComponent<Health>();
         InvokeRepeating("Wander", 0, 5f);
     }
