@@ -1442,6 +1442,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 739732573306371825, guid: 2d8ff08b9bcdde6468d4612f94cb1fc6, type: 3}
   m_PrefabInstance: {fileID: 338714822}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &294715356 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6432428177499325524, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+  m_PrefabInstance: {fileID: 1512412917}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &294760265
 GameObject:
   m_ObjectHideFlags: 0
@@ -6598,12 +6603,67 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5949193554130638932, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
   m_PrefabInstance: {fileID: 1512412917}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 294715356}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b382900375c5134ebc3ffe95f67b42f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1297186464 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3677814416430360805, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+  m_PrefabInstance: {fileID: 1512412917}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294715356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1297186466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294715356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1297186464}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1318240529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7508,7 +7568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4084433205453234855, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -450
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 4084433205453234855, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7526,6 +7586,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5949193554130638932, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: button
+      value: 
+      objectReference: {fileID: 1297186466}
     - target: {fileID: 6432428177499325524, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_Name
       value: DialogueChoiceButton1
@@ -7561,7 +7625,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6432428177499325524, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1297186466}
   m_SourcePrefab: {fileID: 100100000, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
 --- !u!1001 &1518659433
 PrefabInstance:
@@ -10875,7 +10942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4084433205453234855, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 450
+      value: -450
       objectReference: {fileID: 0}
     - target: {fileID: 4084433205453234855, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -10896,7 +10963,7 @@ PrefabInstance:
     - target: {fileID: 5949193554130638932, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: button
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 589418042}
     - target: {fileID: 6432428177499325524, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_Name
       value: DialogueChoiceButton0

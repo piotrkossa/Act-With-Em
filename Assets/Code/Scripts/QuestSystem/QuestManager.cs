@@ -10,6 +10,7 @@ public class QuestManager : MonoBehaviour
 
     private void Awake()
     {
+        PlayerPrefs.DeleteAll();
         // Upewnij siê, ¿e jest tylko jedna instancja
         if (instance != null && instance != this)
         {
@@ -130,7 +131,7 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    private void FinishQuest(string id)
+    public void FinishQuest(string id)
     {
         Quest quest = GetQuestById(id);
         ClaimRewards(quest);
@@ -168,7 +169,7 @@ public class QuestManager : MonoBehaviour
         return quest;
     }
 
-    private void SaveQuestState()
+    public void SaveQuestState()
     {
         foreach (var quest in questMap.Values)
         {
