@@ -7,19 +7,19 @@ public class TavernDoorsOutside : MonoBehaviour
     [SerializeField] private GameObject player;
     private bool playerInRange = false;
 
-    // Subskrybujemy event InteractEvent, kiedy obiekt jest w³¹czony
+    // Subskrybujemy event InteractEvent, kiedy obiekt jest wï¿½ï¿½czony
     private void OnEnable()
     {
         InputManager.Instance.InteractEvent += OnInteractEvent;
     }
 
-    // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wy³¹czony
+    // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wyï¿½ï¿½czony
     private void OnDisable()
     {
         InputManager.Instance.InteractEvent -= OnInteractEvent;
     }
 
-    // Funkcja wywo³ywana po naciœniêciu przycisku InteractEvent
+    // Funkcja wywoï¿½ywana po naciï¿½niï¿½ciu przycisku InteractEvent
     private void OnInteractEvent()  // Ta metoda teraz uruchamia Coroutine
     {
         if (playerInRange)
@@ -28,16 +28,16 @@ public class TavernDoorsOutside : MonoBehaviour
         }
     }
 
-    // Funkcja wywo³ywana w ramach Coroutine
+    // Funkcja wywoï¿½ywana w ramach Coroutine
     private IEnumerator SubmitPressed()
     {
-        // Rozpoczêcie animacji FadeIn
+        // Rozpoczï¿½cie animacji FadeIn
         yield return StartCoroutine(TransitionManager.FadeIn());
 
-        // Zmiana pozycji gracza po zakoñczeniu animacji FadeIn
-        player.transform.position = new Vector3(-275f, player.transform.position.y, -40f);
+        // Zmiana pozycji gracza po zakoï¿½czeniu animacji FadeIn
+        player.transform.position = new Vector3(-275f, 3.12f, -40f);
 
-        // Rozpoczêcie animacji FadeOut
+        // Rozpoczï¿½cie animacji FadeOut
         yield return StartCoroutine(TransitionManager.FadeOut());
     }
 
@@ -50,7 +50,7 @@ public class TavernDoorsOutside : MonoBehaviour
         }
     }
 
-    // Wykrycie, kiedy gracz opuœci obszar triggera
+    // Wykrycie, kiedy gracz opuï¿½ci obszar triggera
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
