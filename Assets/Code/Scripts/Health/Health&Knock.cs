@@ -9,11 +9,11 @@ public class Health : MonoBehaviour
     private float currentHealth;
     private Rigidbody rb;
 
-    [SerializeField] private float knockbackForce;
-    [SerializeField] private float knockbackTime;
-    [SerializeField] private float knockbackResistance;
+    [SerializeField] public float knockbackForce;
+    [SerializeField] public float knockbackTime;
+    [SerializeField] public float knockbackResistance;
 
-    public bool isKnocked {get; private set;}
+    public bool isKnocked;
 
     private void Start()
     {
@@ -36,7 +36,7 @@ public class Health : MonoBehaviour
 
     private Coroutine _reset = null;
 
-    private void Knockback(Vector3 attackPosition)
+    public void Knockback(Vector3 attackPosition)
     {
         isKnocked = true;
 
