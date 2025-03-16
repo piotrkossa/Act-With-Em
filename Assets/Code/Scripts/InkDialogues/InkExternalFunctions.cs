@@ -29,6 +29,7 @@ public class InkExternalFunctions
 
     private void FinishQuest(string questId)
     {
-        QuestManager.instance.FinishQuest(questId);
+        GameEventManager.instance.questEvents.FinishQuest(questId);
+
     }
 }

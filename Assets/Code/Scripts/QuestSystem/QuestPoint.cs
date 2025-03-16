@@ -58,8 +58,6 @@ public class QuestPoint : MonoBehaviour
             {
                 // Finiszowanie questa tylko po odpowiednim dialogu
                 GameEventManager.instance.questEvents.FinishQuest(questId);
-                QuestManager.instance.FinishQuest(questId);
-                QuestManager.instance.SaveQuestState();
             }
         }
         else
@@ -73,8 +71,6 @@ public class QuestPoint : MonoBehaviour
             else if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
             {
                 GameEventManager.instance.questEvents.FinishQuest(questId);
-                QuestManager.instance.FinishQuest(questId);
-                QuestManager.instance.SaveQuestState();
             }
         }
     }
