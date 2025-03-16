@@ -49,17 +49,4 @@ public class InkDialogueVariables
             story.variablesState.SetGlobal(variable.Key, variable.Value);
         }
     }
-
-    public void SetGameResult(bool isWinner)
-    {
-        Ink.Runtime.Object result = new Ink.Runtime.BoolValue(isWinner);
-        if (variables.ContainsKey("gra_wygrana"))
-        {
-            variables["gra_wygrana"] = result; // Update the value of gra_wygrana
-        }
-        else
-        {
-            variables.Add("gra_wygrana", result); // Add it if it doesn't exist
-        }
-    }
 }

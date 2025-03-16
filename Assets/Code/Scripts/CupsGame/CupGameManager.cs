@@ -6,7 +6,6 @@ public class CupGameManager : MonoBehaviour
 {
     [SerializeField] CupsGame cupGameHandler;
     private RectTransform allGameRect;
-    public InkDialogueVariables inkVariables;
 
 
     public static void StartCupGame() {
@@ -49,12 +48,9 @@ public class CupGameManager : MonoBehaviour
         await Awaitable.WaitForSecondsAsync(2f);
 
         GameManager.SetState(GameStates.Player);
-<<<<<<< HEAD
-        inkVariables.SetGameResult(result);
+
         Debug.Log(result);
-=======
         Destroy(this.gameObject);
->>>>>>> 1b69a4ef49db729f34d048fd3f49ca73c3655a0b
     }
 
     private async Task WaitForTween(HTween tween) {
