@@ -4,22 +4,16 @@ using UnityEngine;
 
 public class CutoutObject : MonoBehaviour
 {
-    [SerializeField]
-    private Transform targetObject;  // Obiekt gracza
-
-    [SerializeField]
-    private LayerMask wallMask;  // Warstwa œrodowiska (np. drzewa)
-
-    [SerializeField]
-    private float cutoutSize = 0.2f;  // Rozmiar wyciêcia
-
-    [SerializeField]
-    private float falloffSize = 0.1f; // Rozmiar zanikania
+    [SerializeField] private Transform targetObject;  // Obiekt gracza
+    [SerializeField] private LayerMask wallMask;        // Warstwa œrodowiska (np. drzewa)
+    [SerializeField] private float cutoutSize = 0.2f;     // Rozmiar wyciêcia
+    [SerializeField] private float falloffSize = 0.1f;    // Rozmiar zanikania
+    [SerializeField] private float screenOffsetY = 50f;   // Przesuniêcie pozycji kó³ka w pionie (w pikselach)
 
     private Camera mainCamera;
-    private bool isBehind = false;  // Czy gracz jest za obiektem
-    private Material originalMaterial;  // Oryginalny materia³ drzewa
-    private Renderer cutoutRenderer;   // Renderer drzewa z aktywnym efektem
+    private bool isBehind = false;        // Flaga – czy gracz jest za obiektem
+    private Material originalMaterial;    // Oryginalny materia³ obiektu
+    private Renderer cutoutRenderer;      // Renderer obiektu, na którym efekt jest aktywowany
 
     private void Awake()
     {
@@ -46,12 +40,14 @@ public class CutoutObject : MonoBehaviour
             if (!isBehind)
             {
                 isBehind = true;
-                // Pobieramy Renderer obiektu (np. drzewa)
+                // Pobieramy Renderer trafionego obiektu (np. drzewa)
                 cutoutRenderer = hit.transform.GetComponent<Renderer>();
                 if (cutoutRenderer != null)
                 {
-                    // Zapisujemy oryginalny materia³ drzewa
+                    // Zapisujemy oryginalny materia³
                     originalMaterial = cutoutRenderer.material;
+                    // Tworzymy kopiê materia³u, aby modyfikacje nie wp³ywa³y globalnie
+                    cutoutRenderer.material = new Material(originalMaterial);
                     // Aktywujemy efekt cutout
                     ActivateCutout(cutoutRenderer);
                 }
@@ -77,7 +73,7 @@ public class CutoutObject : MonoBehaviour
                 isBehind = false;
                 if (cutoutRenderer != null)
                 {
-                    // Wy³¹czamy efekt cutout i przywracamy oryginalny wygl¹d drzewa
+                    // Wy³¹czamy efekt cutout i przywracamy oryginalny wygl¹d
                     DeactivateCutout(cutoutRenderer);
                     cutoutRenderer = null;
                 }
@@ -85,30 +81,30 @@ public class CutoutObject : MonoBehaviour
         }
     }
 
-    // Aktywacja efektu cutout – ustawienie parametrów shader’a
+    // Metoda aktywuj¹ca efekt cutout – ustawia parametry shader’a
     private void ActivateCutout(Renderer renderer)
     {
         Material mat = renderer.material;
         Vector3 screenPos = mainCamera.WorldToScreenPoint(targetObject.position);
-        screenPos.y += 50;  // Przesuniêcie pozycji wyciêcia wy¿ej na ekranie
+        screenPos.y += screenOffsetY; // Dodajemy przesuniêcie w pionie (w pikselach)
         Vector2 cutoutPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
         mat.SetVector("_CutoutPos", cutoutPos);
         mat.SetFloat("_CutoutSize", cutoutSize);
         mat.SetFloat("_FalloffSize", falloffSize);
     }
 
-    // Dezaktywacja efektu – przywrócenie oryginalnego materia³u
-    private void DeactivateCutout(Renderer renderer)
-    {
-        renderer.material = originalMaterial;
-    }
-
-    // Aktualizacja pozycji cutout, gdy efekt jest ju¿ aktywny
+    // Metoda aktualizuj¹ca pozycjê cutout, gdy efekt jest aktywny
     private void UpdateCutoutPosition(Renderer renderer)
     {
         Vector3 screenPos = mainCamera.WorldToScreenPoint(targetObject.position);
-        screenPos.y += 50;
+        screenPos.y += screenOffsetY;
         Vector2 cutoutPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
         renderer.material.SetVector("_CutoutPos", cutoutPos);
+    }
+
+    // Metoda dezaktywuj¹ca efekt – przywraca oryginalny materia³
+    private void DeactivateCutout(Renderer renderer)
+    {
+        renderer.material = originalMaterial;
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 739732573306371825}
   - component: {fileID: 3307098025479553946}
   - component: {fileID: 5477005330172794259}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: drzewka_1_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
