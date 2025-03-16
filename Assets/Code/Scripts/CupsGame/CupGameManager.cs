@@ -7,6 +7,10 @@ public class CupGameManager : MonoBehaviour
     [SerializeField] CupsGame cupGameHandler;
     private RectTransform allGameRect;
 
+    public static void StartCupGame() {
+        Instantiate(Resources.Load<CupGameManager>("Prefabs/CupsGame"));
+    }
+
     private void Start() {
         allGameRect = this.transform.GetChild(0).GetComponent<RectTransform>();
         allGameRect.anchoredPosition = new Vector2(0, -540);
