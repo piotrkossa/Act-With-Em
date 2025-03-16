@@ -47,7 +47,7 @@ public class CupGameManager : MonoBehaviour
         await Awaitable.WaitForSecondsAsync(2f);
 
         GameManager.SetState(GameStates.Player);
-        Debug.Log(result);
+        Destroy(this.gameObject);
     }
 
     private async Task WaitForTween(HTween tween) {
