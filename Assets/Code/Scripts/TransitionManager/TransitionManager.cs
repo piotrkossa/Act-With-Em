@@ -24,8 +24,6 @@ public class TransitionManager : MonoBehaviour
         Task task = Instance.InTransition();
 
         yield return new WaitUntil(() => task.IsCompleted == true);
-
-        Instance.gameObject.SetActive(false);
     }
 
     public static IEnumerator FadeOut() {
@@ -39,6 +37,7 @@ public class TransitionManager : MonoBehaviour
 
     private void Start() {
         blackRect = this.transform.GetComponentInChildren<Image>();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private async Task InTransition() {
