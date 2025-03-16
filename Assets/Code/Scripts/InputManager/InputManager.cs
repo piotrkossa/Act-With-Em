@@ -1,12 +1,10 @@
 using System;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputManager", menuName = "InputManager/InputManager")]
 public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions, GameInput.IDialogueActions, GameInput.IInventoryActions, GameInput.IMiniGameActions
 {
-    [SerializeField] private Asset _object;
     
     private static InputManager _instance;
 

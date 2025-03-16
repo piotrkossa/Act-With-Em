@@ -26,6 +26,7 @@ public class Menu : MonoBehaviour
         if (!isWorking) {
             isWorking = true;
             yield return TransitionManager.FadeIn();
+            TransitionManager.FadeOut();
             SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
         }
     }

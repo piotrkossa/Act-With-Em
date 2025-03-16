@@ -19,14 +19,18 @@ public class TransitionManager : MonoBehaviour
     [SerializeField] private Image blackRect;
 
     public static IEnumerator FadeIn() {
+        Instance.gameObject.SetActive(true);
         Task task = Instance.InTransition();
 
         yield return new WaitUntil(() => task.IsCompleted == true);
+        Instance.gameObject.SetActive(false);
     }
 
     public static IEnumerator FadeOut() {
+        Instance.gameObject.SetActive(true);
         Task task = Instance.OutTransition();
         yield return new WaitUntil(() => task.IsCompleted == true);
+        Instance.gameObject.SetActive(false);
     }
 
     private void Start() {
