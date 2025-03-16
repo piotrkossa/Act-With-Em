@@ -7,34 +7,40 @@
     - "FINISHED": -> finished
     - else: -> END
 }
+
 = requirementsNotMet
-nigger
 -> END
 
 = canStart
-Hello! You have to go to the tavern!
-* [Okay, I will.]
-    ~ StartQuest("GoToTavernQuest")
-    Great.
-    -> END
-* [For what?]
-    -> forWhat
+Witaj, nie kojarzę cię. Jesteś tutaj nowy?
+ * [Tak]
+ * [Powiedzmy...]
+    - Więc pewnie nie wiesz dokąd iść...
+    - Ale nie martw się! Wiem kto może ci pomóc!
+    - Niedaleko stąd Korvus prowadzi swoją karczmę. Nie boisz się kruków, co nie?
+    -> kruki
     
-= forWhat
-Well. Something is happening there!
-* [Okay then, I will go there.]
-    ~ StartQuest("GoToTavernQuest")
-    Thanks God!
-- -> END
+= kruki
+* [Ummmm trochę?]
+    Oh...
+    ...
+    No cóż...
+    Jakoś dasz sobię radę :p
+    Pójdź w lewo, do tawerny!
+    ~ StartQuest(GoToTavernQuestId)
+    -> END
+* [Nie]
+    To idealnie!
+    Pójdź w lewo, do tawerny!
+    ~ StartQuest(GoToTavernQuestId)
+    -> END
 
 = inProgress
-You should already be in the tavern!
+-Jeszcze nie poszedłeś? Nie ma sprawy, twoja obecność mi nie przeszkadza:D
 -> END
 
 = canFinish
-Oh? U still alive! Go talk to this white triangle!
 -> END
 
-= finished
-Thanks for your service!
+=finished
 -> END
