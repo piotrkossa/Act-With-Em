@@ -11,12 +11,17 @@ public class TavernDoorsOutside : MonoBehaviour
     private void OnEnable()
     {
         InputManager.Instance.InteractEvent += OnInteractEvent;
+        playerInRange = false;
     }
 
     // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wy��czony
     private void OnDisable()
     {
         InputManager.Instance.InteractEvent -= OnInteractEvent;
+    }
+
+    private void Start() {
+        playerInRange = false;
     }
 
     // Funkcja wywo�ywana po naci�ni�ciu przycisku InteractEvent
@@ -29,16 +34,27 @@ public class TavernDoorsOutside : MonoBehaviour
     }
 
     // Funkcja wywo�ywana w ramach Coroutine
+    private bool isWorking = false;
     private IEnumerator SubmitPressed()
     {
+        if (isWorking) yield break;
+        isWorking = true;
+        GameManager.SetState(GameStates.Dialogue);
+        playerInRange = false;
         // Rozpocz�cie animacji FadeIn
         yield return StartCoroutine(TransitionManager.FadeIn());
 
         // Zmiana pozycji gracza po zako�czeniu animacji FadeIn
         player.transform.position = new Vector3(-275f, 3.12f, -40f);
+        AudioManager.Instance.PlayTavernMusic();
+        yield return new WaitForSeconds(1.5f);
+        player.transform.position = new Vector3(-275f, 3.12f, -40f);
 
         // Rozpocz�cie animacji FadeOut
         yield return StartCoroutine(TransitionManager.FadeOut());
+        playerInRange = false;
+        GameManager.SetState(GameStates.Player);
+        isWorking = false;
     }
 
     // Wykrycie, kiedy gracz wejdzie w obszar triggera
