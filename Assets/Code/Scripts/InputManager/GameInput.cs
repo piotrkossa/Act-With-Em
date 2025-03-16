@@ -402,6 +402,34 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""MiniGame"",
+            ""id"": ""9eb13ec6-8fe5-4b3f-abff-9f36c1d65237"",
+            ""actions"": [
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c778580-c514-44d5-9064-caf429e89f51"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1ed5cdcb-0a42-479b-8a05-e9d353c5cd05"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -487,6 +515,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         // Inventory
         m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
         m_Inventory_InvClose = m_Inventory.FindAction("InvClose", throwIfNotFound: true);
+        // MiniGame
+        m_MiniGame = asset.FindActionMap("MiniGame", throwIfNotFound: true);
+        m_MiniGame_Click = m_MiniGame.FindAction("Click", throwIfNotFound: true);
     }
 
     ~@GameInput()
@@ -495,6 +526,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, GameInput.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Dialogue.enabled, "This will cause a leak and performance issues, GameInput.Dialogue.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Inventory.enabled, "This will cause a leak and performance issues, GameInput.Inventory.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_MiniGame.enabled, "This will cause a leak and performance issues, GameInput.MiniGame.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1038,6 +1070,102 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="InventoryActions" /> instance referencing this action map.
     /// </summary>
     public InventoryActions @Inventory => new InventoryActions(this);
+
+    // MiniGame
+    private readonly InputActionMap m_MiniGame;
+    private List<IMiniGameActions> m_MiniGameActionsCallbackInterfaces = new List<IMiniGameActions>();
+    private readonly InputAction m_MiniGame_Click;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "MiniGame".
+    /// </summary>
+    public struct MiniGameActions
+    {
+        private @GameInput m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public MiniGameActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "MiniGame/Click".
+        /// </summary>
+        public InputAction @Click => m_Wrapper.m_MiniGame_Click;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_MiniGame; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="MiniGameActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(MiniGameActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="MiniGameActions" />
+        public void AddCallbacks(IMiniGameActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MiniGameActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MiniGameActionsCallbackInterfaces.Add(instance);
+            @Click.started += instance.OnClick;
+            @Click.performed += instance.OnClick;
+            @Click.canceled += instance.OnClick;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="MiniGameActions" />
+        private void UnregisterCallbacks(IMiniGameActions instance)
+        {
+            @Click.started -= instance.OnClick;
+            @Click.performed -= instance.OnClick;
+            @Click.canceled -= instance.OnClick;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MiniGameActions.UnregisterCallbacks(IMiniGameActions)" />.
+        /// </summary>
+        /// <seealso cref="MiniGameActions.UnregisterCallbacks(IMiniGameActions)" />
+        public void RemoveCallbacks(IMiniGameActions instance)
+        {
+            if (m_Wrapper.m_MiniGameActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="MiniGameActions.AddCallbacks(IMiniGameActions)" />
+        /// <seealso cref="MiniGameActions.RemoveCallbacks(IMiniGameActions)" />
+        /// <seealso cref="MiniGameActions.UnregisterCallbacks(IMiniGameActions)" />
+        public void SetCallbacks(IMiniGameActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MiniGameActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MiniGameActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="MiniGameActions" /> instance referencing this action map.
+    /// </summary>
+    public MiniGameActions @MiniGame => new MiniGameActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -1218,5 +1346,20 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInvClose(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "MiniGame" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="MiniGameActions.AddCallbacks(IMiniGameActions)" />
+    /// <seealso cref="MiniGameActions.RemoveCallbacks(IMiniGameActions)" />
+    public interface IMiniGameActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Click" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnClick(InputAction.CallbackContext context);
     }
 }

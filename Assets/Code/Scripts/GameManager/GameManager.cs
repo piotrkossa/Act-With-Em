@@ -4,7 +4,8 @@ public enum GameStates {
     Player,
     Dialogue,
     Pause,
-    Inventory
+    Inventory,
+    MiniGame
 }
 
 public class GameManager: MonoBehaviour
@@ -42,6 +43,11 @@ public class GameManager: MonoBehaviour
         InputManager.Instance.SetInventoryInput();
     }
 
+    private void SetMiniGame() {
+        GameState = GameStates.MiniGame;
+        InputManager.Instance.SetMiniGameInput();
+    }
+
 
     public static void SetState(GameStates gameState) {
         switch (gameState) {
@@ -59,6 +65,9 @@ public class GameManager: MonoBehaviour
                 
             case GameStates.Inventory:
                 Instance.SetInventory();
+                break;
+            case GameStates.MiniGame:
+                Instance.SetMiniGame();
                 break;
         }
     }

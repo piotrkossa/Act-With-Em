@@ -60,6 +60,7 @@ public class Tween<T>: HTween
         onUpdate?.Invoke(lerpFunc(easingFunc(elapsedTime)));
 
         if (elapsedTime == 1f) {
+            lerpFunc(1f);
             onComplete?.Invoke();
             Kill();
         }
