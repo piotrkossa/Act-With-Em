@@ -44,10 +44,12 @@ public class CupsGame : MonoBehaviour
 
         if (cupChoosen.containsPotion) {
             await cupChoosen.Raise(true);
+            cupChoosen = null;
             return true;
         }
         else {
             await cupChoosen.Raise(false);
+            cupChoosen = null;
             return false;
         }
     }

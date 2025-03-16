@@ -7,6 +7,11 @@ public class CupGameManager : MonoBehaviour
     [SerializeField] CupsGame cupGameHandler;
     private RectTransform allGameRect;
 
+
+    public static void StartCupGame() {
+        Instantiate(Resources.Load<CupGameManager>("Prefabs/CupsGame"));
+    }
+
     private void Start() {
         allGameRect = this.transform.GetChild(0).GetComponent<RectTransform>();
         allGameRect.anchoredPosition = new Vector2(0, -540);
@@ -23,11 +28,17 @@ public class CupGameManager : MonoBehaviour
 
         await WaitForTween(tween);
 
-        await Awaitable.WaitForSecondsAsync(1f);
+        bool result = false;
 
-        bool result = await cupGameHandler.PerformGame();
+        while (true) {
+            await Awaitable.WaitForSecondsAsync(1f);
 
-        await Awaitable.WaitForSecondsAsync(2f);
+            result = await cupGameHandler.PerformGame();
+
+            await Awaitable.WaitForSecondsAsync(2f);
+
+            if (result == true) break;
+        }
 
         tween = TweenManager.TUIPosition(allGameRect.gameObject, new Vector2(0, -1080), 2.5f);
         tween.SetEasing(Easings.EaseInOutQuad);
@@ -37,7 +48,9 @@ public class CupGameManager : MonoBehaviour
         await Awaitable.WaitForSecondsAsync(2f);
 
         GameManager.SetState(GameStates.Player);
+
         Debug.Log(result);
+        Destroy(this.gameObject);
     }
 
     private async Task WaitForTween(HTween tween) {
