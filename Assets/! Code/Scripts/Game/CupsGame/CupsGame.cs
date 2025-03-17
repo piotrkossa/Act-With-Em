@@ -36,11 +36,13 @@ public class CupsGame : MonoBehaviour
 
         await Shuffle();
 
-        InputManager.Instance.OnMiniGameLeftClick += GetClickedCup;
+        InputManager.MiniGame.LeftClick.AddListener(GetClickedCup);
 
         while (cupChoosen == null) {
             await Awaitable.NextFrameAsync();
         }
+
+        InputManager.MiniGame.LeftClick.RemoveListener(GetClickedCup);
 
         if (cupChoosen.containsPotion) {
             await cupChoosen.Raise(true);

@@ -1,26 +1,20 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputManager", menuName = "InputManager/InputManager")]
 public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions, GameInput.IDialogueActions, GameInput.IInventoryActions, GameInput.IMiniGameActions
 {
-    
-    private static InputManager _instance;
-
-    public static InputManager Instance {
-        get {
-            if (_instance == null) {
-                _instance = Resources.Load<InputManager>("InputManager/InputManager");
-            }
-            return _instance;
-        }
-        private set {}
-    }
+    public static InputManager Instance {get; private set;}
 
     private GameInput _gameInput;
 
     private void OnEnable() {
+        if (Instance == null) {
+            Instance = this;
+        }
+
         if (_gameInput == null) {
             _gameInput = new GameInput();
 
@@ -79,27 +73,39 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
 
 
     // Player
-    public event Action<Vector2> MoveEvent;
-    public event Action AttackEvent;
-    public event Action DodgeEvent;
-    public event Action PauseEvent;
-    public event Action InteractEvent;
-    public event Action OnInvEnter;
+    public class Player {
+        public static UnityEvent<Vector2> MoveEvent = new UnityEvent<Vector2>();
+        public static UnityEvent AttackEvent = new UnityEvent();
+        public static UnityEvent DodgeEvent = new UnityEvent();
+        public static UnityEvent PauseEvent = new UnityEvent();
+        public static UnityEvent InteractEvent = new UnityEvent();
+        public static UnityEvent OnInvEnter = new UnityEvent();
+    }
 
     // UI
-    public event Action ResumeEvent;
+    public class UI {
+        public static UnityEvent ResumeEvent = new UnityEvent();
+    }
 
     // Dialogue
-    public event Action OnSkipEvent;
+    public class Dialogue {
+        public static UnityEvent OnSkipEvent = new UnityEvent();
+    }
 
     // Inventory
-    public event Action OnInvExit;
+    public class Inventory {
+        public static UnityEvent OnInvExit = new UnityEvent();
+    }
 
     // HotBar
-    public event Action<int> OnHotBarItemChoosen;
+    public class HotBar {
+        public static UnityEvent<int> OnHotBarItemChoosen = new UnityEvent<int>();
+    }
 
     // MiniGame
-    public event Action OnMiniGameLeftClick;
+    public class MiniGame {
+        public static UnityEvent LeftClick = new UnityEvent();
+    }
 
 
     #region Input Interface Implementations
@@ -107,25 +113,25 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     //Player
     void GameInput.IPlayerActions.OnMove(InputAction.CallbackContext context)
     {
-        MoveEvent?.Invoke(context.ReadValue<Vector2>());
+        Player.MoveEvent?.Invoke(context.ReadValue<Vector2>());
     }
 
     void GameInput.IPlayerActions.OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            AttackEvent?.Invoke();
+            Player.AttackEvent?.Invoke();
     }
 
     void GameInput.IPlayerActions.OnDodge(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            DodgeEvent?.Invoke();
+            Player.DodgeEvent?.Invoke();
     }
 
     void GameInput.IPlayerActions.OnPause(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            PauseEvent?.Invoke();
+            Player.PauseEvent?.Invoke();
         }
     }
 
@@ -133,14 +139,14 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            InteractEvent?.Invoke();
+            Player.InteractEvent?.Invoke();
         }
     }
 
     void GameInput.IPlayerActions.OnInvOpen(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            OnInvEnter?.Invoke();
+            Player.OnInvEnter?.Invoke();
         }
     }
 
@@ -149,7 +155,7 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     void GameInput.IUIActions.OnResume(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            ResumeEvent?.Invoke();
+            UI.ResumeEvent?.Invoke();
         }
     }
 
@@ -158,7 +164,7 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     void GameInput.IDialogueActions.OnSkip(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            OnSkipEvent?.Invoke();
+            Dialogue.OnSkipEvent?.Invoke();
         }
     }
 
@@ -166,35 +172,35 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     void GameInput.IInventoryActions.OnInvClose(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            OnInvExit?.Invoke();
+            Inventory.OnInvExit?.Invoke();
         }
     }
 
-    public void OnHotBar1(InputAction.CallbackContext context)
+    void GameInput.IPlayerActions.OnHotBar1(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            OnHotBarItemChoosen?.Invoke(0);
+            HotBar.OnHotBarItemChoosen?.Invoke(0);
         }
     }
 
-    public void OnHotBar2(InputAction.CallbackContext context)
+    void GameInput.IPlayerActions.OnHotBar2(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            OnHotBarItemChoosen?.Invoke(1);
+            HotBar.OnHotBarItemChoosen?.Invoke(1);
         }
     }
 
-    public void OnHotBar3(InputAction.CallbackContext context)
+    void GameInput.IPlayerActions.OnHotBar3(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            OnHotBarItemChoosen?.Invoke(2);
+            HotBar.OnHotBarItemChoosen?.Invoke(2);
         }
     }
 
-    public void OnClick(InputAction.CallbackContext context)
+    void GameInput.IMiniGameActions.OnClick(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed) {
-            OnMiniGameLeftClick?.Invoke();
+            MiniGame.LeftClick?.Invoke();
         }
     }
 

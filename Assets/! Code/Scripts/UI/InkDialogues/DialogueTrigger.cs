@@ -9,7 +9,7 @@ public class DialogueTrigger : MonoBehaviour
 
     private void OnEnable()
     {
-        InputManager.Instance.InteractEvent += SubmitPressed;
+        InputManager.Player.InteractEvent.AddListener(SubmitPressed);
     }
 
     private void SubmitPressed()
@@ -27,7 +27,7 @@ public class DialogueTrigger : MonoBehaviour
 
     private void OnDisable()
     {
-        InputManager.Instance.InteractEvent -= SubmitPressed;
+        InputManager.Player.InteractEvent.RemoveListener(SubmitPressed);
 
     }
 

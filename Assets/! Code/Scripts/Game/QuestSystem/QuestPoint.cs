@@ -25,13 +25,13 @@ public class QuestPoint : MonoBehaviour
     private void OnEnable()
     {
         GameEventManager.instance.questEvents.onQuestStateChange += QuestStateChange;
-        InputManager.Instance.InteractEvent += SubmitPressed;
+        InputManager.Player.InteractEvent.AddListener(SubmitPressed);
     }
 
     private void OnDisable()
     {
         GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
-        InputManager.Instance.InteractEvent -= SubmitPressed;
+        InputManager.Player.InteractEvent.RemoveListener(SubmitPressed);
     }
 
     private void QuestStateChange(Quest quest)
@@ -48,12 +48,12 @@ public class QuestPoint : MonoBehaviour
         if (!playersIsNear)
             return;
 
-        // Jeœli dialog jest ustawiony, uruchamiamy dialog
+        // Jeï¿½li dialog jest ustawiony, uruchamiamy dialog
         if (!string.IsNullOrEmpty(dialogueKnotName))
         {
             GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName);
 
-            // Sprawdzamy, czy stan questu jest odpowiedni do zakoñczenia
+            // Sprawdzamy, czy stan questu jest odpowiedni do zakoï¿½czenia
             if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
             {
                 // Finiszowanie questa tylko po odpowiednim dialogu
@@ -62,12 +62,12 @@ public class QuestPoint : MonoBehaviour
         }
         else
         {
-            // Warunki, by quest siê rozpocz¹³
+            // Warunki, by quest siï¿½ rozpoczï¿½ï¿½
             if (currentQuestState.Equals(QuestState.CAN_START) && startPoint)
             {
                 GameEventManager.instance.questEvents.StartQuest(questId);
             }
-            // Zakoñczenie questu tylko jeœli stan questu to CAN_FINISH
+            // Zakoï¿½czenie questu tylko jeï¿½li stan questu to CAN_FINISH
             else if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
             {
                 GameEventManager.instance.questEvents.FinishQuest(questId);

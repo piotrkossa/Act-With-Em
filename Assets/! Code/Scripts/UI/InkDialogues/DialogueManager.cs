@@ -32,7 +32,7 @@ public class DialogueManager : MonoBehaviour
     private void OnEnable()
     {
         GameEventManager.instance.dialogueEvents.onEnterDialogue += EnterDialogue;
-        InputManager.Instance.OnSkipEvent += SkipPressed;
+        InputManager.Dialogue.OnSkipEvent.AddListener(SkipPressed);
         GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex += UpdateChoiceIndex;
         GameEventManager.instance.dialogueEvents.onUpdateInkDialogueVariables += UpdateInkDialogueVariables;
         GameEventManager.instance.questEvents.onQuestStateChange += QuestStateChange;
@@ -41,7 +41,7 @@ public class DialogueManager : MonoBehaviour
     private void OnDisable()
     {
         GameEventManager.instance.dialogueEvents.onEnterDialogue -= EnterDialogue;
-        InputManager.Instance.OnSkipEvent -= SkipPressed;
+        InputManager.Dialogue.OnSkipEvent.RemoveListener(SkipPressed);
         GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex -= UpdateChoiceIndex;
         GameEventManager.instance.dialogueEvents.onUpdateInkDialogueVariables -= UpdateInkDialogueVariables;
         GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;

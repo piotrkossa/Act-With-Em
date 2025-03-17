@@ -10,14 +10,14 @@ public class TavernDoorsOutside : MonoBehaviour
     // Subskrybujemy event InteractEvent, kiedy obiekt jest w��czony
     private void OnEnable()
     {
-        InputManager.Instance.InteractEvent += OnInteractEvent;
+        InputManager.Player.InteractEvent.AddListener(OnInteractEvent);
         playerInRange = false;
     }
 
     // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wy��czony
     private void OnDisable()
     {
-        InputManager.Instance.InteractEvent -= OnInteractEvent;
+        InputManager.Player.InteractEvent.RemoveListener(OnInteractEvent);
     }
 
     private void Start() {

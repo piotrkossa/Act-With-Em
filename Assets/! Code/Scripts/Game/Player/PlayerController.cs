@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
-        InputManager.Instance.MoveEvent += (direction) => {inputDirection = direction;};
+        InputManager.Player.MoveEvent.AddListener((direction) => {inputDirection = direction;});
     }
 
     private void FixedUpdate()

@@ -17,8 +17,8 @@ public class InvManager : MonoBehaviour
         playerData.onItemAdded += AddItem;
         playerData.onItemRemoved += RemoveItem;
 
-        InputManager.Instance.OnInvEnter += () => {this.gameObject.SetActive(true); GameManager.SetState(GameStates.Inventory);};
-        InputManager.Instance.OnInvExit  += () => {this.gameObject.SetActive(false); GameManager.SetState(GameStates.Player); playerData.SetHotBarItems(GetRealItems(_hotBar));};
+        InputManager.Player.OnInvEnter.AddListener(() => {this.gameObject.SetActive(true); GameManager.SetState(GameStates.Inventory);});
+        InputManager.Inventory.OnInvExit.AddListener(() => {this.gameObject.SetActive(false); GameManager.SetState(GameStates.Player); playerData.SetHotBarItems(GetRealItems(_hotBar));});
 
         this.gameObject.SetActive(false);
     }

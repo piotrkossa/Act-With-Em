@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -13,8 +10,8 @@ public class PauseMenu : MonoBehaviour
     {
         menu.SetActive(false);
         settings.SetActive(false);
-        InputManager.Instance.ResumeEvent += ResumeGame;
-        InputManager.Instance.PauseEvent += PauseGame;
+        InputManager.UI.ResumeEvent.AddListener(ResumeGame);
+        InputManager.Player.PauseEvent.AddListener(PauseGame);
     }
 
 

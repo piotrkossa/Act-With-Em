@@ -14,7 +14,7 @@ public class MeleeAttack : MonoBehaviour
     private void Start()
     {
         thisTransform = this.transform;
-        InputManager.Instance.AttackEvent += Attack;
+        InputManager.Player.AttackEvent.AddListener(Attack);
     }
     
 
