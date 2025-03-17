@@ -21,7 +21,7 @@ public class PlayerDash : MonoBehaviour
     void Update()
     {
         // Sprawdzamy, czy gracz chce wykonać dash
-        if (Input.GetKeyDown(dashKey) && Time.time >= lastDashTime + dashCooldown && !isDashing)
+        if (Input.GetKeyDown(dashKey) && Time.time >= lastDashTime + dashCooldown && !isDashing && GameManager.GetGameState() == GameStates.Player)
         {
             Dash();
         }

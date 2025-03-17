@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CupGameManager : MonoBehaviour
 {
+    [SerializeField] private PlayerDataSO playerData;
+    [SerializeField] private Item prize;
+
     [SerializeField] CupsGame cupGameHandler;
     private RectTransform allGameRect;
 
@@ -47,9 +50,10 @@ public class CupGameManager : MonoBehaviour
 
         await Awaitable.WaitForSecondsAsync(2f);
 
-        GameManager.SetState(GameStates.Player);
+        GameManager.SetState(GameStates.Dialogue);
 
-        Debug.Log(result);
+        playerData.AddItem(prize);
+        
         Destroy(this.gameObject);
     }
 

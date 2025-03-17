@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d405f84e9ef61dd4081562e6cccfc0c3, type: 3}
-  m_Name: jedynka
+  m_Script: {fileID: 11500000, guid: a3191db1f8a741e448510082782192cc, type: 3}
+  m_Name: RedPotion
   m_EditorClassIdentifier: 
-  itemName: jedynka
-  icon: {fileID: 21300000, guid: c5de7932f2a39436398cfb9f42796ab8, type: 3}
+  icon: {fileID: 1837811115, guid: 6dfc4b4c3287ccc489d35913251800c9, type: 3}
+  itemName: Mikstura
+  description: Przywraca twoje zdrowie!

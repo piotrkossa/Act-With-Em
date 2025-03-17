@@ -13,6 +13,7 @@ public class HotBarSlot : MonoBehaviour
             realItem = item;
             icon.sprite = item.icon;
             icon.color = Color.white;
+            icon.preserveAspect = true;
         }
         else {
             realItem = null;

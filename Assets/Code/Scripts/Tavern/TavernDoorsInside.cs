@@ -7,19 +7,24 @@ public class TavernDoorsInside : MonoBehaviour
     [SerializeField] private GameObject player;
     private bool playerInRange = false;
 
-    // Subskrybujemy event InteractEvent, kiedy obiekt jest w³¹czony
+    // Subskrybujemy event InteractEvent, kiedy obiekt jest wï¿½ï¿½czony
     private void OnEnable()
     {
         InputManager.Instance.InteractEvent += OnInteractEvent;
+        playerInRange = false;
     }
 
-    // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wy³¹czony
+    // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wyï¿½ï¿½czony
     private void OnDisable()
     {
         InputManager.Instance.InteractEvent -= OnInteractEvent;
     }
 
-    // Funkcja wywo³ywana po naciœniêciu przycisku InteractEvent
+    private void Start() {
+        playerInRange = false;
+    }
+
+    // Funkcja wywoï¿½ywana po naciï¿½niï¿½ciu przycisku InteractEvent
     private void OnInteractEvent()  // Ta metoda teraz uruchamia Coroutine
     {
         if (playerInRange)
@@ -28,17 +33,27 @@ public class TavernDoorsInside : MonoBehaviour
         }
     }
 
-    // Funkcja wywo³ywana w ramach Coroutine
+    // Funkcja wywoï¿½ywana w ramach Coroutine
+    private bool isWorking = false;
     private IEnumerator SubmitPressed()
     {
-        // Rozpoczêcie animacji FadeIn
+        if (isWorking) yield break;
+        isWorking = true;
+        // Rozpoczï¿½cie animacji FadeIn
+        GameManager.SetState(GameStates.Dialogue);
+        playerInRange = false;
         yield return StartCoroutine(TransitionManager.FadeIn());
+        // Zmiana pozycji gracza po zakoï¿½czeniu animacji FadeIn
+        player.transform.position = new Vector3(-1.25f, 1.38f, -15.01f);
+        AudioManager.Instance.PlayForestMusic();
+        yield return new WaitForSeconds(1.5f);
+        player.transform.position = new Vector3(-1.25f, 1.38f, -15.01f);
 
-        // Zmiana pozycji gracza po zakoñczeniu animacji FadeIn
-        player.transform.position = new Vector3(7f, player.transform.position.y, -13f);
-
-        // Rozpoczêcie animacji FadeOut
+        // Rozpoczï¿½cie animacji FadeOut
         yield return StartCoroutine(TransitionManager.FadeOut());
+        playerInRange = false;
+        GameManager.SetState(GameStates.Player);
+        isWorking = false;
     }
 
     // Wykrycie, kiedy gracz wejdzie w obszar triggera
@@ -50,7 +65,7 @@ public class TavernDoorsInside : MonoBehaviour
         }
     }
 
-    // Wykrycie, kiedy gracz opuœci obszar triggera
+    // Wykrycie, kiedy gracz opuï¿½ci obszar triggera
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
