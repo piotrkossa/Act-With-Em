@@ -2,112 +2,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiCutoutSphere : MonoBehaviour
+public class TransparentBehindObject : MonoBehaviour
 {
     [SerializeField] private Transform targetObject;   // Gracz
-    [SerializeField] private LayerMask wallMask;       // Warstwa œrodowiska (drzewa, ska³y, itd.)
-    [SerializeField] private float cutoutSize = 0.2f;  // Rozmiar wyciêcia
-    [SerializeField] private float falloffSize = 0.1f; // Rozmycie krawêdzi wyciêcia
-    [SerializeField] private float screenOffsetY = 50f;// Przesuniêcie "kó³ka" w pionie (w pikselach)
-
-    [Header("SphereCast ustawienia")]
+    [SerializeField] private LayerMask wallMask;       // Warstwa œrodowiska (np. drzewa)
     [SerializeField] private float sphereRadius = 1.0f; // Promieñ "tunelu" od kamery do gracza
 
     private Camera mainCamera;
-
-    // S³ownik: Renderer -> oryginalny materia³
-    private Dictionary<Renderer, Material> originalMaterials = new Dictionary<Renderer, Material>();
-
-    // Obiekty trafione w tej klatce
-    private List<Renderer> currentFrameHits = new List<Renderer>();
-    // Obiekty trafione w poprzedniej klatce
-    private List<Renderer> previousFrameHits = new List<Renderer>();
+    private Material material;
 
     private void Awake()
     {
-        // Jeœli nie przypiszesz w Inspectorze, pobieramy g³ówn¹ kamerê
-        mainCamera = GetComponent<Camera>();
-        if (!mainCamera) mainCamera = Camera.main;
+        // Pobieramy g³ówn¹ kamerê, jeœli nie przypisano
+        mainCamera = Camera.main;
+        if (!mainCamera)
+        {
+            Debug.LogError("Brak kamery!");
+        }
+
+        // Zak³adamy, ¿e materia³ jest na obiekcie, który ten skrypt kontroluje
+        Renderer rend = GetComponent<Renderer>();
+        if (rend)
+        {
+            material = rend.material;
+        }
     }
 
     private void Update()
     {
-        if (!targetObject)
+        if (!targetObject || !material)
         {
-            Debug.LogError("Brak przypisanego obiektu gracza (targetObject)!");
             return;
         }
-
-        currentFrameHits.Clear();
 
         // Kierunek i dystans od kamery do gracza
         Vector3 cameraPos = mainCamera.transform.position;
         Vector3 direction = targetObject.position - cameraPos;
         float distance = direction.magnitude;
 
-        // SphereCastAll – szukamy wszystkich obiektów w "tunelu" o promieniu sphereRadius
-        RaycastHit[] hits = Physics.SphereCastAll(
-            cameraPos,       // punkt startu
-            sphereRadius,    // promieñ
-            direction,       // kierunek
-            distance,        // maks. dystans
-            wallMask         // warstwa obiektów
-        );
-
-        foreach (RaycastHit hit in hits)
+        // SphereCast – sprawdzamy, czy gracz jest za obiektem
+        RaycastHit hit;
+        if (Physics.SphereCast(cameraPos, sphereRadius, direction, out hit, distance, wallMask))
         {
-            Renderer rend = hit.transform.GetComponent<Renderer>();
-            if (rend)
-            {
-                // Dodajemy do bie¿¹cej listy
-                currentFrameHits.Add(rend);
-
-                // Jeœli to pierwszy raz widzimy ten Renderer, zapisz oryginalny materia³
-                if (!originalMaterials.ContainsKey(rend))
-                {
-                    Material originalMat = rend.material;
-                    Material newMat = new Material(originalMat);
-                    rend.material = newMat;
-
-                    originalMaterials.Add(rend, originalMat);
-                }
-
-                // Ustawiamy (lub aktualizujemy) cutout w tym obiekcie
-                UpdateCutout(rend);
-            }
+            // Gracz jest za obiektem, ustawiamy przezroczystoœæ
+            SetOpacity(0.3f);  // Ustawiamy przezroczystoœæ na 30%
         }
-
-        // Obiekty, które zniknê³y z "tunelu" – przywracamy oryginalny materia³
-        foreach (Renderer rend in previousFrameHits)
+        else
         {
-            if (!currentFrameHits.Contains(rend))
-            {
-                RevertCutout(rend);
-            }
+            // Gracz nie jest za obiektem, przywracamy pe³n¹ przezroczystoœæ
+            SetOpacity(1.0f);  // Pe³na przezroczystoœæ
         }
-
-        previousFrameHits.Clear();
-        previousFrameHits.AddRange(currentFrameHits);
     }
 
-    private void UpdateCutout(Renderer rend)
+    private void SetOpacity(float opacity)
     {
-        Vector3 screenPos = mainCamera.WorldToScreenPoint(targetObject.position);
-        screenPos.y += screenOffsetY;
-        Vector2 cutoutPos = new Vector2(screenPos.x / Screen.width, screenPos.y / Screen.height);
-
-        Material mat = rend.material;
-        mat.SetVector("_CutoutPos", cutoutPos);
-        mat.SetFloat("_CutoutSize", cutoutSize);
-        mat.SetFloat("_FalloffSize", falloffSize);
-    }
-
-    private void RevertCutout(Renderer rend)
-    {
-        if (rend && originalMaterials.ContainsKey(rend))
+        if (material)
         {
-            rend.material = originalMaterials[rend];
-            originalMaterials.Remove(rend);
+            material.SetFloat("_Opacity", opacity);  // Zmieniamy opacnoœæ w materiale
         }
     }
 }
