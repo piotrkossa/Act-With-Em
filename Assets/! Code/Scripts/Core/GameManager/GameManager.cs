@@ -54,8 +54,8 @@ public class GameManager: MonoBehaviour
         InputManager.Instance.DisableAll();
     }
 
-    public void SetPreviousState() {
-        SetState(previousState);
+    public static void SetPreviousState() {
+        SetState(Instance.previousState);
     }
 
     private GameStates previousState;

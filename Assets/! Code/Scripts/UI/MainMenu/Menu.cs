@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +10,7 @@ public class Menu : MonoBehaviour
     [SerializeField] private GameObject settings;
 
     public void ContinueGame() {
-        StartCoroutine(LoadGame());
+        Task task = LoadGame();
     }
 
     public void Settings() {
@@ -22,11 +23,11 @@ public class Menu : MonoBehaviour
     }
 
     private bool isWorking = false;
-    private IEnumerator LoadGame() {
+
+    private async Task LoadGame() {
         if (!isWorking) {
             isWorking = true;
-            yield return TransitionManager.FadeIn();
-            TransitionManager.FadeOut();
+            await TransitionManager.Instance.StartTransiiton();
             SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
         }
     }

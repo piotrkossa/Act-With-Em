@@ -18,45 +18,43 @@ public class TransitionManager : MonoBehaviour
 
     [SerializeField] private Image blackRect;
 
-    public static IEnumerator FadeIn() {
-        Instance.gameObject.SetActive(true);
-        Task task = Instance.InTransition();
-
-        yield return new WaitUntil(() => task.IsCompleted == true);
-        Instance.gameObject.SetActive(false);
-    }
-
-    public static IEnumerator FadeOut() {
-        Instance.gameObject.SetActive(true);
-        Task task = Instance.OutTransition();
-        yield return new WaitUntil(() => task.IsCompleted == true);
-        Instance.gameObject.SetActive(false);
-    }
-
     private void Start() {
         blackRect = this.transform.GetComponentInChildren<Image>();
         DontDestroyOnLoad(this.gameObject);
     }
 
-    private HTween tween = null;
+    private bool isWorking = false;
+    HTween tween;
 
-    private async Task InTransition() {
-        if (tween != null && tween.isActive == true) tween.Kill();
+    public async Task StartTransiiton() {
+        if (isWorking) Debug.LogError("Tried to run transition while still active!");
+        isWorking = true;
+        GameManager.SetState(GameStates.Other);
+
         blackRect.color = Color.clear;
+        this.gameObject.SetActive(true);
+
         tween = TweenManager.TUIColor(blackRect.gameObject, Color.black, 1.5f);
-        tween.SetEasing(Easings.EaseInQuad);
+        tween.SetEasing(Easings.EaseInQuad); tween.SetUnscaledTime();
 
         await WaitForTween(tween);
+
+        Task task = OutTransition();
     }
 
     private async Task OutTransition() {
-        if (tween != null || tween.isActive == true) tween.Kill();
         blackRect.color = Color.black;
 
+        await Task.Delay(1500);
+
         tween = TweenManager.TUIColor(blackRect.gameObject, Color.clear, 1.5f);
-        tween.SetEasing(Easings.EaseInQuad);
+        tween.SetEasing(Easings.EaseInQuad); tween.SetUnscaledTime();
 
         await WaitForTween(tween);
+
+        this.gameObject.SetActive(false);
+        isWorking = false;
+        GameManager.SetPreviousState();
     }
 
     private async Task WaitForTween(HTween tween) {

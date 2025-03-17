@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,32 +30,19 @@ public class TavernDoorsOutside : MonoBehaviour
     {
         if (playerInRange)
         {
-            StartCoroutine(SubmitPressed());  // Uruchomienie Coroutine
+            Task task = SubmitPressed();  // Uruchomienie Coroutine
         }
     }
 
-    // Funkcja wywo�ywana w ramach Coroutine
-    private bool isWorking = false;
-    private IEnumerator SubmitPressed()
+
+    private async Task SubmitPressed()
     {
-        if (isWorking) yield break;
-        isWorking = true;
-        GameManager.SetState(GameStates.Dialogue);
-        playerInRange = false;
-        // Rozpocz�cie animacji FadeIn
-        yield return StartCoroutine(TransitionManager.FadeIn());
+        await TransitionManager.Instance.StartTransiiton();
 
-        // Zmiana pozycji gracza po zako�czeniu animacji FadeIn
         player.transform.position = new Vector3(-275f, 3.12f, -40f);
+
         AudioManager.Instance.PlayTavernMusic();
-        yield return new WaitForSeconds(1.5f);
-        player.transform.position = new Vector3(-275f, 3.12f, -40f);
-
-        // Rozpocz�cie animacji FadeOut
-        yield return StartCoroutine(TransitionManager.FadeOut());
         playerInRange = false;
-        GameManager.SetState(GameStates.Player);
-        isWorking = false;
     }
 
     // Wykrycie, kiedy gracz wejdzie w obszar triggera
