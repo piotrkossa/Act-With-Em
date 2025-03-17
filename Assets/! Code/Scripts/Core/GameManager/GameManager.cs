@@ -5,7 +5,8 @@ public enum GameStates {
     Dialogue,
     Pause,
     Inventory,
-    MiniGame
+    MiniGame,
+    Other
 }
 
 public class GameManager: MonoBehaviour
@@ -48,8 +49,20 @@ public class GameManager: MonoBehaviour
         InputManager.Instance.SetMiniGameInput();
     }
 
+    private void SetOther() {
+        GameState = GameStates.Other;
+        InputManager.Instance.DisableAll();
+    }
+
+    public void SetPreviousState() {
+        SetState(previousState);
+    }
+
+    private GameStates previousState;
 
     public static void SetState(GameStates gameState) {
+        Instance.previousState = Instance.GameState;
+
         switch (gameState) {
             case GameStates.Player:
                 Instance.SetPlayer();
@@ -68,6 +81,9 @@ public class GameManager: MonoBehaviour
                 break;
             case GameStates.MiniGame:
                 Instance.SetMiniGame();
+                break;
+            case GameStates.Other:
+                Instance.SetOther();
                 break;
         }
     }

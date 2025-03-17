@@ -63,7 +63,7 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
         _gameInput.MiniGame.Enable();
     }
 
-    private void DisableAll() {
+    public void DisableAll() {
         _gameInput.Inventory.Disable();
         _gameInput.Player.Disable();
         _gameInput.UI.Disable();
