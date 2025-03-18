@@ -1,39 +1,14 @@
-using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class TavernDoorsOutside : MonoBehaviour
+public class TavernDoorsOutside : MonoBehaviour, IInteractable
 {
     [SerializeField] private GameObject player;
-    private bool playerInRange = false;
 
-    // Subskrybujemy event InteractEvent, kiedy obiekt jest w��czony
-    private void OnEnable()
+    public void Interact()
     {
-        InputManager.Player.InteractEvent.AddListener(OnInteractEvent);
-        playerInRange = false;
+        Task task = SubmitPressed();
     }
-
-    // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wy��czony
-    private void OnDisable()
-    {
-        InputManager.Player.InteractEvent.RemoveListener(OnInteractEvent);
-    }
-
-    private void Start() {
-        playerInRange = false;
-    }
-
-    // Funkcja wywo�ywana po naci�ni�ciu przycisku InteractEvent
-    private void OnInteractEvent()  // Ta metoda teraz uruchamia Coroutine
-    {
-        if (playerInRange)
-        {
-            Task task = SubmitPressed();  // Uruchomienie Coroutine
-        }
-    }
-
 
     private async Task SubmitPressed()
     {
@@ -42,24 +17,5 @@ public class TavernDoorsOutside : MonoBehaviour
         player.transform.position = new Vector3(-275f, 3.12f, -40f);
 
         AudioManager.Instance.PlayTavernMusic();
-        playerInRange = false;
-    }
-
-    // Wykrycie, kiedy gracz wejdzie w obszar triggera
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
-        }
-    }
-
-    // Wykrycie, kiedy gracz opu�ci obszar triggera
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
-        }
     }
 }

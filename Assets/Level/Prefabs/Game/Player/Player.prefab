@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6325266063759286603}
   - component: {fileID: 5560170267011207112}
+  - component: {fileID: 4414186902630452068}
   m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
@@ -87,6 +88,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!95 &4414186902630452068
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546138003942422635}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f71c6c7999b1dba43925e96c46a7f30a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6206474172634809099
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,7 +123,6 @@ GameObject:
   - component: {fileID: 588376405562110631}
   - component: {fileID: 5904766766928159672}
   - component: {fileID: 5221762950225334281}
-  - component: {fileID: 3038195072651129158}
   - component: {fileID: 4044957844073321703}
   m_Layer: 3
   m_Name: Player
@@ -117,7 +139,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6206474172634809099}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -26.452534, y: 18.021498, z: -18.715836}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -186,6 +208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7.5
+  animator: {fileID: 4414186902630452068}
+  body: {fileID: 6325266063759286603}
 --- !u!114 &5221762950225334281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,23 +227,6 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &3038195072651129158
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6206474172634809099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3db3e1797eac2e446b488c873069caa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  knockbackForce: 100000
-  knockbackTime: 0
-  knockbackResistance: 0
-  isKnocked: 0
 --- !u!114 &4044957844073321703
 MonoBehaviour:
   m_ObjectHideFlags: 0
