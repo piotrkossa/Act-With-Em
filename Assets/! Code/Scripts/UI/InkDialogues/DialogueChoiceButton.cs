@@ -9,7 +9,7 @@ public class DialogueChoiceButton : MonoBehaviour, ISelectHandler, IPointerEnter
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI choiceText;
 
-    private int choiceIndex = -1;
+    private int choiceIndex = -10;
 
     public void SetChoiceText(string choiceTextString)
     {
@@ -23,6 +23,7 @@ public class DialogueChoiceButton : MonoBehaviour, ISelectHandler, IPointerEnter
 
     public void SelectButton()
     {
+        button.OnDeselect(null);
         button.Select();
     }
 

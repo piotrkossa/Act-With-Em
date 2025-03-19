@@ -49,9 +49,9 @@ public class DialoguePanelUI : MonoBehaviour
             Debug.LogError("More dialogue choices");
         }
 
-        foreach(DialogueChoiceButton choiceButton in choiceButtons)
+        foreach (DialogueChoiceButton choiceButton in choiceButtons)
         {
-            choiceButton.gameObject.SetActive(false);
+            choiceButton.gameObject.SetActive(false); // Ukrywamy wszystkie przyciski
         }
 
         for (int inkChoiceIndex = 0; inkChoiceIndex < dialogueChoices.Count; inkChoiceIndex++)
@@ -62,14 +62,9 @@ public class DialoguePanelUI : MonoBehaviour
             choiceButton.gameObject.SetActive(true);
             choiceButton.SetChoiceText(dialogueChoice.text);
             choiceButton.SetChoiceIndex(inkChoiceIndex);
-
-            if (inkChoiceIndex == 0)
-            {
-                choiceButton.SelectButton();
-                GameEventManager.instance.dialogueEvents.UpdateChoiceIndex(0);
-            }
         }
     }
+
 
     private void ResetPanel()
     {
