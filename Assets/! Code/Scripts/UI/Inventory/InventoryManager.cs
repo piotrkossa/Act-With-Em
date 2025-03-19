@@ -18,8 +18,6 @@ public class InventoryManager : MonoBehaviour
         InputManager.Player.OnInvEnter.AddListener(() => {this.gameObject.SetActive(true); GameManager.SetState(GameStates.Inventory); UpdateInventory();});
         InputManager.Inventory.OnInvExit.AddListener(() => {this.gameObject.SetActive(false); GameManager.SetPreviousState();});
 
-        playerData.AddItem(testItem);
-
         Invoke("DisableWithDelay", 0.01f);
     }
 
@@ -38,6 +36,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void DisableWithDelay() {
+        playerData.AddItem(testItem);
         this.gameObject.SetActive(false);
     }
 }

@@ -119,7 +119,6 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     void GameInput.IPlayerActions.OnMove(InputAction.CallbackContext context)
     {
         Player.MoveEvent?.Invoke(context.ReadValue<Vector2>());
-        Debug.Log(context.ReadValue<Vector2>());
     }
 
     void GameInput.IPlayerActions.OnAttack(InputAction.CallbackContext context)

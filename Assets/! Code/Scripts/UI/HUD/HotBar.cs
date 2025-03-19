@@ -12,7 +12,7 @@ public class HotBar : MonoBehaviour
     }
 
     public void UpdateSlots(Item[] items) {
-        for (int i = 0; i < slots.Length; i++) {
+        for (int i = 0; i < items.Length; i++) {
             slots[i].UpdateSlot(items[i]);
         }
     }
