@@ -7,15 +7,21 @@ public class HudManager : MonoBehaviour
     [SerializeField] private HotBar hotBarHandler;
 
     private void Start() {
-        playerData.onHotBarUpdated += UpdateHotBar;
         playerData.HealthUpdated += UpdateHealth;
 
         InputManager.HotBar.OnHotBarItemChoosen.AddListener(UpdateHeldItem);
-        playerData.test();
     }
 
-    private void UpdateHotBar(Item[] items) {
-        hotBarHandler.UpdateSlots(items);
+    private void OnEnable() {
+        playerData.onInvUpdated += UpdateHotBar;
+    }
+
+    private void OnDisable() {
+        playerData.onInvUpdated -= UpdateHotBar;
+    }
+
+    private void UpdateHotBar() {
+        hotBarHandler.UpdateSlots(playerData.items[^3..^0]);
     }
 
     private void UpdateHealth() {

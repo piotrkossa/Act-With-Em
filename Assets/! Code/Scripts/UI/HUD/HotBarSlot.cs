@@ -9,7 +9,6 @@ public class HotBarSlot : MonoBehaviour
 
     public void UpdateSlot(Item item) {
         if (item != null) {
-            if (item == realItem) return;
             realItem = item;
             icon.sprite = item.icon;
             icon.color = Color.white;

@@ -24,9 +24,9 @@ public class InventoryAnimations : MonoBehaviour
 
         invEndingPos = invStartingPos - new Vector2(0, invOffset);
         hotBarEndingPos = hotBarStartingPos - new Vector2(0, hotbarOffset);
-
         isLoaded = true;
     }
+
 
     private HTween invTween;
     private HTween hbTween;
@@ -34,7 +34,6 @@ public class InventoryAnimations : MonoBehaviour
     private void OnEnable()
     {
         if (!isLoaded) return;
-
         invTransform.anchoredPosition = invEndingPos;
         hotBarTransform.anchoredPosition = hotBarEndingPos;
 

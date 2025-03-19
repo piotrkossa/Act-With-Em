@@ -6,15 +6,20 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu(fileName = "InputManager", menuName = "InputManager/InputManager")]
 public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInput.IUIActions, GameInput.IDialogueActions, GameInput.IInventoryActions, GameInput.IMiniGameActions
 {
-    public static InputManager Instance {get; private set;}
+    private static InputManager _instance;
+
+    public static InputManager Instance {
+        get {
+            if (_instance == null)
+                _instance = Resources.Load<InputManager>("InputManager/InputManager");
+            return _instance;
+        }
+        private set {}
+    }
 
     private GameInput _gameInput;
 
     private void OnEnable() {
-        if (Instance == null) {
-            Instance = this;
-        }
-
         if (_gameInput == null) {
             _gameInput = new GameInput();
 
@@ -23,9 +28,9 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
             _gameInput.Dialogue.SetCallbacks(this);
             _gameInput.Inventory.SetCallbacks(this);
             _gameInput.MiniGame.SetCallbacks(this);
-            
-            SetPlayerInput();
         }
+        SetPlayerInput();
+        Debug.Log(1);
     }
 
     private void OnDisable() {
@@ -114,6 +119,7 @@ public class InputManager : ScriptableObject, GameInput.IPlayerActions, GameInpu
     void GameInput.IPlayerActions.OnMove(InputAction.CallbackContext context)
     {
         Player.MoveEvent?.Invoke(context.ReadValue<Vector2>());
+        Debug.Log(context.ReadValue<Vector2>());
     }
 
     void GameInput.IPlayerActions.OnAttack(InputAction.CallbackContext context)

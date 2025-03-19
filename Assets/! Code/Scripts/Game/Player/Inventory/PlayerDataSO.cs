@@ -1,7 +1,6 @@
 using System;
-using UnityEngine;
 using System.Linq;
-using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerDataSO", menuName = "Scriptable Objects/PlayerDataSO")]
 public class PlayerDataSO : ScriptableObject
@@ -15,10 +14,8 @@ public class PlayerDataSO : ScriptableObject
     public int Health {get; private set;}
 
 
-    public Item testItem;
-
     // Items Set
-    public HashSet<Item> items {get; private set;}
+    public Item[] items {get; private set;}
 
     public Item currentHeldItem {get; private set;}
 
@@ -26,47 +23,45 @@ public class PlayerDataSO : ScriptableObject
     // Health Events
     public event Action HealthUpdated;
     
-    // Item Events
-    public event Action<Item> onItemAdded;
-    public event Action<Item> onItemRemoved;
+    // Inventory Update Event
+    public event Action onInvUpdated;
 
-    public event Action<Item[]> onHotBarUpdated;
 
     public event Action onHeldItemChanged;
 
 
-    public void test() {
-        AddItem(testItem);
-        AddItem(testItem);
-    }
-
     private void OnEnable() {
-        items = new HashSet<Item>();  // Create Empty HashSet
+        items = new Item [9 + 3];  // Create Empty Item List
     }
+    
 
+    public void SwapItems(int slot1, int slot2) {
+        (items[slot1], items[slot2]) = (items[slot2], items[slot1]);
+        onInvUpdated?.Invoke();
+    }
 
     public bool AddItem(Item item) {  // Tries to Add Item to Items Set
-        if (items.Count > 11) {
-            return false;
-        }
-
-        onItemAdded?.Invoke(item);
-        items.Add(item);
-        return true;
-    }
-
-    public bool RemoveItem(Item item) {    // Tries to Remove Item to Items Set
-        if (items.Contains(item)) {
-            items.Remove(item);
-            onItemRemoved?.Invoke(item);
-            return true;
+        for (int i = 0; i < items.Length; i++) {
+            if (items[i] == null) {
+                items[i] = item;
+                onInvUpdated?.Invoke();
+                return true;
+            }
         }
         return false;
     }
 
-    public void SetHotBarItems(Item[] items) {
-        onHotBarUpdated?.Invoke(items);
+    public bool RemoveItem(Item item) {    // Tries to Remove Item to Items Set
+        for (int i = 0; i < items.Length; i++) {
+            if (items[i] == item) {
+                items[i] = null;
+                onInvUpdated?.Invoke();
+                return true;
+            }
+        }
+        return false;
     }
+
 
     public void UpdateHealth(int healthPoints) {  // Updates Player Health, Use Negative Intiger to Deal Damage
         int bufferHealth = Health + healthPoints;
@@ -82,7 +77,12 @@ public class PlayerDataSO : ScriptableObject
     }
 
     public void SetHeldItem(Item item) {
-        currentHeldItem = item;
-        onHeldItemChanged?.Invoke();
+        if (items.Contains(item)) {
+            currentHeldItem = item;
+            onHeldItemChanged?.Invoke();
+        }
+        else {
+            Debug.LogError("Tried to equip non existent Item!");
+        }
     }
 }
