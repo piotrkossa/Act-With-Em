@@ -32,6 +32,7 @@ public class InventorySlotIcon : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (dropSlot != null) {
             this.transform.SetParent(parentSlot.transform);
             parentSlot.SwapItem(dropSlot.slotIndex);
+            dropSlot.ShowInfo();
         }
         else {
             this.transform.SetParent(parentSlot.transform);
