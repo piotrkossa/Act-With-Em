@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerDataSO", menuName = "Scriptable Objects/PlayerDataSO")]
@@ -25,6 +26,7 @@ public class PlayerDataSO : ScriptableObject
     
     // Inventory Update Event
     public event Action onInvUpdated;
+    public event Action<Item> onItemAdded;
 
 
     public event Action onHeldItemChanged;
@@ -45,6 +47,7 @@ public class PlayerDataSO : ScriptableObject
             if (items[i] == null) {
                 items[i] = item;
                 onInvUpdated?.Invoke();
+                onItemAdded?.Invoke(item);
                 return true;
             }
         }
