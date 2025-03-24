@@ -1,16 +1,26 @@
 using UnityEngine;
+using UnityEngine.Events;
 
+public enum PlayerMoveStates {
+    idle,
+    left,
+    right,
+    up,
+    down
+}
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Ustawienia ruchu")]
     [SerializeField] private float speed = 5f; // Szybkosc poruszania sie gracza
-    [SerializeField] private Animator animator;
 
     private Rigidbody rb;
-    [SerializeField] Transform body;
 
     private Vector2 inputDirection = Vector2.zero;
+
+    public UnityEvent<PlayerMoveStates> onStateChanged;
+
+    private PlayerMoveStates currentState = PlayerMoveStates.idle;
 
     private void Start()
     {
@@ -21,20 +31,26 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector3(inputDirection.x, 0, inputDirection.y) * speed;
-        SetAnimation();
+        SetState();
     }
 
-    private void SetAnimation() {
+
+    private void SetState() {
         if (inputDirection.x == 0f) {
-            animator.SetFloat("xVelocity", 0f);
+            SetMoveState(PlayerMoveStates.idle);
         }
         else {
-            if (inputDirection.x < 0f && body.localScale.x > 0f)
-                body.localScale = new Vector3(-body.localScale.x, body.localScale.y, body.localScale.z);
-            else if (inputDirection.x > 0f && body.localScale.x < 0f)
-                body.localScale = new Vector3(-body.localScale.x, body.localScale.y, body.localScale.z);
-
-            animator.SetFloat("xVelocity", 1f);
+            if (inputDirection.x < 0f)
+                SetMoveState(PlayerMoveStates.left);
+            else if (inputDirection.x > 0f)
+                SetMoveState(PlayerMoveStates.right);
         }
+    }
+
+    private void SetMoveState(PlayerMoveStates state) {
+        if (currentState == state) return;
+
+        currentState = state;
+        onStateChanged?.Invoke(state);
     }
 }

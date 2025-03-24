@@ -10,18 +10,23 @@ public class HudManager : MonoBehaviour
         playerData.HealthUpdated += UpdateHealth;
 
         InputManager.HotBar.OnHotBarItemChoosen.AddListener(UpdateHeldItem);
+
     }
 
     private void OnEnable() {
         playerData.onInvUpdated += UpdateHotBar;
     }
 
-    private void OnDisable() {
+    private void OnDestroy() {
         playerData.onInvUpdated -= UpdateHotBar;
     }
 
     private void UpdateHotBar() {
         hotBarHandler.UpdateSlots(playerData.items[^3..^0]);
+        
+        if (hotBarHandler.GetSlotItem(hotBarHandler.currentActiveSlot) != playerData.currentHeldItem) {
+            playerData.SetHeldItem(hotBarHandler.GetSlotItem(hotBarHandler.currentActiveSlot));
+        }
     }
 
     private void UpdateHealth() {
@@ -32,6 +37,10 @@ public class HudManager : MonoBehaviour
         if (hotBarHandler.currentActiveSlot != slotIndex) {
             hotBarHandler.SetHeldSlot(slotIndex);
             playerData.SetHeldItem(hotBarHandler.GetSlotItem(slotIndex));
+        }
+        else {
+            playerData.SetHeldItem(null);
+            hotBarHandler.UnheldAll();
         }
     }
 }

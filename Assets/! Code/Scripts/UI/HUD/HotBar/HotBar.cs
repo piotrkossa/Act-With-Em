@@ -26,6 +26,15 @@ public class HotBar : MonoBehaviour
     }
 
     public Item GetSlotItem(int i) {
+        if (i == -1) return null;
+        
         return slots[i].realItem;
+    }
+
+    public void UnheldAll() {
+        currentActiveSlot = -1;
+        foreach (var slot in slots) {
+            slot.SetBigger(false);
+        }
     }
 }
