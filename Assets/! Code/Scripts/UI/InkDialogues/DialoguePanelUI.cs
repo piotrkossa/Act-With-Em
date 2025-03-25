@@ -42,8 +42,10 @@ public class DialoguePanelUI : MonoBehaviour
     }
     private void DialogueFinished()
     {
-        dialogueBox.SetActive(false);
-        ResetPanel();
+        EndAnim().SetOnComplete(() => {
+            dialogueBox.SetActive(false);
+            ResetPanel();
+        });
     }
 
     private void DisplayDialogue(string dialogueLine, List<Choice> dialogueChoices)
@@ -81,5 +83,12 @@ public class DialoguePanelUI : MonoBehaviour
         dialogueBox.GetComponent<RectTransform>().anchoredPosition = startDialoguePos - new Vector2(0f, transitonStartOffset);
         HTween tween = TweenManager.TUIPosition(dialogueBox, new Vector2(0f, transitonStartOffset), 1f);
         tween.SetEasing(Easings.EaseOutQuart);
+    }
+
+    private HTween EndAnim() {
+        dialogueBox.GetComponent<RectTransform>().anchoredPosition = startDialoguePos;
+        HTween tween = TweenManager.TUIPosition(dialogueBox, new Vector2(0f, -transitonStartOffset), 1f);
+        tween.SetEasing(Easings.EaseOutQuart);
+        return tween;
     }
 }
