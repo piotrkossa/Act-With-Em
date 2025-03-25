@@ -10,10 +10,15 @@ public class DialoguePanelUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private DialogueChoiceButton[] choiceButtons;
 
+    // animations
+    private Vector2 startDialoguePos;
+    [SerializeField] private float transitonStartOffset;
+
     private void Awake()
     {
         dialogueBox.SetActive(false);
         ResetPanel();
+        startDialoguePos = dialogueBox.GetComponent<RectTransform>().anchoredPosition;
     }
 
     private void OnEnable()
@@ -33,6 +38,7 @@ public class DialoguePanelUI : MonoBehaviour
     private void DialogueStarted()
     {
         dialogueBox.SetActive(true);
+        StartAnim();
     }
     private void DialogueFinished()
     {
@@ -69,5 +75,11 @@ public class DialoguePanelUI : MonoBehaviour
     private void ResetPanel()
     {
         dialogueText.text = "";
+    }
+
+    private void StartAnim() {
+        dialogueBox.GetComponent<RectTransform>().anchoredPosition = startDialoguePos - new Vector2(0f, transitonStartOffset);
+        HTween tween = TweenManager.TUIPosition(dialogueBox, new Vector2(0f, transitonStartOffset), 1f);
+        tween.SetEasing(Easings.EaseOutQuart);
     }
 }
