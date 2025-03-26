@@ -13,15 +13,15 @@ public class PlayerAnimations : MonoBehaviour
     private void SetAnimations(PlayerMoveStates state) {
         switch (state) {
             case PlayerMoveStates.idle:
-                animator.SetFloat("xVelocity", 0f);
+                animator.Play("Idle");
                 break;
             case PlayerMoveStates.left:
                 visualObject.localScale = new Vector3(-Mathf.Abs(visualObject.localScale.x), visualObject.localScale.y, visualObject.localScale.z);
-                animator.SetFloat("xVelocity", 1f);
+                animator.Play("MoveVertical");
                 break;
             case PlayerMoveStates.right:
                 visualObject.localScale = new Vector3(Mathf.Abs(visualObject.localScale.x), visualObject.localScale.y, visualObject.localScale.z);
-                animator.SetFloat("xVelocity", 1f);
+                animator.Play("MoveVertical");
                 break;
         }
     }
