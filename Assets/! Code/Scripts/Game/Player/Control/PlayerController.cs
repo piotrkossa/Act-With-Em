@@ -6,7 +6,8 @@ public enum PlayerMoveStates {
     left,
     right,
     up,
-    down
+    down,
+    knocked
 }
 
 public class PlayerController : MonoBehaviour
@@ -20,16 +21,21 @@ public class PlayerController : MonoBehaviour
 
     public UnityEvent<PlayerMoveStates> onStateChanged;
 
-    private PlayerMoveStates currentState = PlayerMoveStates.idle;
+    public PlayerMoveStates currentState = PlayerMoveStates.idle;
+
+    private PlayerAnimations playerAnimations;
 
     private void Start()
     {
+        playerAnimations = this.GetComponent<PlayerAnimations>();
         rb = this.GetComponent<Rigidbody>();
         InputManager.Player.MoveEvent.AddListener((direction) => {inputDirection = direction;});
     }
 
     private void FixedUpdate()
     {
+        if (currentState == PlayerMoveStates.knocked) return;
+
         rb.linearVelocity = new Vector3(inputDirection.x, 0, inputDirection.y) * speed;
         SetState();
     }
@@ -37,20 +43,20 @@ public class PlayerController : MonoBehaviour
 
     private void SetState() {
         if (inputDirection.x == 0f) {
-            SetMoveState(PlayerMoveStates.idle);
+            SetPlayerState(PlayerMoveStates.idle);
         }
         else {
             if (inputDirection.x < 0f)
-                SetMoveState(PlayerMoveStates.left);
+                SetPlayerState(PlayerMoveStates.left);
             else if (inputDirection.x > 0f)
-                SetMoveState(PlayerMoveStates.right);
+                SetPlayerState(PlayerMoveStates.right);
         }
     }
 
-    private void SetMoveState(PlayerMoveStates state) {
+    public void SetPlayerState(PlayerMoveStates state) {
         if (currentState == state) return;
 
         currentState = state;
-        onStateChanged?.Invoke(state);
+        playerAnimations.SetAnimation(state);
     }
 }

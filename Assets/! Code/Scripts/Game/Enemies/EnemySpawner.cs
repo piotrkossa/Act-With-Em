@@ -9,12 +9,12 @@ public interface IEnemy {
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private List<GameObject> enemiesList; // Hold Reference to Enemies Prefabs
-    private IEnemy[] enemiesInterfaces; // Hold Reference to Enemy Interfaces to Interact During Runtime
-    [SerializeField] private float playerDetectionRange; // Range from Spawner Position That Detects Player
+    [SerializeField] private float playerDetectionRange;
 
-    private Transform _player; //  Hold Reference to Player Transform
-    private Transform thisTransform; // Hold Reference to Spawner Object Transform
+    private Transform _player;
+    private Transform thisTransform;
+
+    private IEnemy[] enemiesInterfaces;
 
 
     private void Start()
@@ -22,33 +22,30 @@ public class EnemySpawner : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         thisTransform = this.transform;
 
-        enemiesInterfaces = new IEnemy [enemiesList.Count];
-        for (int i = 0; i < enemiesList.Count; i++) {
-            enemiesInterfaces[i] = Instantiate(enemiesList[i], thisTransform).GetComponent<IEnemy>();
-            enemiesInterfaces[i].SetActive(false);
-        }
+        enemiesInterfaces = thisTransform.GetComponentsInChildren<IEnemy>();
     }
 
-
+    private bool isPlayerInRange = false;
     private void Update()
     {
         if (Vector3.Distance(thisTransform.position, _player.position) < playerDetectionRange) {
-            SetAllEnemiesActive(true);
+            if (!isPlayerInRange) {
+                isPlayerInRange = true;
+                SetAllEnemiesActive(true);
+            }
         }
-        else { 
+        else if (isPlayerInRange){ 
+            isPlayerInRange = false;
             SetAllEnemiesActive(false);
         }
-        if (isActive) {
+        
+        if (isPlayerInRange) {
             SetAllEnemiesTarget();
         }
     }
 
 
-
-    private bool isActive = false;
     private void SetAllEnemiesActive(bool active) {
-        if (isActive == active) return;
-        isActive = active;
         foreach (var ienemy in enemiesInterfaces) {
             ienemy.SetActive(active);
         }
@@ -58,5 +55,10 @@ public class EnemySpawner : MonoBehaviour
         foreach (var ienemy in enemiesInterfaces) {
             ienemy.SetTarget(_player.transform.position);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(this.transform.position, playerDetectionRange);
     }
 }

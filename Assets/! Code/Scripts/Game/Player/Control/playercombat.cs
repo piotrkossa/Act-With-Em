@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MeleeAttack : MonoBehaviour
@@ -10,19 +11,40 @@ public class MeleeAttack : MonoBehaviour
 
     private Collider[] colliderBuffer = new Collider[10];
     private int collidersCount;
+    private PlayerController playerController;
+    private PlayerAnimations playerAnimations;
 
     private void Start()
     {
         thisTransform = this.transform;
         InputManager.Player.AttackEvent.AddListener(Attack);
+        playerController = this.GetComponent<PlayerController>();
+        playerAnimations = this.GetComponent<PlayerAnimations>();
     }
     
 
     private void Attack()
     {
-        //animator.SetTrigger("Attack");
-        DealDamageToSurroundingObjects();
+        StartCoroutine(AttackWithDelay());
     }
+
+    private bool isAttacking = false;
+
+    private IEnumerator AttackWithDelay() {
+        if (isAttacking) yield break;
+        isAttacking = true;
+
+        playerController.currentState = PlayerMoveStates.knocked;
+
+        playerAnimations.animator.Play("Attack");
+        DealDamageToSurroundingObjects();
+        yield return new WaitUntil(() => playerAnimations.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
+
+
+        playerController.SetPlayerState(PlayerMoveStates.idle);
+        isAttacking = false;
+    }
+
 
     private void OnDrawGizmos()
     {
