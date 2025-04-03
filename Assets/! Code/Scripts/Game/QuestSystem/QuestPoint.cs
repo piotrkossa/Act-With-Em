@@ -6,6 +6,7 @@ public class QuestPoint : MonoBehaviour
     [Header("Dialogue (opcjonalnie)")]
     [SerializeField] private string dialogueKnotName;
     [SerializeField] private string npcName;
+    [SerializeField] private Sprite npcImage;
 
     [Header("Quest")]
     [SerializeField] private QuestInfoSO questInfoForPoint;
@@ -52,7 +53,7 @@ public class QuestPoint : MonoBehaviour
         // Je�li dialog jest ustawiony, uruchamiamy dialog
         if (!string.IsNullOrEmpty(dialogueKnotName))
         {
-            GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName, npcName);
+            GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName, npcName, npcImage);
 
             // Sprawdzamy, czy stan questu jest odpowiedni do zako�czenia
             if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)

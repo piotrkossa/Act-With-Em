@@ -5,9 +5,10 @@ public class DialogueTrigger : MonoBehaviour
     [Header("Dialogue")]
     [SerializeField] private string dialogueKnotName;
     [SerializeField] private string npcName;
+    [SerializeField] private Sprite npcImage;
 
     private bool playersIsNear = false;
-
+    
     private void OnEnable()
     {
         InputManager.Player.InteractEvent.AddListener(SubmitPressed);
@@ -22,7 +23,7 @@ public class DialogueTrigger : MonoBehaviour
 
         if (!dialogueKnotName.Equals(""))
         {
-            GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName, npcName);
+            GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName, npcName, npcImage);
         }
     }
 

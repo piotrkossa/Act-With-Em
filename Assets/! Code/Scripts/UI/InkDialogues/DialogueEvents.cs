@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public class DialogueEvents
 {
-    public event Action<string, string> onEnterDialogue; // Dodaliśmy npcName
-    public void EnterDialogue(string knotName, string npcName) // Dodaliśmy parametr npcName
+    public event Action<string, string, Sprite> onEnterDialogue;
+    public void EnterDialogue(string knotName, string npcName, Sprite npcSprite)
     {
         if (onEnterDialogue != null)
         {
-            onEnterDialogue(knotName, npcName); // Przekazujemy npcName
+            onEnterDialogue(knotName, npcName, npcSprite);
         }
     }
 
@@ -32,13 +32,13 @@ public class DialogueEvents
         }
     }
 
-    // Zmieniamy sygnaturę zdarzenia DisplayDialogue, aby uwzględnić nazwę NPC
-    public event Action<string, string, List<Choice>> onDisplayDialogue;
-    public void DisplayDialogue(string npcName, string dialogueLine, List<Choice> dialogueChoices)
+    // Zmieniamy sygnaturę DisplayDialogue, aby przyjmowała tylko sprite NPC
+    public event Action<string, string, List<Choice>, Sprite> onDisplayDialogue;
+    public void DisplayDialogue(string npcName, string dialogueLine, List<Choice> dialogueChoices, Sprite npcSprite)
     {
         if (onDisplayDialogue != null)
         {
-            onDisplayDialogue(npcName, dialogueLine, dialogueChoices);
+            onDisplayDialogue(npcName, dialogueLine, dialogueChoices, npcSprite);
         }
     }
 

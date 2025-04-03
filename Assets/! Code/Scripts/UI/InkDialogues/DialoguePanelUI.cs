@@ -2,14 +2,16 @@ using UnityEngine;
 using TMPro;
 using Ink.Runtime;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class DialoguePanelUI : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private TextMeshProUGUI npcNameText;
     [SerializeField] private DialogueChoiceButton[] choiceButtons;
+    [SerializeField] private GameObject talkersImages;
+    [SerializeField] private Image npcImage; // Zostawiamy tylko obraz NPC
 
     // animations
     private Vector2 startDialoguePos;
@@ -18,6 +20,8 @@ public class DialoguePanelUI : MonoBehaviour
     private void Awake()
     {
         dialogueBox.SetActive(false);
+        talkersImages.SetActive(false);
+
         ResetPanel();
         startDialoguePos = dialogueBox.GetComponent<RectTransform>().anchoredPosition;
     }
@@ -26,7 +30,6 @@ public class DialoguePanelUI : MonoBehaviour
     {
         GameEventManager.instance.dialogueEvents.onDialogueStarted += DialogueStarted;
         GameEventManager.instance.dialogueEvents.onDialogueFinished += DialogueFinished;
-        // Zmieniamy sygnaturę metody DisplayDialogue, aby przyjmowała nazwę NPC
         GameEventManager.instance.dialogueEvents.onDisplayDialogue += DisplayDialogue;
     }
 
@@ -34,28 +37,35 @@ public class DialoguePanelUI : MonoBehaviour
     {
         GameEventManager.instance.dialogueEvents.onDialogueStarted -= DialogueStarted;
         GameEventManager.instance.dialogueEvents.onDialogueFinished -= DialogueFinished;
-        // Odpinamy również metodę z poprzednią sygnaturą
         GameEventManager.instance.dialogueEvents.onDisplayDialogue -= DisplayDialogue;
     }
 
     private void DialogueStarted()
     {
         dialogueBox.SetActive(true);
+        talkersImages.SetActive(true);
         StartAnim();
     }
     private void DialogueFinished()
     {
         EndAnim().SetOnComplete(() => {
             dialogueBox.SetActive(false);
+            talkersImages.SetActive(false);
             ResetPanel();
         });
     }
 
-    private void DisplayDialogue(string npcName, string dialogueLine, List<Choice> dialogueChoices)
+    // Aktualizujemy metodę DisplayDialogue, aby przyjmowała tylko sprite NPC
+    private void DisplayDialogue(string npcName, string dialogueLine, List<Choice> dialogueChoices, Sprite npcSprite)
     {
-        
+        Debug.Log($"NPC: {npcName}");
+
         dialogueText.text = dialogueLine;
-        npcNameText.text = npcName;
+
+        if (npcImage != null)
+        {
+            npcImage.sprite = npcSprite;
+        }
 
         if (dialogueChoices.Count > choiceButtons.Length)
         {
@@ -64,7 +74,7 @@ public class DialoguePanelUI : MonoBehaviour
 
         foreach (DialogueChoiceButton choiceButton in choiceButtons)
         {
-            choiceButton.gameObject.SetActive(false); // Ukrywamy wszystkie przyciski
+            choiceButton.gameObject.SetActive(false);
         }
 
         for (int inkChoiceIndex = 0; inkChoiceIndex < dialogueChoices.Count; inkChoiceIndex++)
@@ -82,6 +92,7 @@ public class DialoguePanelUI : MonoBehaviour
     private void ResetPanel()
     {
         dialogueText.text = "";
+        if (npcImage != null) npcImage.sprite = null;
     }
 
     private void StartAnim() {
