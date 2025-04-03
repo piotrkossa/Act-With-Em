@@ -1,41 +1,128 @@
-using UnityEngine;
-using UnityEngine.AI;
-using System;
 using System.Collections;
+using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class StoneyMovement : MonoBehaviour, IEnemy
 {
+    [Header("Settings")]
     [SerializeField] private float speed;
+    [SerializeField] private float dashTime;
+    [SerializeField] private float jumpDistance;
+    [SerializeField] private float damageDistance;
+    [SerializeField] private int damage;
+    [SerializeField] private float knockForce;
+
+    // Stoney RigidBody
+    private Rigidbody rb;
+
+    // Stoney Anim
+    private StoneyAnim _animations;
+
+    // Starting Position to Come Back When Player is Not in Range
     private Vector3 startingPosiiton;
 
-    private Rigidbody rb;
+    // Runtime Destination Target
     private Vector3 targetPosition;
-    private float stopDistance;
+    private Vector3 direction;
+
+    // Bool Telling When We Chasing Player
     private bool isActive;
+
+    // Bool Stopping Fixed Update from Running
+    private bool stopMovement = false;
+    private bool isJumping = false;
 
     private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
         startingPosiiton = this.transform.position;
+        _animations = this.GetComponent<StoneyAnim>();
     }
 
     public void SetActive(bool active)
     {
-        if (!active) {
-            targetPosition = startingPosiiton;
-        }
         isActive = active;
+
+        if (!isActive) SetTarget(startingPosiiton); // Go Back to Starting Position If Not Chasing Player
+
+        stopMovement = false; // Run FixedUpdate Because State Changed
     }
 
     public void SetTarget(Vector3 target)
     {
         targetPosition = target;
+        targetPosition.y = startingPosiiton.y;
+
+        if (isActive) {
+            var distanceFromPlayer = Vector3.zero;
+            distanceFromPlayer.x = target.x - this.transform.position.x < 0f ? 0.5f : -0.5f;
+            distanceFromPlayer.z = target.z - this.transform.position.z < 0f ? 0.5f : -0.5f;
+
+            targetPosition += distanceFromPlayer;
+        }
+
+        direction = (targetPosition - this.transform.position).normalized;
+        direction.y = 0f;
+    }
+
+    private void Update() {
+        if (!isActive && Vector3.Distance(this.transform.position, startingPosiiton) < 0.01f) {
+            stopMovement = true;
+            return;
+        }
+        else if (isActive && Vector3.Distance(this.transform.position, targetPosition) < jumpDistance && !isJumping) {
+            StartCoroutine(DashIntoPlayer());
+            return;
+        }
     }
 
     private void FixedUpdate()
     {
-        Vector3 direction = (targetPosition - this.transform.position).normalized;
-        rb.MovePosition(this.transform.position + (direction * Time.fixedDeltaTime * speed));
+        if (stopMovement || isJumping) {
+            rb.linearVelocity = Vector3.zero;
+            return;
+        }
+        rb.AddForce(direction * speed, ForceMode.VelocityChange);
+    }
+
+    private IEnumerator DashIntoPlayer() {
+        isJumping = true;
+        yield return StartCoroutine(_animations.DashColorAnimIn());
+        if (!isActive) {
+            yield return StartCoroutine(_animations.DashColorAnimOut());
+            isJumping = false;
+            yield break;
+        }
+        var direction = targetPosition - this.transform.position;
+        HTween tween = TweenManager.CoreVector3((value) => {rb.MovePosition(value);}, this.transform.position, targetPosition, dashTime);
+        tween.SetEasing(Easings.EaseInCubic);
+
+        yield return new WaitUntil(() => !tween.isActive);
+        _animations.ShockWave();
+        DealDamage(direction);
+        yield return StartCoroutine(_animations.DashColorAnimOut());
+        yield return new WaitForSeconds(1f);
+        
+        isJumping = false;
+    }
+
+    private void DealDamage(Vector3 direction) {
+        foreach(var hit in Physics.OverlapSphere(this.transform.position, damageDistance)) {
+            if (hit.CompareTag("Player")) {
+                hit.GetComponent<PlayerHealth>().Hit(damage, direction.normalized, knockForce);
+            }
+        }
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(this.transform.position, damageDistance);
+        Gizmos.color = Color.white;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(this.transform.position, jumpDistance);
     }
 }

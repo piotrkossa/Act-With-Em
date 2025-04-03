@@ -3,14 +3,13 @@ using UnityEngine;
 public class PlayerAnimations : MonoBehaviour
 {
     [SerializeField] private Transform visualObject;
-    private Animator animator;
+    public Animator animator {get; private set;}
 
     private void Start() {
         animator = visualObject.GetComponent<Animator>();
-        this.GetComponent<PlayerController>().onStateChanged.AddListener(SetAnimations);
     }
 
-    private void SetAnimations(PlayerMoveStates state) {
+    public void SetAnimation(PlayerMoveStates state) {
         switch (state) {
             case PlayerMoveStates.idle:
                 animator.Play("Idle");

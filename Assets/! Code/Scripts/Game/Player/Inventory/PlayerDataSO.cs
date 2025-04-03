@@ -33,6 +33,7 @@ public class PlayerDataSO : ScriptableObject
 
 
     private void OnEnable() {
+        Health = maxHealth;
         items = new Item [9 + 3];  // Create Empty Item List
     }
     
