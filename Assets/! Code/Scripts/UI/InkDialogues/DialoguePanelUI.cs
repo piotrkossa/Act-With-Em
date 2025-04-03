@@ -8,6 +8,7 @@ public class DialoguePanelUI : MonoBehaviour
     [Header("Components")]
     [SerializeField] private GameObject dialogueBox;
     [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private TextMeshProUGUI npcNameText;
     [SerializeField] private DialogueChoiceButton[] choiceButtons;
 
     // animations
@@ -25,6 +26,7 @@ public class DialoguePanelUI : MonoBehaviour
     {
         GameEventManager.instance.dialogueEvents.onDialogueStarted += DialogueStarted;
         GameEventManager.instance.dialogueEvents.onDialogueFinished += DialogueFinished;
+        // Zmieniamy sygnaturę metody DisplayDialogue, aby przyjmowała nazwę NPC
         GameEventManager.instance.dialogueEvents.onDisplayDialogue += DisplayDialogue;
     }
 
@@ -32,6 +34,7 @@ public class DialoguePanelUI : MonoBehaviour
     {
         GameEventManager.instance.dialogueEvents.onDialogueStarted -= DialogueStarted;
         GameEventManager.instance.dialogueEvents.onDialogueFinished -= DialogueFinished;
+        // Odpinamy również metodę z poprzednią sygnaturą
         GameEventManager.instance.dialogueEvents.onDisplayDialogue -= DisplayDialogue;
     }
 
@@ -48,9 +51,11 @@ public class DialoguePanelUI : MonoBehaviour
         });
     }
 
-    private void DisplayDialogue(string dialogueLine, List<Choice> dialogueChoices)
+    private void DisplayDialogue(string npcName, string dialogueLine, List<Choice> dialogueChoices)
     {
+        
         dialogueText.text = dialogueLine;
+        npcNameText.text = npcName;
 
         if (dialogueChoices.Count > choiceButtons.Length)
         {

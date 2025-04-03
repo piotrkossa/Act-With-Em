@@ -16,6 +16,8 @@ public class DialogueManager : MonoBehaviour
     private InkExternalFunctions inkExternalFunctions;
     private InkDialogueVariables inkDialogueVariables;
 
+    private string currentNpcName = ""; // Dodajemy pole do przechowywania nazwy NPC
+
     private void Awake()
     {
         story = new Story(inkJson.text);
@@ -36,6 +38,8 @@ public class DialogueManager : MonoBehaviour
         GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex += UpdateChoiceIndex;
         GameEventManager.instance.dialogueEvents.onUpdateInkDialogueVariables += UpdateInkDialogueVariables;
         GameEventManager.instance.questEvents.onQuestStateChange += QuestStateChange;
+        // Subskrybujemy nowe zdarzenie, aby kontynuować dialog po kliknięciu
+        GameEventManager.instance.dialogueEvents.onChooseDialogueOption += ContinueOrExitStory;
     }
 
     private void OnDisable()
@@ -45,6 +49,8 @@ public class DialogueManager : MonoBehaviour
         GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex -= UpdateChoiceIndex;
         GameEventManager.instance.dialogueEvents.onUpdateInkDialogueVariables -= UpdateInkDialogueVariables;
         GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
+        // Odsubskrybujemy nowe zdarzenie
+        GameEventManager.instance.dialogueEvents.onChooseDialogueOption -= ContinueOrExitStory;
     }
 
     private void QuestStateChange(Quest quest)
@@ -74,7 +80,8 @@ public class DialogueManager : MonoBehaviour
         ContinueOrExitStory();
     }
 
-    public void EnterDialogue(string knotName)
+    // Zmieniamy sygnaturę EnterDialogue, aby przyjmować nazwę NPC
+    public void EnterDialogue(string knotName, string npcName)
     {
         if (dialoguePlaying)
         {
@@ -82,6 +89,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         dialoguePlaying = true;
+        currentNpcName = npcName; // Zapisujemy nazwę NPC
 
         GameEventManager.instance.dialogueEvents.DialogueStarted();
 
@@ -125,7 +133,8 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                GameEventManager.instance.dialogueEvents.DisplayDialogue(dialogueLine, story.currentChoices);
+                // Przekazujemy nazwę NPC do zdarzenia DisplayDialogue
+                GameEventManager.instance.dialogueEvents.DisplayDialogue(currentNpcName, dialogueLine, story.currentChoices);
             }
         }
         else if (story.currentChoices.Count == 0)
@@ -153,5 +162,4 @@ public class DialogueManager : MonoBehaviour
     {
         return dialogueLine.Trim().Equals("") || dialogueLine.Trim().Equals("\n");
     }
-
 }

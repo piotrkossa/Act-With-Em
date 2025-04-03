@@ -4,6 +4,7 @@ public class DialogueTrigger : MonoBehaviour
 {
     [Header("Dialogue")]
     [SerializeField] private string dialogueKnotName;
+    [SerializeField] private string npcName;
 
     private bool playersIsNear = false;
 
@@ -21,7 +22,7 @@ public class DialogueTrigger : MonoBehaviour
 
         if (!dialogueKnotName.Equals(""))
         {
-            GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName);
+            GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName, npcName);
         }
     }
 
