@@ -11,14 +11,14 @@ public class MeleeAttack : MonoBehaviour
 
     private Collider[] colliderBuffer = new Collider[10];
     private int collidersCount;
-    private PlayerController playerController;
+    private PlayerStateMachine playerStateMachine;
     private PlayerAnimations playerAnimations;
 
     private void Start()
     {
         thisTransform = this.transform;
         InputManager.Player.AttackEvent.AddListener(Attack);
-        playerController = this.GetComponent<PlayerController>();
+        playerStateMachine = this.GetComponent<PlayerStateMachine>();
         playerAnimations = this.GetComponent<PlayerAnimations>();
     }
     
@@ -28,40 +28,57 @@ public class MeleeAttack : MonoBehaviour
         StartCoroutine(AttackWithDelay());
     }
 
-    private bool isAttacking = false;
-
     private IEnumerator AttackWithDelay() {
-        if (isAttacking) yield break;
-        isAttacking = true;
+        if (!playerStateMachine.canMove) yield break;
 
-        playerController.currentState = PlayerMoveStates.knocked;
+        playerStateMachine.SetState(PlayerStates.attacking);
 
         playerAnimations.animator.Play("Attack");
+
+        yield return new WaitForSeconds(0.2f);
+
         DealDamageToSurroundingObjects();
+
         yield return new WaitUntil(() => playerAnimations.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
 
 
-        playerController.SetPlayerState(PlayerMoveStates.idle);
-        isAttacking = false;
+        playerStateMachine.SetState(PlayerStates.idle);
     }
 
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(this.transform.position, attackRange);
+        Gizmos.DrawWireSphere(this.transform.position + new Vector3(attackRange/2, 0, 0), attackRange);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(this.transform.position - new Vector3(attackRange/2, 0, 0), attackRange);
     }
 
     private void DealDamageToSurroundingObjects()
     {
-        collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position, attackRange, colliderBuffer, enemyLayers);
+        if (playerAnimations.isLookingRight)
+            collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position + new Vector3(attackRange/2, 0, 0), attackRange, colliderBuffer, enemyLayers);
+        else
+            collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position - new Vector3(attackRange/2, 0, 0), attackRange, colliderBuffer, enemyLayers);
 
         for (int i = 0; i < collidersCount; i++)
         {
-            if (colliderBuffer[i].TryGetComponent(out Health healthComponent))
+            if (colliderBuffer[i].TryGetComponent(out EnemyHealthBase healthComponent))
             {
-                healthComponent.TakeDamage(attackDamage, thisTransform.position);
+                healthComponent.Hit(attackDamage, GetNormalizedDirection(healthComponent.transform));
             }
         }
+    }
+
+    private Vector3 GetNormalizedDirection(Transform enemyTransform) {
+        var normalizedDirection = enemyTransform.position - thisTransform.position;
+        normalizedDirection.y = 0f;
+        normalizedDirection.Normalize();
+
+        if (normalizedDirection.magnitude < 0.1f) {
+            normalizedDirection.x = playerAnimations.isLookingRight ? 1f : -1f;
+        }
+
+        return normalizedDirection;
     }
 }

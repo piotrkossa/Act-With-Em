@@ -30,6 +30,7 @@ public class StoneyMovement : MonoBehaviour, IEnemy
     // Bool Stopping Fixed Update from Running
     private bool stopMovement = false;
     private bool isJumping = false;
+    public bool isKnocked = false;
 
     private void Start()
     {
@@ -65,6 +66,7 @@ public class StoneyMovement : MonoBehaviour, IEnemy
     }
 
     private void Update() {
+        if (isKnocked) return;
         if (!isActive && Vector3.Distance(this.transform.position, startingPosiiton) < 0.01f) {
             stopMovement = true;
             return;
@@ -77,6 +79,7 @@ public class StoneyMovement : MonoBehaviour, IEnemy
 
     private void FixedUpdate()
     {
+        if (isKnocked) return;
         if (stopMovement || isJumping) {
             rb.linearVelocity = Vector3.zero;
             return;

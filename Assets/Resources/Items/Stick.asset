@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7163cbbe2d7c09a41a5b9a878d19b252, type: 3}
-  m_Name: Sword
+  m_Name: Stick
   m_EditorClassIdentifier: 
-  icon: {fileID: 1021400903, guid: 0a2de27671085cf42b67ccf28a851454, type: 3}
+  icon: {fileID: -82194525, guid: 1bd21472fe8cc674d9e7081c9ef8124e, type: 3}
   itemName: Miecz
   description: miecz
-  damage: 1
-  cooldown: 1
+  damage: 10

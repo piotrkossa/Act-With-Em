@@ -5,13 +5,13 @@ public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private PlayerDataSO playerData;
     private Rigidbody rb;
-    private PlayerController playerController;
+    private PlayerStateMachine playerStateMachine;
 
     private float knockDuration = 0.8f;
 
     private void Start() {
-        rb = this.transform.GetComponent<Rigidbody>();
-        playerController = this.transform.GetComponent<PlayerController>();
+        playerStateMachine = this.GetComponent<PlayerStateMachine>();
+        rb = this.GetComponent<Rigidbody>();
     }
 
     public void Hit(int damage, Vector3 normalizedDirection, float force) {
@@ -27,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
     private IEnumerator Knock(Vector3 moveDistance) {
-        playerController.currentState = PlayerMoveStates.knocked;
+        AddKnockCount();
         rb.linearVelocity = Vector3.zero;
         
         rb.AddForce(moveDistance, ForceMode.Impulse);
@@ -35,6 +35,13 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(knockDuration);
         
         rb.linearVelocity = Vector3.zero;
-        playerController.currentState = PlayerMoveStates.idle;
+        RemoveKnockCount();
+    }
+
+    private void AddKnockCount() {
+        playerStateMachine.SetState(PlayerStates.knocked);
+    }
+    private void RemoveKnockCount() {
+        playerStateMachine.SetState(PlayerStates.idle);
     }
 }

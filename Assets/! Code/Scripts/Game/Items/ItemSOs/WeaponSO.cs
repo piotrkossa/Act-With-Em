@@ -5,5 +5,4 @@ public class WeaponSO : Item
 {
     [Header("Weapon Settings")]
     public int damage;
-    public int cooldown;
 }
