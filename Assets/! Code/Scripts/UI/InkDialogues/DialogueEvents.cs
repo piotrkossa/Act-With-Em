@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public class DialogueEvents
 {
-    public event Action<string> onEnterDialogue;
-    public void EnterDialogue(string knotName)
+    public event Action<string, string, Sprite> onEnterDialogue;
+    public void EnterDialogue(string knotName, string npcName, Sprite npcSprite)
     {
         if (onEnterDialogue != null)
         {
-            onEnterDialogue(knotName);
+            onEnterDialogue(knotName, npcName, npcSprite);
         }
     }
 
@@ -32,12 +32,13 @@ public class DialogueEvents
         }
     }
 
-    public event Action<string, List<Choice>> onDisplayDialogue;
-    public void DisplayDialogue(string dialogueLine, List<Choice> dialogueChoices)
+    // Zmieniamy sygnaturę DisplayDialogue, aby przyjmowała tylko sprite NPC
+    public event Action<string, string, List<Choice>, Sprite> onDisplayDialogue;
+    public void DisplayDialogue(string npcName, string dialogueLine, List<Choice> dialogueChoices, Sprite npcSprite)
     {
         if (onDisplayDialogue != null)
         {
-            onDisplayDialogue(dialogueLine, dialogueChoices);
+            onDisplayDialogue(npcName, dialogueLine, dialogueChoices, npcSprite);
         }
     }
 
@@ -56,6 +57,15 @@ public class DialogueEvents
         if (onUpdateInkDialogueVariables != null)
         {
             onUpdateInkDialogueVariables(name, value);
+        }
+    }
+
+    public event Action onChooseDialogueOption;
+    public void ChooseDialogueOption()
+    {
+        if (onChooseDialogueOption != null)
+        {
+            onChooseDialogueOption();
         }
     }
 }

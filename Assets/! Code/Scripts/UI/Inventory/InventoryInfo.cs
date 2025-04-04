@@ -14,6 +14,10 @@ public class InventoryInfo : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    private void OnDisable() {
+        this.gameObject.SetActive(false);
+    }
+
     public void ShowInfo(Item item, Vector3 screenPos, bool showLeft) {
         _itemName.text = item.itemName;
         _itemDescription.text = item.description;

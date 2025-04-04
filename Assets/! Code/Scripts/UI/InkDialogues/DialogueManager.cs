@@ -6,6 +6,7 @@ public class DialogueManager : MonoBehaviour
 {
     [Header("Ink Story")]
     [SerializeField] private TextAsset inkJson;
+    // Usuwamy playerSprite
 
     private Story story;
 
@@ -15,6 +16,9 @@ public class DialogueManager : MonoBehaviour
 
     private InkExternalFunctions inkExternalFunctions;
     private InkDialogueVariables inkDialogueVariables;
+
+    private string currentNpcName = "";
+    private Sprite currentNpcSprite;
 
     private void Awake()
     {
@@ -36,6 +40,8 @@ public class DialogueManager : MonoBehaviour
         GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex += UpdateChoiceIndex;
         GameEventManager.instance.dialogueEvents.onUpdateInkDialogueVariables += UpdateInkDialogueVariables;
         GameEventManager.instance.questEvents.onQuestStateChange += QuestStateChange;
+        // Subskrybujemy nowe zdarzenie, aby kontynuować dialog po kliknięciu
+        GameEventManager.instance.dialogueEvents.onChooseDialogueOption += ContinueOrExitStory;
     }
 
     private void OnDisable()
@@ -45,6 +51,8 @@ public class DialogueManager : MonoBehaviour
         GameEventManager.instance.dialogueEvents.onUpdateChoiceIndex -= UpdateChoiceIndex;
         GameEventManager.instance.dialogueEvents.onUpdateInkDialogueVariables -= UpdateInkDialogueVariables;
         GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
+        // Odsubskrybujemy nowe zdarzenie
+        GameEventManager.instance.dialogueEvents.onChooseDialogueOption -= ContinueOrExitStory;
     }
 
     private void QuestStateChange(Quest quest)
@@ -74,7 +82,7 @@ public class DialogueManager : MonoBehaviour
         ContinueOrExitStory();
     }
 
-    public void EnterDialogue(string knotName)
+    public void EnterDialogue(string knotName, string npcName, Sprite npcSprite)
     {
         if (dialoguePlaying)
         {
@@ -82,6 +90,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         dialoguePlaying = true;
+        currentNpcName = npcName;
+        currentNpcSprite = npcSprite;
 
         GameEventManager.instance.dialogueEvents.DialogueStarted();
 
@@ -125,7 +135,8 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                GameEventManager.instance.dialogueEvents.DisplayDialogue(dialogueLine, story.currentChoices);
+                // Przekazujemy tylko sprite NPC
+                GameEventManager.instance.dialogueEvents.DisplayDialogue(currentNpcName, dialogueLine, story.currentChoices, currentNpcSprite);
             }
         }
         else if (story.currentChoices.Count == 0)
@@ -153,5 +164,4 @@ public class DialogueManager : MonoBehaviour
     {
         return dialogueLine.Trim().Equals("") || dialogueLine.Trim().Equals("\n");
     }
-
 }

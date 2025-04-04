@@ -13,4 +13,3 @@ MonoBehaviour:
   m_Name: PlayerDataSO
   m_EditorClassIdentifier: 
   maxHealth: 100
-  testItem: {fileID: 11400000, guid: bb7e146dcce454f46947d218a0ddd154, type: 2}

@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class DialogueChoiceButton : MonoBehaviour
+public class DialogueChoiceButton : MonoBehaviour, IPointerEnterHandler
 {
     [Header("Components")]
     [SerializeField] private Button button;
@@ -25,7 +25,14 @@ public class DialogueChoiceButton : MonoBehaviour
         this.choiceIndex = choiceIndex;
     }
 
-    private void Clicked() {
+    public void OnPointerEnter(PointerEventData eventData)
+    {
         GameEventManager.instance.dialogueEvents.UpdateChoiceIndex(choiceIndex);
+        // Opcjonalnie: Dodaj tutaj wizualne wskazanie, że opcja jest wybrana (np. zmiana koloru)
+    }
+
+    private void Clicked() {
+        // Informujemy DialogueManager, że wybrano opcję i można kontynuować
+        GameEventManager.instance.dialogueEvents.ChooseDialogueOption();
     }
 }

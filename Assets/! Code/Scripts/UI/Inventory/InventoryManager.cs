@@ -7,8 +7,6 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private Transform invGrid;
     [SerializeField] private Transform hotbarGrid;
-
-    [SerializeField] private Item testItem;
     
     private InventorySlot[] invSlots;
 
@@ -36,7 +34,6 @@ public class InventoryManager : MonoBehaviour
     }
 
     private void DisableWithDelay() {
-        playerData.AddItem(testItem);
         this.gameObject.SetActive(false);
     }
 }
