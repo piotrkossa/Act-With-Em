@@ -1,10 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public interface IEnemy {
-    void SetTarget(Vector3 target);
-    void SetActive(bool active);
-}
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -14,15 +10,13 @@ public class EnemySpawner : MonoBehaviour
     private Transform _player;
     private Transform thisTransform;
 
-    private IEnemy[] enemiesInterfaces;
-
+    public UnityEvent<bool> onSetActive;
+    public UnityEvent<Vector3> onSetTarget;
 
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         thisTransform = this.transform;
-
-        enemiesInterfaces = thisTransform.GetComponentsInChildren<IEnemy>();
     }
 
     private bool isPlayerInRange = false;
@@ -31,31 +25,19 @@ public class EnemySpawner : MonoBehaviour
         if (Vector3.Distance(thisTransform.position, _player.position) < playerDetectionRange) {
             if (!isPlayerInRange) {
                 isPlayerInRange = true;
-                SetAllEnemiesActive(true);
+                onSetActive?.Invoke(true);
             }
         }
         else if (isPlayerInRange){ 
             isPlayerInRange = false;
-            SetAllEnemiesActive(false);
+            onSetActive?.Invoke(false);
         }
         
         if (isPlayerInRange) {
-            SetAllEnemiesTarget();
+            onSetTarget?.Invoke(_player.transform.position);
         }
     }
 
-
-    private void SetAllEnemiesActive(bool active) {
-        foreach (var ienemy in enemiesInterfaces) {
-            ienemy.SetActive(active);
-        }
-    }
-
-    private void SetAllEnemiesTarget() {
-        foreach (var ienemy in enemiesInterfaces) {
-            ienemy.SetTarget(_player.transform.position);
-        }
-    }
 
     private void OnDrawGizmos()
     {

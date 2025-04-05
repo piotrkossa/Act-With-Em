@@ -13,6 +13,7 @@ public class MeleeAttack : MonoBehaviour
     private int collidersCount;
     private PlayerStateMachine playerStateMachine;
     private PlayerAnimations playerAnimations;
+    [SerializeField] private PlayerDataSO playerData;
 
     private void Start()
     {
@@ -25,13 +26,15 @@ public class MeleeAttack : MonoBehaviour
 
     private void Attack()
     {
-        StartCoroutine(AttackWithDelay());
+        if (playerData.currentHeldItem is WeaponSO)
+            StartCoroutine(AttackWithDelay());
     }
 
     private IEnumerator AttackWithDelay() {
         if (!playerStateMachine.canMove) yield break;
 
         playerStateMachine.SetState(PlayerStates.attacking);
+        GameManager.SetState(GameStates.Other);
 
         playerAnimations.animator.Play("Attack");
 
@@ -41,7 +44,7 @@ public class MeleeAttack : MonoBehaviour
 
         yield return new WaitUntil(() => playerAnimations.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
 
-
+        GameManager.SetState(GameStates.Player);
         playerStateMachine.SetState(PlayerStates.idle);
     }
 

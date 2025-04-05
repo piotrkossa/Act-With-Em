@@ -8,4 +8,9 @@ public abstract class Item : ScriptableObject
     public string itemName;
     public string description;
     public string Id {get; private set;} = Guid.NewGuid().ToString();
+
+    [Header("Visual Item Settings")]
+    public Vector2 positionOffset;
+    public float scale;
+    public float zRotation;
 }

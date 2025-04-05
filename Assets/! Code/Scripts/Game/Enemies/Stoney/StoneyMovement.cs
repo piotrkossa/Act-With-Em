@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class StoneyMovement : MonoBehaviour, IEnemy
+public class StoneyMovement : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private float speed;
@@ -37,6 +37,15 @@ public class StoneyMovement : MonoBehaviour, IEnemy
         rb = this.GetComponent<Rigidbody>();
         startingPosiiton = this.transform.position;
         _animations = this.GetComponent<StoneyAnim>();
+
+        var enemySpawner = this.transform.parent.GetComponent<EnemySpawner>();
+        if (enemySpawner == null) {
+            Debug.LogError(this.name + " " + "put me in Enemy Spawner!!!");
+        }
+        else {
+            enemySpawner.onSetActive.AddListener(SetActive);
+            enemySpawner.onSetTarget.AddListener(SetTarget);
+        }
     }
 
     public void SetActive(bool active)
@@ -67,9 +76,15 @@ public class StoneyMovement : MonoBehaviour, IEnemy
 
     private void Update() {
         if (isKnocked) return;
-        if (!isActive && Vector3.Distance(this.transform.position, startingPosiiton) < 0.01f) {
-            stopMovement = true;
-            return;
+        if (!isActive) {
+            if (Vector3.Distance(this.transform.position, startingPosiiton) > 0.5f) {
+                SetTarget(startingPosiiton);
+            }
+            else {
+                stopMovement = true;
+                rb.linearVelocity = Vector3.zero;
+                return;
+            }
         }
         else if (isActive && Vector3.Distance(this.transform.position, targetPosition) < jumpDistance && !isJumping) {
             StartCoroutine(DashIntoPlayer());
@@ -81,14 +96,14 @@ public class StoneyMovement : MonoBehaviour, IEnemy
     {
         if (isKnocked) return;
         if (stopMovement || isJumping) {
-            rb.linearVelocity = Vector3.zero;
             return;
         }
-        rb.AddForce(direction * speed, ForceMode.VelocityChange);
+        rb.linearVelocity = direction * speed;
     }
 
     private IEnumerator DashIntoPlayer() {
         isJumping = true;
+        rb.linearVelocity = Vector3.zero;
         yield return StartCoroutine(_animations.DashColorAnimIn());
         if (!isActive) {
             yield return StartCoroutine(_animations.DashColorAnimOut());

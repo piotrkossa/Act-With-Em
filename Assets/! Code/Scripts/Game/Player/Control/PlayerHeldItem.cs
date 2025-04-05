@@ -12,7 +12,7 @@ public class PlayerHeldItem : MonoBehaviour
     {
         playerData.onHeldItemChanged += SetHeldItem;
         startingScale = this.transform.localScale;
-        this.gameObject.SetActive(false);
+        itemSprite.gameObject.SetActive(false);
     }
 
     private void OnDestroy()
@@ -22,13 +22,16 @@ public class PlayerHeldItem : MonoBehaviour
 
     private void SetHeldItem() {
         if (playerData.currentHeldItem != null) {
-            this.gameObject.SetActive(true);
+            itemSprite.gameObject.SetActive(true);
             itemSprite.sprite = playerData.currentHeldItem.icon;
-            itemSprite.transform.localScale = Vector3.zero;
+            itemSprite.transform.localScale = Vector3.one * playerData.currentHeldItem.scale;
+            itemSprite.transform.localPosition = playerData.currentHeldItem.positionOffset;
+            itemSprite.transform.localEulerAngles = new Vector3(0, 0, playerData.currentHeldItem.zRotation);
+            this.transform.localScale = Vector3.zero;
             TweenManager.TScale(this.gameObject, startingScale, 0.3f).SetEasing(Easings.EaseOutQuart);
         }
         else {
-            this.gameObject.SetActive(false);
+            itemSprite.gameObject.SetActive(false);
         }
     }
 }

@@ -1,10 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Ustawienia ruchu")]
-    [SerializeField] private float speed = 5f; // Szybkosc poruszania sie gracza
+    [SerializeField] private float speed;
+    [SerializeField] private float dashForce;
+    [SerializeField] private float dashTime;
 
     private Rigidbody rb;
     private PlayerStateMachine playerStateMachine;
@@ -17,6 +20,8 @@ public class PlayerController : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
         playerStateMachine = this.GetComponent<PlayerStateMachine>();
         InputManager.Player.MoveEvent.AddListener((direction) => {inputDirection = direction;});
+        
+        InputManager.Player.DodgeEvent.AddListener(() => StartCoroutine(PerformDash()));
     }
 
     private void FixedUpdate()
@@ -44,5 +49,21 @@ public class PlayerController : MonoBehaviour
         else {
             playerStateMachine.SetState(PlayerStates.idle);
         }
+    }
+
+
+    private IEnumerator PerformDash()
+    {
+        if (inputDirection == Vector2.zero || !playerStateMachine.canMove) yield break;
+
+        playerStateMachine.SetState(PlayerStates.knocked);
+        rb.linearVelocity = Vector3.zero;
+        
+        rb.AddForce(new Vector3(inputDirection.x, 0, inputDirection.y) * dashForce, ForceMode.VelocityChange);
+
+        yield return new WaitForSeconds(dashTime);
+        rb.linearVelocity = Vector3.zero;
+
+        playerStateMachine.SetState(PlayerStates.idle);
     }
 }
