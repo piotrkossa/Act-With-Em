@@ -31,8 +31,10 @@ public class PlayerAnimations : MonoBehaviour
                 isLookingRight = true;
                 break;
             case PlayerStates.moveUp:
+                animator.Play("MoveUp");
                 break;
             case PlayerStates.moveDown:
+                animator.Play("MoveDown");
                 break;
         }
     }
