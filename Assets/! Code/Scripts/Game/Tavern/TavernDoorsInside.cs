@@ -1,63 +1,25 @@
-using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class TavernDoorsInside : MonoBehaviour
+public class TavernDoorsInside : MonoBehaviour, IInteractable
 {
-    [SerializeField] private GameObject player;
-    private bool playerInRange = false;
-
-    // Subskrybujemy event InteractEvent, kiedy obiekt jest w��czony
-    private void OnEnable()
-    {
-        InputManager.Player.InteractEvent.AddListener(OnInteractEvent);
-        playerInRange = false;
-    }
-
-    // Odsubskrybowanie eventu InteractEvent, kiedy obiekt jest wy��czony
-    private void OnDisable()
-    {
-        InputManager.Player.InteractEvent.RemoveListener(OnInteractEvent);
-    }
+    private Rigidbody player;
 
     private void Start() {
-        playerInRange = false;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
     }
 
-    // Funkcja wywo�ywana po naci�ni�ciu przycisku InteractEvent
-    private void OnInteractEvent()  // Ta metoda teraz uruchamia Coroutine
+    public void Interact()
     {
-        if (playerInRange)
-        {
-            Task task = SubmitPressed();  // Uruchomienie Coroutine
-        }
+        Task task = SubmitPressed();
     }
 
     private async Task SubmitPressed()
     {
         await TransitionManager.Instance.StartTransiiton();
 
-        player.transform.position = new Vector3(-1.25f, 1.38f, -15.01f);
+        player.position = new Vector3(-1.25f, 1.38f, -15.01f);
+
         AudioManager.Instance.PlayForestMusic();
-        playerInRange = false;
-    }
-
-    // Wykrycie, kiedy gracz wejdzie w obszar triggera
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
-        }
-    }
-
-    // Wykrycie, kiedy gracz opu�ci obszar triggera
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
-        }
     }
 }

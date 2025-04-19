@@ -3,7 +3,11 @@ using UnityEngine;
 
 public class TavernDoorsOutside : MonoBehaviour, IInteractable
 {
-    [SerializeField] private GameObject player;
+    private Rigidbody player;
+
+    private void Start() {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
+    }
 
     public void Interact()
     {
@@ -14,7 +18,7 @@ public class TavernDoorsOutside : MonoBehaviour, IInteractable
     {
         await TransitionManager.Instance.StartTransiiton();
 
-        player.transform.position = new Vector3(-275f, 3.12f, -40f);
+        player.position = new Vector3(-275f, 3.12f, -40f);
 
         AudioManager.Instance.PlayTavernMusic();
     }
