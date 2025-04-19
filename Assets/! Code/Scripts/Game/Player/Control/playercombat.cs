@@ -59,7 +59,7 @@ public class MeleeAttack : MonoBehaviour
 
     private void DealDamageToSurroundingObjects()
     {
-        if (playerAnimations.isLookingRight)
+        if (playerStateMachine.isFacingRight)
             collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position + new Vector3(attackRange/2, 0, 0), attackRange, colliderBuffer, enemyLayers);
         else
             collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position - new Vector3(attackRange/2, 0, 0), attackRange, colliderBuffer, enemyLayers);
@@ -79,7 +79,7 @@ public class MeleeAttack : MonoBehaviour
         normalizedDirection.Normalize();
 
         if (normalizedDirection.magnitude < 0.1f) {
-            normalizedDirection.x = playerAnimations.isLookingRight ? 1f : -1f;
+            normalizedDirection.x = playerStateMachine.isFacingRight ? 1f : -1f;
         }
 
         return normalizedDirection;

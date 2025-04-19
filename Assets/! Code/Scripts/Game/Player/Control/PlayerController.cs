@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
 
     private void SetState() {
+        SetLookingDirection();
         if (inputDirection.y > 0f) {
             playerStateMachine.SetState(PlayerStates.moveUp);
         }
@@ -48,6 +49,15 @@ public class PlayerController : MonoBehaviour
         }
         else {
             playerStateMachine.SetState(PlayerStates.idle);
+        }
+    }
+
+    private void SetLookingDirection() {
+        if (inputDirection.x > 0f) {
+            playerStateMachine.isFacingRight = true;
+        }
+        else if (inputDirection.x < 0f) {
+            playerStateMachine.isFacingRight = false;
         }
     }
 

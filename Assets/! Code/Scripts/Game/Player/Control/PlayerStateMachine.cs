@@ -19,6 +19,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     public UnityEvent onStateChanged;
 
+    public bool isFacingRight = true;
+
     private int blockCount = 0;
 
     public void SetState(PlayerStates state) {
