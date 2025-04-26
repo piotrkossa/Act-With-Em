@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerDataSO", menuName = "Scriptable Objects/PlayerDataSO")]
-public class PlayerDataSO : ScriptableObject
+public class PlayerDataSO : ScriptableObject, ISaveData
 {
     // Allow Inspector Serialization
     [Header("Settings")]
@@ -30,6 +30,16 @@ public class PlayerDataSO : ScriptableObject
 
 
     public event Action onHeldItemChanged;
+
+    public void LoadData(GameData data)
+    {
+
+    }
+
+    public void SaveData(ref GameData data)
+    {
+
+    }
 
 
     private void OnEnable() {
