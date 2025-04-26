@@ -52,8 +52,6 @@ public class QuestManager : MonoBehaviour
                 break;
             }
         }
-
-        Debug.Log(meetsRequirements);
         return meetsRequirements;
     }
 
