@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ISaveData
 {
     [Header("Ustawienia ruchu")]
     [SerializeField] private float speed;
@@ -22,6 +22,16 @@ public class PlayerController : MonoBehaviour
         InputManager.Player.MoveEvent.AddListener((direction) => {inputDirection = direction;});
         
         InputManager.Player.DodgeEvent.AddListener(() => StartCoroutine(PerformDash()));
+    }
+
+    public void LoadData(GameData data)
+    {
+        this.rb.position = data.playerPosition;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.playerPosition = this.rb.position;
     }
 
     private void FixedUpdate()
