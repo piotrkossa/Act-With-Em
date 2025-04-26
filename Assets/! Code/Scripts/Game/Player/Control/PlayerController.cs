@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour, ISaveData
         rb = this.GetComponent<Rigidbody>();
         playerStateMachine = this.GetComponent<PlayerStateMachine>();
         InputManager.Player.MoveEvent.AddListener((direction) => {inputDirection = direction;});
-        
         InputManager.Player.DodgeEvent.AddListener(() => StartCoroutine(PerformDash()));
     }
 
