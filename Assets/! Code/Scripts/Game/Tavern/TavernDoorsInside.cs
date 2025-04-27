@@ -18,7 +18,9 @@ public class TavernDoorsInside : MonoBehaviour, IInteractable
     {
         await TransitionManager.Instance.StartTransiiton();
 
-        player.position = new Vector3(-1.25f, 1.38f, -15.01f);
+        player.isKinematic = true;
+        player.position = new Vector3(-757.42f, 1.353f, 19.2f);
+        player.isKinematic = false;
 
         AudioManager.Instance.PlayForestMusic();
     }

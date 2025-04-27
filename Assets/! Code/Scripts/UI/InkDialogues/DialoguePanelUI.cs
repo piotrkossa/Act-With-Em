@@ -17,6 +17,10 @@ public class DialoguePanelUI : MonoBehaviour
     private Vector2 startDialoguePos;
     [SerializeField] private float transitonStartOffset;
 
+    [SerializeField] private RectTransform playerImage;
+    private Vector2 startPlayerScale;
+    private Vector2 startNpcScale;
+
     private void Awake()
     {
         dialogueBox.SetActive(false);
@@ -24,6 +28,9 @@ public class DialoguePanelUI : MonoBehaviour
 
         ResetPanel();
         startDialoguePos = dialogueBox.GetComponent<RectTransform>().anchoredPosition;
+
+        startPlayerScale = playerImage.localScale;
+        startNpcScale = npcImage.transform.localScale;
     }
 
     private void OnEnable()
@@ -99,12 +106,24 @@ public class DialoguePanelUI : MonoBehaviour
         dialogueBox.GetComponent<RectTransform>().anchoredPosition = startDialoguePos - new Vector2(0f, transitonStartOffset);
         HTween tween = TweenManager.TUIPosition(dialogueBox, new Vector2(0f, transitonStartOffset), 1f);
         tween.SetEasing(Easings.EaseOutQuart);
+
+        npcImage.transform.localScale = Vector2.zero;
+        playerImage.transform.localScale = Vector2.zero;
+
+        TweenManager.TScale(npcImage.gameObject, startNpcScale, 0.5f).SetEasing(Easings.EaseOutQuart);
+        TweenManager.TScale(playerImage.gameObject, startPlayerScale, 0.5f).SetEasing(Easings.EaseOutQuart);
     }
 
     private HTween EndAnim() {
         dialogueBox.GetComponent<RectTransform>().anchoredPosition = startDialoguePos;
         HTween tween = TweenManager.TUIPosition(dialogueBox, new Vector2(0f, -transitonStartOffset), 1f);
         tween.SetEasing(Easings.EaseOutQuart);
+
+        npcImage.transform.localScale = startNpcScale;
+        playerImage.transform.localScale = startPlayerScale;
+
+        TweenManager.TScale(npcImage.gameObject, Vector2.zero, 0.5f).SetEasing(Easings.EaseInQuart);
+        TweenManager.TScale(playerImage.gameObject, Vector2.zero, 0.5f).SetEasing(Easings.EaseInQuart);
         return tween;
     }
 }

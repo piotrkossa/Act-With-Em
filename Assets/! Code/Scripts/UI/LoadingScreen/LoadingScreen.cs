@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
@@ -57,6 +58,6 @@ public class LoadingScreen : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        Debug.Log("END");
+        SceneManager.LoadScene("MainMenu");
     }
 }

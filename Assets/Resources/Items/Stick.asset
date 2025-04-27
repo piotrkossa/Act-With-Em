@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Stick
   m_EditorClassIdentifier: 
   icon: {fileID: -82194525, guid: 1bd21472fe8cc674d9e7081c9ef8124e, type: 3}
-  itemName: Miecz
-  description: miecz
+  itemName: Patyk
+  description: "Obra\u017Cenia - 10"
   positionOffset: {x: 0.2, y: 0.5}
   scale: 0.3
   zRotation: -53.708

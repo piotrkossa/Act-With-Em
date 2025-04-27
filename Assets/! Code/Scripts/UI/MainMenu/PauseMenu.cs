@@ -17,11 +17,14 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame() {
         GameManager.SetState(GameStates.Pause);
+        Time.timeScale = 0f;
         menu.SetActive(true);
     }
 
     public void ResumeGame() {
         menu.SetActive(false);
+        settings.SetActive(false);
+        Time.timeScale = 1f;
         GameManager.SetState(GameStates.Player);
     }
 

@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2127576783, guid: c2bd4ea701a2f804fba4e0170943155e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -4991,6 +4991,7 @@ GameObject:
   - component: {fileID: 5650806459452272503}
   - component: {fileID: 1420563848354470947}
   - component: {fileID: 6523284906670967290}
+  - component: {fileID: 3385647603541669846}
   m_Layer: 6
   m_Name: Stoney
   m_TagString: Enemy
@@ -5075,12 +5076,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef826b6c9301e9441a83dcd9f5f71acb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 4
   dashTime: 0.5
   jumpDistance: 5
   damageDistance: 2
   damage: 10
   knockForce: 10
+  isKnocked: 0
 --- !u!114 &6523284906670967290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5095,3 +5097,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visualObject: {fileID: 6972636334334951964}
   shockwaveParticles: {fileID: 552100196402782897}
+--- !u!114 &3385647603541669846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8785671881791533257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 873a9cafd26cfd544a2d65cd157ff0f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  selfKnockForce: 30
+  selfKnockDuration: 1

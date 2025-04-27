@@ -19,6 +19,7 @@ public class HudPromptManager : MonoBehaviour
         HudPrompt prompt = Instantiate(itemPromptPrefab).GetComponent<HudPrompt>();
         prompt.transform.SetParent(this.transform);
         prompt.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
+        prompt.GetComponent<RectTransform>().localScale = Vector3.one;
 
         prompt.ShowPrompt(item);
 
@@ -51,10 +52,6 @@ public class HudPromptManager : MonoBehaviour
     }
 
     private IEnumerator itemTest() {
-        yield return new WaitForSeconds(3f);
-        playerData.AddItem(testItem);
-        yield return new WaitForSeconds(1f);
-        playerData.AddItem(testItem);
         yield return new WaitForSeconds(1f);
         playerData.AddItem(testItem);
     }

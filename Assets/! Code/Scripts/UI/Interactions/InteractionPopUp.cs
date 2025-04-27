@@ -8,9 +8,18 @@ public class InteractionPopUp : MonoBehaviour
     [SerializeField] private GameObject interactiveObject;
     [SerializeField] private string interactionText;
     [SerializeField] private float yOffset = 2f;
+
+    private Vector3 startingScale;
     
     private GameObject currentIndicator;
     private TextMeshProUGUI textMeshPro;
+
+    private void Awake()
+    {
+        startingScale = indicatorPrefab.transform.localScale;
+    }
+
+    HTween tween;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -24,6 +33,11 @@ public class InteractionPopUp : MonoBehaviour
             currentIndicator = Instantiate(indicatorPrefab, newPos, Quaternion.identity);
             textMeshPro = currentIndicator.GetComponentInChildren<TextMeshProUGUI>();
             textMeshPro.text = interactionText;
+
+            currentIndicator.transform.localScale = Vector3.zero;
+            tween = TweenManager.TScale(currentIndicator, startingScale, 0.3f);
+            tween.SetEasing(Easings.EaseOutQuart);
+
             currentIndicator.SetActive(true);
         }
     }
@@ -34,6 +48,9 @@ public class InteractionPopUp : MonoBehaviour
         {
             if (currentIndicator != null)
             {
+                if (tween != null) {
+                    tween.Kill();
+                }
                 Destroy(currentIndicator);
             }
         }
