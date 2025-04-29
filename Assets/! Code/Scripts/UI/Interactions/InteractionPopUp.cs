@@ -1,5 +1,7 @@
 using TMPro;
 using UnityEngine;
+using LitMotion;
+using LitMotion.Extensions;
 
 public class InteractionPopUp : MonoBehaviour
 {
@@ -19,7 +21,7 @@ public class InteractionPopUp : MonoBehaviour
         startingScale = indicatorPrefab.transform.localScale;
     }
 
-    HTween tween;
+    MotionHandle tween = new MotionHandle();
 
     private void OnTriggerEnter(Collider other)
     {
@@ -35,8 +37,10 @@ public class InteractionPopUp : MonoBehaviour
             textMeshPro.text = interactionText;
 
             currentIndicator.transform.localScale = Vector3.zero;
-            tween = TweenManager.TScale(currentIndicator, startingScale, 0.3f);
-            tween.SetEasing(Easings.EaseOutQuart);
+
+            tween = LMotion.Create(currentIndicator.transform.localScale, startingScale, 0.3f)
+                .WithEase(Ease.OutQuart)
+                .BindToLocalScale(currentIndicator.transform);
 
             currentIndicator.SetActive(true);
         }
@@ -48,8 +52,8 @@ public class InteractionPopUp : MonoBehaviour
         {
             if (currentIndicator != null)
             {
-                if (tween != null) {
-                    tween.Kill();
+                if (tween.IsActive()) {
+                    tween.Cancel();
                 }
                 Destroy(currentIndicator);
             }

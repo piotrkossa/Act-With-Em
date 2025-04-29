@@ -1,4 +1,6 @@
 using System.Collections;
+using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,14 +11,19 @@ public class HudPrompt : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
 
     private IEnumerator PromptLifetime() {
-        TweenManager.TUIPosition(this.gameObject, new Vector2(xStartOffset, 0f), 1f).SetEasing(Easings.EaseOutQuart);
+        var rect = this.GetComponent<RectTransform>();
+
+        LMotion.Create(rect.anchoredPosition, rect.anchoredPosition + new Vector2(xStartOffset, 0f), 1f)
+            .WithEase(Ease.OutQuart)
+            .BindToAnchoredPosition(rect);
 
         yield return new WaitForSeconds(4f);
 
-        HTween tween = TweenManager.CoreFloat((value) => canvasGroup.alpha = value, 1f, 0f, 1f);
-        tween.SetEasing(Easings.EaseOutQuart);
+        MotionHandle tween = LMotion.Create(1f, 0f, 1f)
+            .WithEase(Ease.OutQuart)
+            .Bind((value) => canvasGroup.alpha = value);
 
-        yield return new WaitUntil(() => tween.isActive == false);
+        yield return new WaitUntil(() => tween.IsActive() == false);
         Destroy(this.gameObject);
     }
 

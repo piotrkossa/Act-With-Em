@@ -1,4 +1,6 @@
 using UnityEngine;
+using LitMotion;
+using LitMotion.Extensions;
 
 public class PlayerHeldItem : MonoBehaviour
 {
@@ -28,7 +30,7 @@ public class PlayerHeldItem : MonoBehaviour
             itemSprite.transform.localPosition = playerData.currentHeldItem.positionOffset;
             itemSprite.transform.localEulerAngles = new Vector3(0, 0, playerData.currentHeldItem.zRotation);
             this.transform.localScale = Vector3.zero;
-            TweenManager.TScale(this.gameObject, startingScale, 0.3f).SetEasing(Easings.EaseOutQuart);
+            LMotion.Create(Vector3.zero, startingScale, 0.3f).WithEase(Ease.OutQuart).BindToLocalScale(this.transform);
         }
         else {
             itemSprite.gameObject.SetActive(false);

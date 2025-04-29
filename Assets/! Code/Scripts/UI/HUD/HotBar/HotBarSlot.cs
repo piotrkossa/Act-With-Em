@@ -1,3 +1,5 @@
+using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,14 +22,18 @@ public class HotBarSlot : MonoBehaviour
         }
     }
 
-    HTween tween;
+    private MotionHandle anim = new MotionHandle();
+
     public void SetBigger(bool shouldBeBigger) {
-        if (tween != null) tween.Kill();
+        if (anim.IsActive()) {
+            anim.Cancel();
+        }
         this.transform.localScale = Vector3.one;
 
         if (shouldBeBigger) {
-            tween = TweenManager.TScale(this.gameObject, new Vector3(1.1f, 1.1f, 1.1f), animationTime);
-            tween.SetEasing(Easings.EaseOutCubic);
+            anim = LMotion.Create(this.transform.localScale, new Vector3(1.1f, 1.1f, 1.1f), animationTime)
+                .WithEase(Ease.OutCubic)
+                .BindToLocalScale(this.transform);
         }
     }
 }

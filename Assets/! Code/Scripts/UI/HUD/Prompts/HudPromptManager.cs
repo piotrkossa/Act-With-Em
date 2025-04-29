@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 
 public class HudPromptManager : MonoBehaviour
@@ -34,7 +36,10 @@ public class HudPromptManager : MonoBehaviour
                 continue;
             }
 
-            TweenManager.TUIPosition(hudPrompts[i], new Vector2(0f, distanceBetweenPrompts), 0.5f).SetEasing(Easings.EaseOutQuart);
+            var recttrans = hudPrompts[i].GetComponent<RectTransform>();
+            LMotion.Create(recttrans.anchoredPosition, recttrans.anchoredPosition + new Vector2(0f, distanceBetweenPrompts), 0.5f)
+                .WithEase(Ease.OutQuart)
+                .BindToAnchoredPosition(recttrans);
         }
     }
 

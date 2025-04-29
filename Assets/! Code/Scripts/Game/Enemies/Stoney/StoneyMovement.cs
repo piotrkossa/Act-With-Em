@@ -1,4 +1,5 @@
 using System.Collections;
+using LitMotion;
 using UnityEngine;
 
 public class StoneyMovement : MonoBehaviour
@@ -111,10 +112,12 @@ public class StoneyMovement : MonoBehaviour
             yield break;
         }
         var direction = targetPosition - this.transform.position;
-        HTween tween = TweenManager.CoreVector3((value) => {rb.MovePosition(value);}, this.transform.position, targetPosition, dashTime);
-        tween.SetEasing(Easings.EaseInCubic);
 
-        yield return new WaitUntil(() => !tween.isActive);
+        var tween = LMotion.Create(this.transform.position, targetPosition, dashTime)
+            .WithEase(Ease.InCubic)
+            .Bind((value) => rb.MovePosition(value));
+
+        yield return new WaitUntil(() => !tween.IsActive());
         _animations.ShockWave();
         DealDamage(direction);
         yield return StartCoroutine(_animations.DashColorAnimOut());

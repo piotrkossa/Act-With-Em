@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Threading.Tasks;
+using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 
 public class CupGameManager : MonoBehaviour
@@ -26,8 +28,9 @@ public class CupGameManager : MonoBehaviour
 
         await Awaitable.WaitForSecondsAsync(2f);
 
-        HTween tween = TweenManager.TUIPosition(allGameRect.gameObject, new Vector2(0, 1080), 2.5f);
-        tween.SetEasing(Easings.EaseInOutQuad);
+        MotionHandle tween = LMotion.Create(allGameRect.anchoredPosition, allGameRect.anchoredPosition + new Vector2(0, 1080), 2.5f)
+            .WithEase(Ease.InOutQuad)
+            .BindToAnchoredPosition(allGameRect);
 
         await WaitForTween(tween);
 
@@ -43,8 +46,9 @@ public class CupGameManager : MonoBehaviour
             if (result == true) break;
         }
 
-        tween = TweenManager.TUIPosition(allGameRect.gameObject, new Vector2(0, -1080), 2.5f);
-        tween.SetEasing(Easings.EaseInOutQuad);
+        tween = LMotion.Create(allGameRect.anchoredPosition, allGameRect.anchoredPosition + new Vector2(0, -1080), 2.5f)
+            .WithEase(Ease.InOutQuad)
+            .BindToAnchoredPosition(allGameRect);
 
         await WaitForTween(tween);
 
@@ -57,10 +61,10 @@ public class CupGameManager : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private async Task WaitForTween(HTween tween) {
+    private async Task WaitForTween(MotionHandle tween) {
         while (true) {
             await Awaitable.NextFrameAsync();
-            if (tween == null || !tween.isActive) break;
+            if (tween == null || !tween.IsActive()) break;
         }
     }
 }

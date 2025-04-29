@@ -1,3 +1,4 @@
+using LitMotion;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,17 +7,15 @@ public class HudHealth : MonoBehaviour
     [SerializeField] private Slider HealthSlider;
     [SerializeField] private float animationTime;
     
-    HTween tween;
+    MotionHandle anim;
     public void UpdateHealth(int currentHealth, int maxHealth) {
-        if (tween != null) tween.Kill();
+        if (anim.IsActive()) anim.Cancel();
         float healthPercentage = (float)currentHealth / (float)maxHealth;
 
         float moveRatio = Mathf.Abs(HealthSlider.value - healthPercentage);
 
-        tween = TweenManager.CoreFloat(
-            (value) => {HealthSlider.value = value;},
-            HealthSlider.value, healthPercentage, animationTime*moveRatio
-        );
-        tween.SetEasing(Easings.EaseInOutQuint);
+        anim = LMotion.Create(HealthSlider.value, healthPercentage, animationTime*moveRatio)
+            .WithEase(Ease.InOutQuint)
+            .Bind(value => HealthSlider.value = value);
     }
 }
