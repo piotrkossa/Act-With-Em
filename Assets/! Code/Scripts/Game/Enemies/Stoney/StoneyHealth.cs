@@ -1,6 +1,8 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using LitMotion;
+using LitMotion.Extensions;
 
 public class StoneyHealth : EnemyHealthBase
 {
@@ -8,9 +10,14 @@ public class StoneyHealth : EnemyHealthBase
     [SerializeField] private GameObject hitMark;
     [SerializeField] private TextMeshPro damageText;
 
+    private Vector3 startHitMarkScale;
+    private Vector3 startDamageTextScale;
+
     protected override void OnStart()
     {
         stoneyMovement = this.GetComponent<StoneyMovement>();
+        startHitMarkScale = hitMark.transform.localScale;
+        startDamageTextScale = damageText.transform.localScale;
     }
 
     public override void Hit(int damage, Vector3 normalizedDirection)
@@ -41,9 +48,25 @@ public class StoneyHealth : EnemyHealthBase
         damageText.gameObject.SetActive(true);
         damageText.text = "-" + damage.ToString() + " HP"; // -(value) HP
 
-        yield return new WaitForSeconds(0.7f);
+        LMotion.Create(Vector3.zero, startHitMarkScale, 0.4f)
+            .WithEase(Ease.InQuart)
+            .BindToLocalScale(hitMark.transform);
+
+
+        yield return LMotion.Create(Vector3.zero, startDamageTextScale, 0.5f)
+            .WithEase(Ease.OutCubic)
+            .BindToLocalScale(damageText.transform)
+            .ToYieldInstruction();
 
         hitMark.SetActive(false);
-        damageText.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(0.6f);
+
+        LMotion.Create(startDamageTextScale, Vector3.zero, 0.3f)
+            .WithEase(Ease.InElastic)
+            .WithOnComplete(() => {
+                damageText.gameObject.SetActive(false);
+            })
+            .BindToLocalScale(damageText.transform);
     }
 }

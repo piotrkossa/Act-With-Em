@@ -6,7 +6,6 @@ public class MeleeAttack : MonoBehaviour
     //public Animator animator;
     private Transform thisTransform; 
     [SerializeField] private float attackRange = 1f;
-    [SerializeField] private int attackDamage = 100;
     [SerializeField] private LayerMask enemyLayers;
 
     private Collider[] colliderBuffer = new Collider[10];
@@ -26,11 +25,11 @@ public class MeleeAttack : MonoBehaviour
 
     private void Attack()
     {
-        if (playerData.currentHeldItem is WeaponSO)
-            StartCoroutine(AttackWithDelay());
+        if (playerData.currentHeldItem != null && playerData.currentHeldItem is WeaponSO weapon)
+            StartCoroutine(AttackWithDelay(weapon.damage));
     }
 
-    private IEnumerator AttackWithDelay() {
+    private IEnumerator AttackWithDelay(int damage) {
         if (!playerStateMachine.canMove) yield break;
 
         playerStateMachine.SetState(PlayerStates.attacking);
@@ -40,7 +39,7 @@ public class MeleeAttack : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        DealDamageToSurroundingObjects();
+        DealDamageToSurroundingObjects(damage);
 
         yield return new WaitUntil(() => playerAnimations.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
 
@@ -57,7 +56,7 @@ public class MeleeAttack : MonoBehaviour
         Gizmos.DrawWireSphere(this.transform.position - new Vector3(attackRange/2, 0, 0), attackRange);
     }
 
-    private void DealDamageToSurroundingObjects()
+    private void DealDamageToSurroundingObjects(int damage)
     {
         if (playerStateMachine.isFacingRight)
             collidersCount = Physics.OverlapSphereNonAlloc(thisTransform.position + new Vector3(attackRange/2, 0, 0), attackRange, colliderBuffer, enemyLayers);
@@ -68,7 +67,7 @@ public class MeleeAttack : MonoBehaviour
         {
             if (colliderBuffer[i].TryGetComponent(out EnemyHealthBase healthComponent))
             {
-                healthComponent.Hit(attackDamage, GetNormalizedDirection(healthComponent.transform));
+                healthComponent.Hit(damage, GetNormalizedDirection(healthComponent.transform));
             }
         }
     }

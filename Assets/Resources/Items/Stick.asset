@@ -18,4 +18,4 @@ MonoBehaviour:
   positionOffset: {x: 0.2, y: 0.5}
   scale: 0.3
   zRotation: -53.708
-  damage: 10
+  damage: 1
