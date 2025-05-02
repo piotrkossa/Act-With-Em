@@ -45,16 +45,17 @@ public class StoneyHealth : EnemyHealthBase
 
     private IEnumerator PerformHitMark(int damage) {
         hitMark.SetActive(true);
+
         damageText.gameObject.SetActive(true);
         damageText.text = "-" + damage.ToString() + " HP"; // -(value) HP
 
         LMotion.Create(Vector3.zero, startHitMarkScale, 0.4f)
-            .WithEase(Ease.InQuart)
+            .WithEase(Ease.OutQuart)
             .BindToLocalScale(hitMark.transform);
 
 
         yield return LMotion.Create(Vector3.zero, startDamageTextScale, 0.5f)
-            .WithEase(Ease.OutCubic)
+            .WithEase(Ease.OutSine)
             .BindToLocalScale(damageText.transform)
             .ToYieldInstruction();
 
@@ -63,7 +64,7 @@ public class StoneyHealth : EnemyHealthBase
         yield return new WaitForSeconds(0.6f);
 
         LMotion.Create(startDamageTextScale, Vector3.zero, 0.3f)
-            .WithEase(Ease.InElastic)
+            .WithEase(Ease.OutCirc)
             .WithOnComplete(() => {
                 damageText.gameObject.SetActive(false);
             })

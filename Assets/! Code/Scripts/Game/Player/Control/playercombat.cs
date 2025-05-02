@@ -32,6 +32,7 @@ public class MeleeAttack : MonoBehaviour
     private IEnumerator AttackWithDelay(int damage) {
         if (!playerStateMachine.canMove) yield break;
 
+        thisTransform.GetComponent<Rigidbody>().linearVelocity = Vector2.zero;
         playerStateMachine.SetState(PlayerStates.attacking);
         GameManager.SetState(GameStates.Other);
 
