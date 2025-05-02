@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -10,7 +9,6 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
-    [SerializeField] private Slider fullscreenToggle;
 
     private void Start()
     {
@@ -28,20 +26,16 @@ public class SettingsMenu : MonoBehaviour
     }
 
     public void SetMusicVolume(float musicVolume) {
-        audioMixer.SetFloat("music", musicVolume*8);
+        audioMixer.SetFloat("music", musicVolume);
         PlayerPrefs.SetFloat("musicVolume", musicVolume);
     }
 
     public void SetSFXVolume(float sfxVolume) {
-        audioMixer.SetFloat("sfx", sfxVolume*8);
+        audioMixer.SetFloat("sfx", sfxVolume);
         PlayerPrefs.SetFloat("sfxVolume", sfxVolume);
     }
 
-    public void SetFullscreen(float isFullscreen) {
-        if (isFullscreen == 1) {
-            Screen.fullScreen = true;
-        } else {
-            Screen.fullScreen = false;
-        }
+    public void SetFullscreen(bool isFullscreen) {
+        Screen.fullScreen = isFullscreen;
     }
 }
