@@ -95,7 +95,7 @@ public class DialogueManager : MonoBehaviour
 
         GameEventManager.instance.dialogueEvents.DialogueStarted();
 
-        InputManager.Instance.SetDialogueInput();
+        GameManager.SetState(GameStates.Dialogue);
 
 
         if (!knotName.Equals(""))
@@ -153,7 +153,7 @@ public class DialogueManager : MonoBehaviour
 
         GameEventManager.instance.dialogueEvents.DialogueFinished();
 
-        InputManager.Instance.SetPlayerInput();
+        GameManager.SetState(GameStates.Player);
 
         inkDialogueVariables.StopListening(story);
 

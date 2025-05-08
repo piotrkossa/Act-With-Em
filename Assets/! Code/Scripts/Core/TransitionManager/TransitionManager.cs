@@ -35,7 +35,7 @@ public class TransitionManager : MonoBehaviour
         blackRect.color = Color.clear;
         this.gameObject.SetActive(true);
 
-        tween = LMotion.Create(Color.clear, Color.white, 1.5f)
+        tween = LMotion.Create(Color.clear, Color.black, 1.5f)
             .WithEase(Ease.InQuad)
             .WithScheduler(MotionScheduler.TimeUpdateIgnoreTimeScale)
             .BindToColor(blackRect);
@@ -50,7 +50,7 @@ public class TransitionManager : MonoBehaviour
 
         await Task.Delay(1500);
 
-        tween = LMotion.Create(Color.white, Color.clear, 1.5f)
+        tween = LMotion.Create(Color.black, Color.clear, 1.5f)
             .WithEase(Ease.InQuad)
             .WithScheduler(MotionScheduler.TimeUpdateIgnoreTimeScale)
             .BindToColor(blackRect);
