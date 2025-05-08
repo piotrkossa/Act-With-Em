@@ -10,7 +10,6 @@ public class GameData
     public Item[] items;
     public Item currentHeldItem;
 
-
     public GameData()
     {
         playerPosition = new Vector3(0f, 1.5f, -13f);
