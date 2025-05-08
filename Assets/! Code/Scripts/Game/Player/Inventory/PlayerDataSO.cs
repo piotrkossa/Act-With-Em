@@ -45,6 +45,7 @@ public class PlayerDataSO : ScriptableObject, ISaveData
     private void OnEnable() {
         Health = maxHealth;
         items = new Item [9 + 3];  // Create Empty Item List
+        currentHeldItem = null;
     }
     
 

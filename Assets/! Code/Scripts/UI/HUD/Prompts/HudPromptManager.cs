@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 
 public class HudPromptManager : MonoBehaviour
@@ -19,6 +21,7 @@ public class HudPromptManager : MonoBehaviour
         HudPrompt prompt = Instantiate(itemPromptPrefab).GetComponent<HudPrompt>();
         prompt.transform.SetParent(this.transform);
         prompt.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
+        prompt.GetComponent<RectTransform>().localScale = Vector3.one;
 
         prompt.ShowPrompt(item);
 
@@ -33,7 +36,10 @@ public class HudPromptManager : MonoBehaviour
                 continue;
             }
 
-            TweenManager.TUIPosition(hudPrompts[i], new Vector2(0f, distanceBetweenPrompts), 0.5f).SetEasing(Easings.EaseOutQuart);
+            var recttrans = hudPrompts[i].GetComponent<RectTransform>();
+            LMotion.Create(recttrans.anchoredPosition, recttrans.anchoredPosition + new Vector2(0f, distanceBetweenPrompts), 0.5f)
+                .WithEase(Ease.OutQuart)
+                .BindToAnchoredPosition(recttrans);
         }
     }
 
@@ -51,10 +57,6 @@ public class HudPromptManager : MonoBehaviour
     }
 
     private IEnumerator itemTest() {
-        yield return new WaitForSeconds(3f);
-        playerData.AddItem(testItem);
-        yield return new WaitForSeconds(1f);
-        playerData.AddItem(testItem);
         yield return new WaitForSeconds(1f);
         playerData.AddItem(testItem);
     }

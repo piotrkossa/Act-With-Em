@@ -38,7 +38,13 @@ public class PlayerAnimations : MonoBehaviour
                 animator.Play("MoveDown");
                 break;
             case PlayerStates.knocked:
-                animator.Play("Dash");
+                animator.Play("DashVertical");
+                break;
+            case PlayerStates.dashUp:
+                animator.Play("DashUp");
+                break;
+            case PlayerStates.dashDown:
+                animator.Play("DashDown");
                 break;
         }
     }

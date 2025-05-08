@@ -1,5 +1,6 @@
-using System;
 using UnityEngine;
+using LitMotion;
+using LitMotion.Extensions;
 
 public class InventoryAnimations : MonoBehaviour
 {
@@ -28,8 +29,8 @@ public class InventoryAnimations : MonoBehaviour
     }
 
 
-    private HTween invTween;
-    private HTween hbTween;
+    private MotionHandle invTween = new MotionHandle();
+    private MotionHandle hbTween = new MotionHandle();
 
     private void OnEnable()
     {
@@ -37,22 +38,28 @@ public class InventoryAnimations : MonoBehaviour
         invTransform.anchoredPosition = invEndingPos;
         hotBarTransform.anchoredPosition = hotBarEndingPos;
 
-        invTween = TweenManager.TUIPosition(invTransform.gameObject, new Vector2(0, invOffset), 0.5f);
-        invTween.SetEasing(Easings.EaseInOutCubic); invTween.SetUnscaledTime();
+        var anchpos = invTransform.anchoredPosition;
+        invTween = LMotion.Create(anchpos, anchpos + new Vector2(0, invOffset), 0.5f)
+            .WithEase(Ease.InOutCubic)
+            .WithScheduler(MotionScheduler.TimeUpdateIgnoreTimeScale)
+            .BindToAnchoredPosition(invTransform);
 
 
+        hbTween = LMotion.Create(hotBarTransform.anchoredPosition, hotBarTransform.anchoredPosition + new Vector2(0, hotbarOffset), 0.4f)
+            .WithEase(Ease.InOutCubic)
+            .WithDelay(0.3f)
+            .WithScheduler(MotionScheduler.TimeUpdateIgnoreTimeScale)
+            .BindToAnchoredPosition(hotBarTransform);
 
-        hbTween = TweenManager.TUIPosition(hotBarTransform.gameObject, new Vector2(0, hotbarOffset), 0.4f);
-        hbTween.SetEasing(Easings.EaseInOutCubic); hbTween.SetDelay(0.3f); hbTween.SetUnscaledTime();
     }
 
     private void OnDisable()
     {
-        if (invTween != null) {
-            invTween.Kill();
+        if (invTween.IsActive()) {
+            invTween.Cancel();
         }
-        if (hbTween != null) {
-            hbTween.Kill();
+        if (hbTween.IsActive()) {
+            hbTween.Cancel();
         }
     }
 }

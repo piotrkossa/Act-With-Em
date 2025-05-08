@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TavernDoorsOutside : MonoBehaviour, IInteractable
@@ -20,7 +19,9 @@ public class TavernDoorsOutside : MonoBehaviour, IInteractable
     {
         await TransitionManager.Instance.StartTransiiton();
 
-        player.position = new Vector3(-275f, 3.12f, -40f);
+        player.isKinematic = true;
+        player.position = new Vector3(-274.75f, 3.052f, -43.463f);
+        player.isKinematic = false;
 
         AudioManager.Instance.PlayTavernMusic();
     }

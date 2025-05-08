@@ -8,7 +8,9 @@ public enum PlayerStates {
     moveLeft,
     moveRight,
     attacking,
-    knocked
+    knocked,
+    dashUp,
+    dashDown
 }
 
 public class PlayerStateMachine : MonoBehaviour
@@ -43,7 +45,7 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
     private bool CheckIfCanMove(PlayerStates state) {
-        if (state == PlayerStates.attacking || state == PlayerStates.knocked) {
+        if (state == PlayerStates.attacking || state == PlayerStates.knocked || state == PlayerStates.dashUp || state == PlayerStates.dashDown) {
             return false;
         }
         return true;

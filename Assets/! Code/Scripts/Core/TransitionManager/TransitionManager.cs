@@ -1,7 +1,8 @@
-using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using LitMotion;
+using LitMotion.Extensions;
 
 public class TransitionManager : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class TransitionManager : MonoBehaviour
     }
 
     private bool isWorking = false;
-    HTween tween;
+    MotionHandle tween = new MotionHandle();
 
     public async Task StartTransiiton() {
         if (isWorking) Debug.LogError("Tried to run transition while still active!");
@@ -34,8 +35,10 @@ public class TransitionManager : MonoBehaviour
         blackRect.color = Color.clear;
         this.gameObject.SetActive(true);
 
-        tween = TweenManager.TUIColor(blackRect.gameObject, Color.black, 1.5f);
-        tween.SetEasing(Easings.EaseInQuad); tween.SetUnscaledTime();
+        tween = LMotion.Create(Color.clear, Color.white, 1.5f)
+            .WithEase(Ease.InQuad)
+            .WithScheduler(MotionScheduler.TimeUpdateIgnoreTimeScale)
+            .BindToColor(blackRect);
 
         await WaitForTween(tween);
 
@@ -47,8 +50,10 @@ public class TransitionManager : MonoBehaviour
 
         await Task.Delay(1500);
 
-        tween = TweenManager.TUIColor(blackRect.gameObject, Color.clear, 1.5f);
-        tween.SetEasing(Easings.EaseInQuad); tween.SetUnscaledTime();
+        tween = LMotion.Create(Color.white, Color.clear, 1.5f)
+            .WithEase(Ease.InQuad)
+            .WithScheduler(MotionScheduler.TimeUpdateIgnoreTimeScale)
+            .BindToColor(blackRect);
 
         await WaitForTween(tween);
 
@@ -57,10 +62,10 @@ public class TransitionManager : MonoBehaviour
         GameManager.SetPreviousState();
     }
 
-    private async Task WaitForTween(HTween tween) {
+    private async Task WaitForTween(MotionHandle tween) {
         while (true) {
             await Awaitable.NextFrameAsync();
-            if (tween == null || !tween.isActive) break;
+            if (tween == null || !tween.IsActive()) break;
         }
     }
 }

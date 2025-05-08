@@ -3,6 +3,10 @@ using TMPro;
 using Ink.Runtime;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using LitMotion;
+using LitMotion.Extensions;
+using System;
+using Unity.VisualScripting;
 
 public class DialoguePanelUI : MonoBehaviour
 {
@@ -17,6 +21,10 @@ public class DialoguePanelUI : MonoBehaviour
     private Vector2 startDialoguePos;
     [SerializeField] private float transitonStartOffset;
 
+    [SerializeField] private RectTransform playerImage;
+    private Vector2 startPlayerScale;
+    private Vector2 startNpcScale;
+
     private void Awake()
     {
         dialogueBox.SetActive(false);
@@ -24,6 +32,9 @@ public class DialoguePanelUI : MonoBehaviour
 
         ResetPanel();
         startDialoguePos = dialogueBox.GetComponent<RectTransform>().anchoredPosition;
+
+        startPlayerScale = playerImage.localScale;
+        startNpcScale = npcImage.transform.localScale;
     }
 
     private void OnEnable()
@@ -48,7 +59,7 @@ public class DialoguePanelUI : MonoBehaviour
     }
     private void DialogueFinished()
     {
-        EndAnim().SetOnComplete(() => {
+        EndAnim(() => {
             dialogueBox.SetActive(false);
             talkersImages.SetActive(false);
             ResetPanel();
@@ -97,14 +108,32 @@ public class DialoguePanelUI : MonoBehaviour
 
     private void StartAnim() {
         dialogueBox.GetComponent<RectTransform>().anchoredPosition = startDialoguePos - new Vector2(0f, transitonStartOffset);
-        HTween tween = TweenManager.TUIPosition(dialogueBox, new Vector2(0f, transitonStartOffset), 1f);
-        tween.SetEasing(Easings.EaseOutQuart);
+
+        var anchpos = dialogueBox.GetComponent<RectTransform>().anchoredPosition;
+        MotionHandle tween = LMotion.Create(anchpos, anchpos + new Vector2(0f, transitonStartOffset), 1f)
+            .WithEase(Ease.OutQuart)
+            .BindToAnchoredPosition(dialogueBox.GetComponent<RectTransform>());
+
+        npcImage.transform.localScale = Vector2.zero;
+        playerImage.transform.localScale = Vector2.zero;
+
+
+        LMotion.Create(Vector2.zero, startNpcScale, 0.5f).WithEase(Ease.OutQuart).BindToLocalScaleXY(npcImage.transform);
+        LMotion.Create(Vector2.zero, startPlayerScale, 0.5f).WithEase(Ease.OutQuart).BindToLocalScaleXY(playerImage.transform);
     }
 
-    private HTween EndAnim() {
+    private void EndAnim(Action onComplete) {
         dialogueBox.GetComponent<RectTransform>().anchoredPosition = startDialoguePos;
-        HTween tween = TweenManager.TUIPosition(dialogueBox, new Vector2(0f, -transitonStartOffset), 1f);
-        tween.SetEasing(Easings.EaseOutQuart);
-        return tween;
+
+        var tween = LMotion.Create(startDialoguePos, startDialoguePos + new Vector2(0f, -transitonStartOffset), 1f)
+            .WithEase(Ease.OutQuart)
+            .WithOnComplete(onComplete)
+            .BindToAnchoredPosition(dialogueBox.GetComponent<RectTransform>());
+
+        npcImage.transform.localScale = startNpcScale;
+        playerImage.transform.localScale = startPlayerScale;
+
+        LMotion.Create(startNpcScale, Vector2.zero, 0.5f).WithEase(Ease.InQuart).BindToLocalScaleXY(npcImage.transform);
+        LMotion.Create(startPlayerScale, Vector2.zero, 0.5f).WithEase(Ease.InQuart).BindToLocalScaleXY(playerImage.transform);
     }
 }

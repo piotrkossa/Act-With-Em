@@ -75,7 +75,16 @@ public class PlayerController : MonoBehaviour, ISaveData
     {
         if (inputDirection == Vector2.zero || !playerStateMachine.canMove) yield break;
 
-        playerStateMachine.SetState(PlayerStates.knocked);
+        if (inputDirection.y > 0f) {
+            playerStateMachine.SetState(PlayerStates.dashUp);
+        }
+        else if (inputDirection.y < 0f) {
+            playerStateMachine.SetState(PlayerStates.dashDown);
+        }
+        else {
+            playerStateMachine.SetState(PlayerStates.knocked);
+        }
+
         rb.linearVelocity = Vector3.zero;
         
         rb.AddForce(new Vector3(inputDirection.x, 0, inputDirection.y) * dashForce, ForceMode.VelocityChange);
@@ -83,6 +92,6 @@ public class PlayerController : MonoBehaviour, ISaveData
         yield return new WaitForSeconds(dashTime);
         rb.linearVelocity = Vector3.zero;
 
-        playerStateMachine.SetState(PlayerStates.idle);
+        SetState();
     }
 }
