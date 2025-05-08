@@ -16,6 +16,8 @@ public class QuestManager : MonoBehaviour
         GameEventManager.instance.questEvents.onStartQuest += StartQuest;
         GameEventManager.instance.questEvents.onAdvanceQuest += AdvanceQuest;
         GameEventManager.instance.questEvents.onFinishQuest += FinishQuest;
+
+        GameEventManager.instance.questEvents.onQuestStepStateChange += QuestStepStateChange;
     }
 
     private void OnDisable()
@@ -23,6 +25,8 @@ public class QuestManager : MonoBehaviour
         GameEventManager.instance.questEvents.onStartQuest -= StartQuest;
         GameEventManager.instance.questEvents.onAdvanceQuest -= AdvanceQuest;
         GameEventManager.instance.questEvents.onFinishQuest -= FinishQuest;
+
+        GameEventManager.instance.questEvents.onQuestStepStateChange -= QuestStepStateChange;
     }
 
     private void Start()
@@ -66,6 +70,25 @@ public class QuestManager : MonoBehaviour
         }
     }
 
+    // public void LoadData(GameData data)
+    // {
+
+    // }
+
+    // public void SaveData(ref GameData data)
+    // {
+    //     try
+    //     {
+    //         Quest quest;
+    //         data = quest.GetQuestData();
+    //         string serializedData = JsonUtility.ToJson(questData);
+    //     }
+    //     catch (System.Exception e)
+    //     {
+    //         Debug.LogError("Failed to save quest with id " + quest.info.id + ": " + e);
+    //     }
+    // }
+
     private void StartQuest(string id)
     {
         Quest quest = GetQuestById(id);
@@ -102,6 +125,13 @@ public class QuestManager : MonoBehaviour
         Debug.Log("Odebrano nagrody!");
     }
 
+    private void QuestStepStateChange(string id, int stepIndex, QuestStepState questStepState)
+    {
+        Quest quest = GetQuestById(id);
+        quest.StoreQuestStepState(questStepState, stepIndex);
+        ChangeQuestState(id, quest.state);
+    }
+
     private Dictionary<string, Quest> CreateQuestMap()
     {
         QuestInfoSO[] allQuest = Resources.LoadAll<QuestInfoSO>("Quests");
@@ -126,4 +156,17 @@ public class QuestManager : MonoBehaviour
         }
         return quest;
     }
+
+    // private void SaveQuest(Quest quest)
+    // {
+    //     try
+    //     {
+    //         QuestData questData = quest.GetQuestData();
+    //         string serializedData = JsonUtility.ToJson(questData);
+    //     }
+    //     catch (System.Exception e)
+    //     {
+    //         Debug.LogError("Failed to save quest with id " + quest.info.id + ": " + e);
+    //     }
+    // }
 }
