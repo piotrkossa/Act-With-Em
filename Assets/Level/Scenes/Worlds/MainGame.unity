@@ -6617,6 +6617,8 @@ MonoBehaviour:
   npcImage: {fileID: 2058657775}
   transitonStartOffset: 500
   playerImage: {fileID: 916729685}
+  choiceButtonAnimDuration: 0.3
+  choiceButtonAnimEase: 26
 --- !u!1 &892482228
 GameObject:
   m_ObjectHideFlags: 0
@@ -10730,7 +10732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83f5fac5fbba7f4ab3ec4d29dbe1639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueKnotName: Spiacy
+  dialogueKnotName: Pianino
   npcName: 
   npcImage: {fileID: 0}
 --- !u!1 &1484068888
