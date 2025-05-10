@@ -344,6 +344,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "QuestLog",
+            "id": "dd23ec98-fde8-48c7-838d-255ccdbf667a",
+            "actions": [
+                {
+                    "name": "QuestLogToggle",
+                    "type": "Button",
+                    "id": "7c8c9ea1-3b8a-44c7-9a2b-82a8fd3882f7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "caa6c9ba-dfc8-4472-9356-993016815a26",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "QuestLogToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

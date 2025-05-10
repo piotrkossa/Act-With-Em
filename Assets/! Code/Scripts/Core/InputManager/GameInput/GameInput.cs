@@ -430,6 +430,34 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""QuestLog"",
+            ""id"": ""dd23ec98-fde8-48c7-838d-255ccdbf667a"",
+            ""actions"": [
+                {
+                    ""name"": ""QuestLogToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""7c8c9ea1-3b8a-44c7-9a2b-82a8fd3882f7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""caa6c9ba-dfc8-4472-9356-993016815a26"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""QuestLogToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -518,6 +546,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         // MiniGame
         m_MiniGame = asset.FindActionMap("MiniGame", throwIfNotFound: true);
         m_MiniGame_Click = m_MiniGame.FindAction("Click", throwIfNotFound: true);
+        // QuestLog
+        m_QuestLog = asset.FindActionMap("QuestLog", throwIfNotFound: true);
+        m_QuestLog_QuestLogToggle = m_QuestLog.FindAction("QuestLogToggle", throwIfNotFound: true);
     }
 
     ~@GameInput()
@@ -527,6 +558,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Dialogue.enabled, "This will cause a leak and performance issues, GameInput.Dialogue.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Inventory.enabled, "This will cause a leak and performance issues, GameInput.Inventory.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_MiniGame.enabled, "This will cause a leak and performance issues, GameInput.MiniGame.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_QuestLog.enabled, "This will cause a leak and performance issues, GameInput.QuestLog.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1166,6 +1198,102 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="MiniGameActions" /> instance referencing this action map.
     /// </summary>
     public MiniGameActions @MiniGame => new MiniGameActions(this);
+
+    // QuestLog
+    private readonly InputActionMap m_QuestLog;
+    private List<IQuestLogActions> m_QuestLogActionsCallbackInterfaces = new List<IQuestLogActions>();
+    private readonly InputAction m_QuestLog_QuestLogToggle;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "QuestLog".
+    /// </summary>
+    public struct QuestLogActions
+    {
+        private @GameInput m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public QuestLogActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "QuestLog/QuestLogToggle".
+        /// </summary>
+        public InputAction @QuestLogToggle => m_Wrapper.m_QuestLog_QuestLogToggle;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_QuestLog; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="QuestLogActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(QuestLogActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="QuestLogActions" />
+        public void AddCallbacks(IQuestLogActions instance)
+        {
+            if (instance == null || m_Wrapper.m_QuestLogActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_QuestLogActionsCallbackInterfaces.Add(instance);
+            @QuestLogToggle.started += instance.OnQuestLogToggle;
+            @QuestLogToggle.performed += instance.OnQuestLogToggle;
+            @QuestLogToggle.canceled += instance.OnQuestLogToggle;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="QuestLogActions" />
+        private void UnregisterCallbacks(IQuestLogActions instance)
+        {
+            @QuestLogToggle.started -= instance.OnQuestLogToggle;
+            @QuestLogToggle.performed -= instance.OnQuestLogToggle;
+            @QuestLogToggle.canceled -= instance.OnQuestLogToggle;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="QuestLogActions.UnregisterCallbacks(IQuestLogActions)" />.
+        /// </summary>
+        /// <seealso cref="QuestLogActions.UnregisterCallbacks(IQuestLogActions)" />
+        public void RemoveCallbacks(IQuestLogActions instance)
+        {
+            if (m_Wrapper.m_QuestLogActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="QuestLogActions.AddCallbacks(IQuestLogActions)" />
+        /// <seealso cref="QuestLogActions.RemoveCallbacks(IQuestLogActions)" />
+        /// <seealso cref="QuestLogActions.UnregisterCallbacks(IQuestLogActions)" />
+        public void SetCallbacks(IQuestLogActions instance)
+        {
+            foreach (var item in m_Wrapper.m_QuestLogActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_QuestLogActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="QuestLogActions" /> instance referencing this action map.
+    /// </summary>
+    public QuestLogActions @QuestLog => new QuestLogActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -1361,5 +1489,20 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnClick(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "QuestLog" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="QuestLogActions.AddCallbacks(IQuestLogActions)" />
+    /// <seealso cref="QuestLogActions.RemoveCallbacks(IQuestLogActions)" />
+    public interface IQuestLogActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "QuestLogToggle" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnQuestLogToggle(InputAction.CallbackContext context);
     }
 }
