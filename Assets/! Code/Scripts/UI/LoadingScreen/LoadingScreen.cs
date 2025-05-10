@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using LitMotion;
 using LitMotion.Extensions;
+using System.Threading.Tasks;
 
 public class LoadingScreen : MonoBehaviour
 {
@@ -66,7 +67,8 @@ public class LoadingScreen : MonoBehaviour
 
         yield return new WaitUntil(() => !tween.IsActive() && !tween2.IsActive());
 
-        yield return new WaitForSeconds(0.2f);
+        Task trans = TransitionManager.Instance.StartTransiiton();
+        yield return new WaitUntil(() => trans.IsCompleted);
 
         SceneManager.LoadScene("MainMenu");
     }

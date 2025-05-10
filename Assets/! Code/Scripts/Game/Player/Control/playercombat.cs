@@ -25,8 +25,14 @@ public class MeleeAttack : MonoBehaviour
 
     private void Attack()
     {
-        if (playerData.currentHeldItem != null && playerData.currentHeldItem is WeaponSO weapon)
+        if (playerData.currentHeldItem == null) return;
+
+        else if (playerData.currentHeldItem is WeaponSO weapon)
             StartCoroutine(AttackWithDelay(weapon.damage));
+        else if (playerData.currentHeldItem is PotionSO potion) {
+            playerData.UpdateHealth(potion.healAmount);
+            playerData.RemoveItem(potion);
+        }
     }
 
     private IEnumerator AttackWithDelay(int damage) {

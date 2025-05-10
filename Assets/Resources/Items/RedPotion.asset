@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 1837811115, guid: 6dfc4b4c3287ccc489d35913251800c9, type: 3}
   itemName: Mikstura
-  description: Przywraca twoje zdrowie!
+  description: "Przywraca 50 punkt\xF3w zdrowia!"
   positionOffset: {x: -0.019, y: 0.012}
   scale: 0.09
   zRotation: 0
+  healAmount: 50
