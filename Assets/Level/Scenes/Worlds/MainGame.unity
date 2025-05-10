@@ -3067,7 +3067,7 @@ GameObject:
   - component: {fileID: 320724965}
   - component: {fileID: 320724966}
   - component: {fileID: 320724967}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StumpGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3112,7 +3112,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3163,7 +3163,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
