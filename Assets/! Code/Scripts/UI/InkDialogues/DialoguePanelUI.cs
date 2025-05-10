@@ -16,6 +16,7 @@ public class DialoguePanelUI : MonoBehaviour
     [SerializeField] private DialogueChoiceButton[] choiceButtons;
     [SerializeField] private GameObject talkersImages;
     [SerializeField] private Image npcImage;
+    [SerializeField] private TextMeshProUGUI _npcName;
     // [SerializeField] private Image playerImage; // Upewnij się, że playerImage jest typu Image, jeśli tak go używasz w inspektorze
 
     // animations
@@ -83,6 +84,7 @@ public class DialoguePanelUI : MonoBehaviour
         {
             npcImage.sprite = npcSprite;
         }
+        _npcName.text = npcName;
 
         if (dialogueChoices.Count > choiceButtons.Length)
         {

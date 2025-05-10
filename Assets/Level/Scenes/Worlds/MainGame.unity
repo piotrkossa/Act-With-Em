@@ -5454,7 +5454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueKnotName: GoToTavernStart
-  npcName: MainGrzybek
+  npcName: Shroom
   npcImage: {fileID: -891306409, guid: 01963ed50a497964b82c3ed7a7caa325, type: 3}
   questInfoForPoint: {fileID: 11400000, guid: 6e59946b32ca0e34aa5b06deecf2ad8d, type: 2}
   startPoint: 1
@@ -6615,6 +6615,7 @@ MonoBehaviour:
   - {fileID: 1297186463}
   talkersImages: {fileID: 1579575559}
   npcImage: {fileID: 2058657775}
+  _npcName: {fileID: 1294751172}
   transitonStartOffset: 500
   playerImage: {fileID: 916729685}
   choiceButtonAnimDuration: 0.3
