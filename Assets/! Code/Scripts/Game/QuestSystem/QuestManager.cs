@@ -1,67 +1,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestManager : MonoBehaviour
+public class QuestManager : MonoBehaviour, ISaveData // Dodajemy ISaveData
 {
-    private Dictionary<string, Quest> questMap;
-
+    private Dictionary<string, Quest> questMapInternal;
+    private Dictionary<string, QuestInfoSO> allQuestInfos;
 
     private void Awake()
     {
-        questMap = CreateQuestMap();
+        allQuestInfos = new Dictionary<string, QuestInfoSO>();
+        QuestInfoSO[] allQuestsFromResources = Resources.LoadAll<QuestInfoSO>("Quests");
+        foreach (QuestInfoSO questInfo in allQuestsFromResources)
+        {
+            if (allQuestInfos.ContainsKey(questInfo.id))
+            {
+                // Debug.LogWarning("Duplicate QuestInfoSO ID found: " + questInfo.id);
+            }
+            else
+            {
+                allQuestInfos.Add(questInfo.id, questInfo);
+            }
+        }
+        questMapInternal = new Dictionary<string, Quest>();
     }
 
     private void OnEnable()
     {
-        GameEventManager.instance.questEvents.onStartQuest += StartQuest;
-        GameEventManager.instance.questEvents.onAdvanceQuest += AdvanceQuest;
-        GameEventManager.instance.questEvents.onFinishQuest += FinishQuest;
-
-        GameEventManager.instance.questEvents.onQuestStepStateChange += QuestStepStateChange;
+        if (GameEventManager.instance != null && GameEventManager.instance.questEvents != null)
+        {
+            GameEventManager.instance.questEvents.onStartQuest += StartQuest;
+            GameEventManager.instance.questEvents.onAdvanceQuest += AdvanceQuest;
+            GameEventManager.instance.questEvents.onFinishQuest += FinishQuest;
+            GameEventManager.instance.questEvents.onQuestStepStateChange += QuestStepStateChange;
+        }
     }
 
     private void OnDisable()
     {
-        GameEventManager.instance.questEvents.onStartQuest -= StartQuest;
-        GameEventManager.instance.questEvents.onAdvanceQuest -= AdvanceQuest;
-        GameEventManager.instance.questEvents.onFinishQuest -= FinishQuest;
-
-        GameEventManager.instance.questEvents.onQuestStepStateChange -= QuestStepStateChange;
-    }
-
-    private void Start()
-    {
-        foreach (Quest quest in questMap.Values)
+        if (GameEventManager.instance != null && GameEventManager.instance.questEvents != null)
         {
-            GameEventManager.instance.questEvents.QuestStateChange(quest);
+            GameEventManager.instance.questEvents.onStartQuest -= StartQuest;
+            GameEventManager.instance.questEvents.onAdvanceQuest -= AdvanceQuest;
+            GameEventManager.instance.questEvents.onFinishQuest -= FinishQuest;
+            GameEventManager.instance.questEvents.onQuestStepStateChange -= QuestStepStateChange;
         }
-    }
-
-    private void ChangeQuestState(string id, QuestState state)
-    {
-        Quest quest = GetQuestById(id);
-        quest.state = state;
-        GameEventManager.instance.questEvents.QuestStateChange(quest);
-    }
-
-    private bool CheckRequirmentsMet(Quest quest)
-    {
-        bool meetsRequirements = true;
-
-        foreach (QuestInfoSO prerequisiteQuestInfo in quest.info.questPrerequisites)
-        {
-            if (GetQuestById(prerequisiteQuestInfo.id).state != QuestState.FINISHED)
-            {
-                meetsRequirements = false;
-                break;
-            }
-        }
-        return meetsRequirements;
     }
 
     private void Update()
     {
-        foreach (Quest quest in questMap.Values)
+        if (questMapInternal == null) return;
+        foreach (Quest quest in questMapInternal.Values)
         {
             if (quest.state == QuestState.REQUIREMENTS_NOT_MET && CheckRequirmentsMet(quest))
             {
@@ -70,71 +58,143 @@ public class QuestManager : MonoBehaviour
         }
     }
 
+    public void LoadData(GameData data)
+    {
+        foreach (Transform child in transform) Destroy(child.gameObject);
+        questMapInternal.Clear();
+
+        if (data == null || data.questDataMap == null || data.questDataMap.Count == 0)
+        {
+            foreach (QuestInfoSO questInfo in allQuestInfos.Values)
+            {
+                questMapInternal.Add(questInfo.id, new Quest(questInfo));
+            }
+        }
+        else
+        {
+            foreach (KeyValuePair<string, QuestData> entry in data.questDataMap)
+            {
+                if (allQuestInfos.TryGetValue(entry.Key, out QuestInfoSO questInfo))
+                {
+                    Quest quest = new Quest(questInfo, entry.Value);
+                    questMapInternal.Add(entry.Key, quest);
+                    if (quest.state == QuestState.IN_PROGRESS)
+                    {
+                        quest.InstantiatecurrentQuestStep(this.transform);
+                    }
+                }
+            }
+            foreach (QuestInfoSO questInfo in allQuestInfos.Values) {
+                if (!questMapInternal.ContainsKey(questInfo.id)) {
+                    questMapInternal.Add(questInfo.id, new Quest(questInfo));
+                }
+            }
+        }
+        foreach (Quest quest in questMapInternal.Values)
+        {
+            if (GameEventManager.instance != null && GameEventManager.instance.questEvents != null)
+                 GameEventManager.instance.questEvents.QuestStateChange(quest);
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        if (data == null) return;
+        if (data.questDataMap == null) data.questDataMap = new SerializableDictionary<string, QuestData>();
+        
+        data.questDataMap.Clear();
+
+        if (questMapInternal == null) return;
+
+        foreach (KeyValuePair<string, Quest> entry in questMapInternal)
+        {
+            if (entry.Value != null)
+            {
+                data.questDataMap.Add(entry.Key, entry.Value.GetQuestData());
+            }
+        }
+    }
+
+    private void ChangeQuestState(string id, QuestState newState)
+    {
+        Quest quest = GetQuestById(id);
+        if (quest != null && quest.state != newState)
+        {
+            quest.state = newState;
+             if (GameEventManager.instance != null && GameEventManager.instance.questEvents != null)
+                GameEventManager.instance.questEvents.QuestStateChange(quest);
+        }
+    }
+
+    private bool CheckRequirmentsMet(Quest quest)
+    {
+        if (quest == null || quest.info == null) return false;
+        foreach (QuestInfoSO preqInfo in quest.info.questPrerequisites)
+        {
+            if (preqInfo == null) continue;
+            Quest preqQuest = GetQuestById(preqInfo.id);
+            if (preqQuest == null || preqQuest.state != QuestState.FINISHED) return false;
+        }
+        return true;
+    }
+
     private void StartQuest(string id)
     {
         Quest quest = GetQuestById(id);
-        quest.InstantiatecurrentQuestStep(this.transform);
-        ChangeQuestState(quest.info.id, QuestState.IN_PROGRESS);
+        if (quest != null && quest.state == QuestState.CAN_START)
+        {
+            ChangeQuestState(id, QuestState.IN_PROGRESS);
+            quest.InstantiatecurrentQuestStep(this.transform);
+        }
     }
 
     private void AdvanceQuest(string id)
     {
         Quest quest = GetQuestById(id);
-
-        quest.MoveToNextStep();
-
-        if (quest.CurrentStepExists())
+        if (quest != null && quest.state == QuestState.IN_PROGRESS)
         {
-            quest.InstantiatecurrentQuestStep(this.transform);
-        }
-        else
-        {
-            ChangeQuestState(quest.info.id, QuestState.CAN_FINISH);
+            quest.MoveToNextStep();
+            if (quest.CurrentStepExists())
+            {
+                quest.InstantiatecurrentQuestStep(this.transform);
+            }
+            else
+            {
+                ChangeQuestState(id, QuestState.CAN_FINISH);
+            }
         }
     }
 
     private void FinishQuest(string id)
     {
         Quest quest = GetQuestById(id);
-        ClaimRewards(quest);
-        ChangeQuestState(quest.info.id, QuestState.FINISHED);
+        if (quest != null && quest.state == QuestState.CAN_FINISH)
+        {
+            ClaimRewards(quest);
+            ChangeQuestState(id, QuestState.FINISHED);
+        }
     }
 
     private void ClaimRewards(Quest quest)
     {
-        // TODO jak bedzie inventory dodwanie itemkow 
-        Debug.Log("Odebrano nagrody!");
+        // Implementacja nagród
     }
 
-    private void QuestStepStateChange(string id, int stepIndex, QuestStepState questStepState)
+    private void QuestStepStateChange(string id, int stepIndex, QuestStepState newQuestStepState)
     {
         Quest quest = GetQuestById(id);
-        quest.StoreQuestStepState(questStepState, stepIndex);
-        ChangeQuestState(id, quest.state);
-    }
-
-    private Dictionary<string, Quest> CreateQuestMap()
-    {
-        QuestInfoSO[] allQuest = Resources.LoadAll<QuestInfoSO>("Quests");
-        Dictionary<string, Quest> idToQuestMap = new Dictionary<string, Quest>();
-        foreach (QuestInfoSO questInfo in allQuest)
+        if (quest != null)
         {
-            if (idToQuestMap.ContainsKey(questInfo.id))
-            {
-                Debug.Log("Duplicate ID found when creating quest map: " + questInfo.id);
-            }
-            idToQuestMap.Add(questInfo.id, new Quest(questInfo));
+            quest.StoreQuestStepState(newQuestStepState, stepIndex);
+            if (GameEventManager.instance != null && GameEventManager.instance.questEvents != null)
+                GameEventManager.instance.questEvents.QuestStateChange(quest);
         }
-        return idToQuestMap;
     }
 
     private Quest GetQuestById(string id)
     {
-        Quest quest = questMap[id];
-        if (quest == null)
-        {
-            Debug.LogError("ID not found in the Quest Map: " + id);
-        }
+        if (questMapInternal == null) return null;
+        questMapInternal.TryGetValue(id, out Quest quest);
         return quest;
     }
 }

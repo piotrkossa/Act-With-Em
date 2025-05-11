@@ -7,8 +7,8 @@ public class Quest
     private int currentQuestStepIndex;
     private QuestStepState[] questStepStates;
 
-    public int CurrentQuestStepIndex { get { return currentQuestStepIndex; } }
-    public QuestStepState[] QuestStepStates { get { return questStepStates; } }
+    public int CurrentQuestStepIndex => currentQuestStepIndex;
+    // public QuestStepState[] QuestStepStates => questStepStates; // Dla UI, jeÅ›li potrzebne
 
     public Quest(QuestInfoSO questInfo)
     {
@@ -22,33 +22,32 @@ public class Quest
         }
     }
 
-    public Quest(QuestInfoSO questInfo, QuestData questData)
+    public Quest(QuestInfoSO questInfo, QuestData data)
     {
         this.info = questInfo;
-        this.state = questData.state;
-        this.currentQuestStepIndex = questData.questStepIndex;
-        this.questStepStates = new QuestStepState[questInfo.questStepPrefabs.Length];
+        this.state = data.state;
+        this.currentQuestStepIndex = data.questStepIndex;
 
-        // Upewnij siê, ¿e tablica questStepStates w questData nie jest null i ma odpowiedni¹ d³ugoœæ
-        // W praktyce powinna byæ zawsze zgodna z questInfo.questStepPrefabs.Length,
-        // ale dla bezpieczeñstwa mo¿na dodaæ sprawdzenie.
-        if (questData.questStepStates != null)
+        int numberOfSteps = info.questStepPrefabs.Length;
+        this.questStepStates = new QuestStepState[numberOfSteps];
+
+        if (data.questStepStates != null)
         {
-            for (int i = 0; i < this.questStepStates.Length; i++)
+            for (int i = 0; i < numberOfSteps; i++)
             {
-                if (i < questData.questStepStates.Length && questData.questStepStates[i] != null)
+                if (i < data.questStepStates.Length && data.questStepStates[i] != null)
                 {
-                    this.questStepStates[i] = new QuestStepState(questData.questStepStates[i].state, "");
+                    this.questStepStates[i] = new QuestStepState(data.questStepStates[i].state, data.questStepStates[i].status);
                 }
                 else
                 {
-                    this.questStepStates[i] = new QuestStepState(); // Domyœlny stan, jeœli brakuje danych
+                    this.questStepStates[i] = new QuestStepState();
                 }
             }
         }
         else
         {
-            for (int i = 0; i < this.questStepStates.Length; i++)
+             for (int i = 0; i < numberOfSteps; i++)
             {
                 this.questStepStates[i] = new QuestStepState();
             }
@@ -70,74 +69,84 @@ public class Quest
         GameObject questStepPrefab = GetCurrentQuestStepPrefab();
         if (questStepPrefab != null)
         {
-            QuestStep questStep = Object.Instantiate<GameObject>(questStepPrefab, parentTransform).GetComponent<QuestStep>();
-            questStep.InitializeQuestStep(info.id, currentQuestStepIndex);
+            QuestStep questStep = Object.Instantiate(questStepPrefab, parentTransform).GetComponent<QuestStep>();
+            QuestStepState stepStateToInit = (questStepStates != null && currentQuestStepIndex < questStepStates.Length)
+                                             ? questStepStates[currentQuestStepIndex]
+                                             : new QuestStepState();
+            questStep.InitializeQuestStep(info.id, currentQuestStepIndex, stepStateToInit);
         }
     }
 
     private GameObject GetCurrentQuestStepPrefab()
     {
-        GameObject questStepPrefab = null;
         if (CurrentStepExists())
         {
-            questStepPrefab = info.questStepPrefabs[currentQuestStepIndex];
+            return info.questStepPrefabs[currentQuestStepIndex];
         }
-        else
-        {
-            Debug.LogWarning("Tried to get quest step prefab, but StepIndex was out of range indicating that "
-            + "there's no current step: QuestId=" + info.id + " stepIndex= " + currentQuestStepIndex);
-        }
-        return questStepPrefab;
+        return null;
     }
 
     public void StoreQuestStepState(QuestStepState questStepState, int stepIndex)
     {
-        if (stepIndex < questStepStates.Length)
+        if (stepIndex >= 0 && stepIndex < questStepStates.Length)
         {
-            questStepStates[stepIndex].state = questStepState.state;
-            questStepStates[stepIndex].status = questStepState.status;
+             if (questStepState == null) {
+                 this.questStepStates[stepIndex] = new QuestStepState();
+                 return;
+            }
+            this.questStepStates[stepIndex].state = questStepState.state;
+            this.questStepStates[stepIndex].status = questStepState.status;
         }
-        else
-        {
-            Debug.LogWarning("Tried to access quest step data, but StepIndex was out of range "
-            + "QuestId=" + info.id + " stepIndex= " + currentQuestStepIndex);
-        }
+    }
+
+    public QuestData GetQuestData()
+    {
+        return new QuestData(this.state, this.currentQuestStepIndex, this.questStepStates);
     }
 
     public string GetFullStatusText()
     {
-        string fullStatus = "";
-        if (state == QuestState.REQUIREMENTS_NOT_MET)
+        // Implementacja GetFullStatusText z poprzednich odpowiedzi, dostosowana do QuestStepState.status
+        if (state == QuestState.REQUIREMENTS_NOT_MET) return "Nie speÅ‚niÅ‚eÅ› jeszcze wymagaÅ„, aby podjÄ…Ä‡ siÄ™ tego zadania.";
+        if (state == QuestState.CAN_START) return "MoÅ¼esz rozpoczÄ…Ä‡ to zadanie!";
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        for (int i = 0; i < currentQuestStepIndex; i++)
         {
-            fullStatus = "Nie spe³ni³eœ jeszcze wymagañ, aby podj¹æ siê tego zadania.";
-        }
-        else if (state == QuestState.CAN_START)
-        {
-            fullStatus = "Mo¿esz rozpocz¹æ to zadanie!";
-        }
-        else
-        {
-            for (int i = 0; i < currentQuestStepIndex; i++)
+            if (questStepStates != null && i < questStepStates.Length && questStepStates[i] != null && !string.IsNullOrEmpty(questStepStates[i].status))
             {
-                fullStatus = "<s>" + questStepStates[i].status + "<s>\n";
-            }
-            if (CurrentStepExists())
-            {
-                fullStatus += questStepStates[currentQuestStepIndex].status;
-            }
-            if (state == QuestState.CAN_FINISH)
-            {
-                fullStatus += "Mo¿esz zakoñczyæ zadanie!";
-            }
-            else if (state == QuestState.FINISHED)
-            {
-                fullStatus += "The quest has been completed";
+                sb.AppendLine("<s>" + questStepStates[i].status + "</s>");
             }
         }
-        return fullStatus;
-    }
-    public QuestData GetQuestData()
-    {
-        return new QuestData(state, currentQuestStepIndex, questStepStates);
+
+        if (state == QuestState.IN_PROGRESS || state == QuestState.CAN_FINISH)
+        {
+            if (CurrentStepExists() && questStepStates != null && currentQuestStepIndex < questStepStates.Length && questStepStates[currentQuestStepIndex] != null && !string.IsNullOrEmpty(questStepStates[currentQuestStepIndex].status))
+            {
+                sb.AppendLine(questStepStates[currentQuestStepIndex].status);
+            }
+        }
+        
+        if (state == QuestState.CAN_FINISH)
+        {
+            sb.AppendLine("MoÅ¼esz zakoÅ„czyÄ‡ zadanie!");
+        }
+        else if (state == QuestState.FINISHED)
+        {
+            sb.Clear();
+            if (questStepStates != null)
+            {
+                for (int i = 0; i < questStepStates.Length; i++)
+                {
+                    if (questStepStates[i] != null && !string.IsNullOrEmpty(questStepStates[i].status))
+                    {
+                        sb.AppendLine("<s>" + questStepStates[i].status + "</s>");
+                    }
+                }
+            }
+            sb.AppendLine("Zadanie ukoÅ„czone.");
+        }
+        return sb.ToString().TrimEnd('\r', '\n');
     }
 }
