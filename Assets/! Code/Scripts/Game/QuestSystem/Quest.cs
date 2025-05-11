@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Text;
 
 public class Quest
 {
@@ -8,15 +9,16 @@ public class Quest
     private QuestStepState[] questStepStates;
 
     public int CurrentQuestStepIndex => currentQuestStepIndex;
-    // public QuestStepState[] QuestStepStates => questStepStates; // Dla UI, jeśli potrzebne
+    public QuestStepState[] QuestStepStates => questStepStates;
 
     public Quest(QuestInfoSO questInfo)
     {
         this.info = questInfo;
         this.state = QuestState.REQUIREMENTS_NOT_MET;
         this.currentQuestStepIndex = 0;
-        this.questStepStates = new QuestStepState[info.questStepPrefabs.Length];
-        for (int i = 0; i < questStepStates.Length; i++)
+        int stepCount = (info.questStepPrefabs != null) ? info.questStepPrefabs.Length : 0;
+        this.questStepStates = new QuestStepState[stepCount];
+        for (int i = 0; i < stepCount; i++)
         {
             questStepStates[i] = new QuestStepState();
         }
@@ -27,10 +29,8 @@ public class Quest
         this.info = questInfo;
         this.state = data.state;
         this.currentQuestStepIndex = data.questStepIndex;
-
-        int numberOfSteps = info.questStepPrefabs.Length;
+        int numberOfSteps = (info.questStepPrefabs != null) ? info.questStepPrefabs.Length : 0;
         this.questStepStates = new QuestStepState[numberOfSteps];
-
         if (data.questStepStates != null)
         {
             for (int i = 0; i < numberOfSteps; i++)
@@ -47,7 +47,7 @@ public class Quest
         }
         else
         {
-             for (int i = 0; i < numberOfSteps; i++)
+            for (int i = 0; i < numberOfSteps; i++)
             {
                 this.questStepStates[i] = new QuestStepState();
             }
@@ -61,7 +61,7 @@ public class Quest
 
     public bool CurrentStepExists()
     {
-        return (currentQuestStepIndex < info.questStepPrefabs.Length);
+        return (info.questStepPrefabs != null && currentQuestStepIndex < info.questStepPrefabs.Length);
     }
 
     public void InstantiatecurrentQuestStep(Transform parentTransform)
@@ -70,10 +70,13 @@ public class Quest
         if (questStepPrefab != null)
         {
             QuestStep questStep = Object.Instantiate(questStepPrefab, parentTransform).GetComponent<QuestStep>();
-            QuestStepState stepStateToInit = (questStepStates != null && currentQuestStepIndex < questStepStates.Length)
-                                             ? questStepStates[currentQuestStepIndex]
-                                             : new QuestStepState();
-            questStep.InitializeQuestStep(info.id, currentQuestStepIndex, stepStateToInit);
+            QuestStepState stepStateToInit = new QuestStepState();
+            if (questStepStates != null && currentQuestStepIndex >= 0 && currentQuestStepIndex < questStepStates.Length)
+            {
+                stepStateToInit = questStepStates[currentQuestStepIndex] ?? new QuestStepState();
+            }
+            string inkVarForSteps = (info != null) ? info.inkStoryStateVariableForSteps : null;
+            questStep.InitializeQuestStep(info.id, currentQuestStepIndex, stepStateToInit, inkVarForSteps);
         }
     }
 
@@ -88,11 +91,12 @@ public class Quest
 
     public void StoreQuestStepState(QuestStepState questStepState, int stepIndex)
     {
-        if (stepIndex >= 0 && stepIndex < questStepStates.Length)
+        if (questStepStates != null && stepIndex >= 0 && stepIndex < questStepStates.Length)
         {
-             if (questStepState == null) {
-                 this.questStepStates[stepIndex] = new QuestStepState();
-                 return;
+            if (questStepState == null)
+            {
+                this.questStepStates[stepIndex] = new QuestStepState();
+                return;
             }
             this.questStepStates[stepIndex].state = questStepState.state;
             this.questStepStates[stepIndex].status = questStepState.status;
@@ -106,47 +110,65 @@ public class Quest
 
     public string GetFullStatusText()
     {
-        // Implementacja GetFullStatusText z poprzednich odpowiedzi, dostosowana do QuestStepState.status
-        if (state == QuestState.REQUIREMENTS_NOT_MET) return "Nie spełniłeś jeszcze wymagań, aby podjąć się tego zadania.";
-        if (state == QuestState.CAN_START) return "Możesz rozpocząć to zadanie!";
+        if (info == null) return "Błąd: Brak informacji o zadaniu.";
+        string idPierwszegoQuesta = "PoczatekPrzygodyQuest";
 
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-        for (int i = 0; i < currentQuestStepIndex; i++)
+        if (this.state == QuestState.CAN_START && this.info.id.Equals(idPierwszegoQuesta))
         {
-            if (questStepStates != null && i < questStepStates.Length && questStepStates[i] != null && !string.IsNullOrEmpty(questStepStates[i].status))
-            {
-                sb.AppendLine("<s>" + questStepStates[i].status + "</s>");
-            }
+            return "Pójdź porozmawiać z Grzybkiem, aby rozpocząć swoją przygodę.";
         }
 
-        if (state == QuestState.IN_PROGRESS || state == QuestState.CAN_FINISH)
+        switch (this.state)
         {
-            if (CurrentStepExists() && questStepStates != null && currentQuestStepIndex < questStepStates.Length && questStepStates[currentQuestStepIndex] != null && !string.IsNullOrEmpty(questStepStates[currentQuestStepIndex].status))
-            {
-                sb.AppendLine(questStepStates[currentQuestStepIndex].status);
-            }
-        }
-        
-        if (state == QuestState.CAN_FINISH)
-        {
-            sb.AppendLine("Możesz zakończyć zadanie!");
-        }
-        else if (state == QuestState.FINISHED)
-        {
-            sb.Clear();
-            if (questStepStates != null)
-            {
-                for (int i = 0; i < questStepStates.Length; i++)
+            case QuestState.REQUIREMENTS_NOT_MET:
+                return "Nie spełniłeś jeszcze wymagań, aby podjąć się tego zadania.";
+            case QuestState.CAN_START:
+                return "Możesz rozpocząć to zadanie!";
+            case QuestState.IN_PROGRESS:
+            case QuestState.CAN_FINISH:
+                StringBuilder sbInProgress = new StringBuilder();
+                for (int i = 0; i < this.currentQuestStepIndex; i++)
                 {
-                    if (questStepStates[i] != null && !string.IsNullOrEmpty(questStepStates[i].status))
+                    if (this.questStepStates != null && i < this.questStepStates.Length
+                        && this.questStepStates[i] != null && !string.IsNullOrEmpty(this.questStepStates[i].status))
                     {
-                        sb.AppendLine("<s>" + questStepStates[i].status + "</s>");
+                        sbInProgress.AppendLine("<s>" + this.questStepStates[i].status + "</s>");
                     }
                 }
-            }
-            sb.AppendLine("Zadanie ukończone.");
+                if (CurrentStepExists() && this.questStepStates != null
+                    && this.currentQuestStepIndex < this.questStepStates.Length
+                    && this.questStepStates[this.currentQuestStepIndex] != null
+                    && !string.IsNullOrEmpty(this.questStepStates[this.currentQuestStepIndex].status))
+                {
+                    sbInProgress.AppendLine(this.questStepStates[this.currentQuestStepIndex].status);
+                }
+                else if (this.state == QuestState.IN_PROGRESS)
+                {
+                    sbInProgress.AppendLine("Kontynuuj zadanie...");
+                }
+
+                if (this.state == QuestState.CAN_FINISH)
+                {
+                    sbInProgress.AppendLine("Możesz zakończyć zadanie!");
+                }
+                return sbInProgress.ToString().TrimEnd('\r', '\n');
+
+            case QuestState.FINISHED:
+                StringBuilder sbFinished = new StringBuilder();
+                if (this.questStepStates != null)
+                {
+                    for (int i = 0; i < this.questStepStates.Length; i++)
+                    {
+                        if (this.questStepStates[i] != null && !string.IsNullOrEmpty(this.questStepStates[i].status))
+                        {
+                            sbFinished.AppendLine("<s>" + this.questStepStates[i].status + "</s>");
+                        }
+                    }
+                }
+                sbFinished.AppendLine("Zadanie ukończone.");
+                return sbFinished.ToString().TrimEnd('\r', '\n');
+            default:
+                return "Nieznany stan zadania.";
         }
-        return sb.ToString().TrimEnd('\r', '\n');
     }
 }

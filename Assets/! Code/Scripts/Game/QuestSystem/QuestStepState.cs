@@ -1,8 +1,8 @@
 [System.Serializable]
 public class QuestStepState
 {
-    public string state;    // Wewnêtrzny stan logiki kroku (np. "key_A_found")
-    public string status;   // Tekst wyœwietlany graczowi dla tego kroku
+    public string state;
+    public string status;
 
     public QuestStepState(string state, string status)
     {

@@ -1,5 +1,5 @@
 === GoToTavernStart ===
-{ GoToTavernQuestState :
+{ PoczatekPrzygodyQuestState :
     - "REQUIREMENTS_NOT_MET": -> requirementsNotMet
     - "CAN_START": -> canStart
     - "IN_PROGRESS": -> inProgress
@@ -27,12 +27,12 @@ Witaj, nie kojarzę cię. Jesteś tutaj nowy?
     No cóż...
     Jakoś dasz sobię radę :p
     Pójdź w lewo, do tawerny!
-    ~ StartQuest(GoToTavernQuestId)
+    ~ StartQuest(PoczatekPrzygodyID)
     -> END
 * [Nie]
     To idealnie!
     Pójdź w lewo, do tawerny!
-    ~ StartQuest(GoToTavernQuestId)
+    ~ StartQuest(PoczatekPrzygodyID)
     -> END
 
 = inProgress

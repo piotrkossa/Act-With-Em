@@ -1,6 +1,6 @@
 === KrukDialog ===
 
-{ GoToTavernQuestState:
+{ PoczatekPrzygodyQuestState:
     - "FINISHED": -> finished
     - else: -> default
 }
@@ -54,7 +54,7 @@ Niemożliwe!
 Jeszcze nigdy wcześniej nie przegrałem!
 W końcu jakieś wyzwanie!
 Wpadnij kiedyś, jak będę miał inne gry. A na razie masz ode mnie nagrodę za uczciwą wygraną, powodzenia!
-~ FinishQuest(GoToTavernQuestId)
+~ FinishQuest(PoczatekPrzygodyID)
 -> END
 
 = finished

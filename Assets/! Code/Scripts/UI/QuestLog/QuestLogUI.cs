@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem; // Dodaj przestrzeñ nazw dla InputSystem
 
 public class QuestLogUI : MonoBehaviour
 {
@@ -19,14 +18,12 @@ public class QuestLogUI : MonoBehaviour
     private void OnEnable()
     {
         GameEventManager.instance.questEvents.onQuestStateChange += QuestStateChange;
-        // Zasubskrybuj metodê QuestLogTogglePressed do zdarzenia z InputManager
         InputManager.UI.QuestLogToggleEvent.AddListener(QuestLogTogglePressed);
     }
 
     private void OnDisable()
     {
         GameEventManager.instance.questEvents.onQuestStateChange -= QuestStateChange;
-        // Anuluj subskrypcjê metody QuestLogTogglePressed
         InputManager.UI.QuestLogToggleEvent.RemoveListener(QuestLogTogglePressed);
     }
 
@@ -61,28 +58,19 @@ public class QuestLogUI : MonoBehaviour
 
     private void QuestStateChange(Quest quest)
     {
-        // add the button to the scrolling list if not already added
         QuestLogButton questLogButton = scrollingList.CreateButtonIfNotExists(quest, () => {
             SetQuestLogInfo(quest);
         });
-
-        // initialize the first selected button if not already so that it's
-        // always the top button
         if (firstSelectedButton == null)
         {
             firstSelectedButton = questLogButton.button;
         }
-
-        // set the button color based on quest state
         questLogButton.SetState(quest.state);
     }
 
     private void SetQuestLogInfo(Quest quest)
     {
-        // quest name
         questDisplayNameText.text = quest.info.displayName;
-
-        // status
         questStatusText.text = quest.GetFullStatusText();
 
     }

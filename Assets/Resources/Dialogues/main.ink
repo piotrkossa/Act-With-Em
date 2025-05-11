@@ -4,10 +4,10 @@ EXTERNAL FinishQuest(questId)
 EXTERNAL StartCupGame()
 
 //quest names
-VAR GoToTavernQuestId = "GoToTavernQuest"   
+VAR PoczatekPrzygodyID = "PoczatekPrzygodyQuest"   
 
 //quest states (quest id + "State")
-VAR GoToTavernQuestState = "REQUIREMENTS_NOT_MET"
+VAR PoczatekPrzygodyQuestState = "REQUIREMENTS_NOT_MET"
 
 // ink files
 INCLUDE GoToTavernQuestStartNPC.ink

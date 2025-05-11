@@ -634,7 +634,7 @@ MonoBehaviour:
   dialogueKnotName: KrukDialog
   npcName: Kruk
   npcImage: {fileID: 344752660, guid: 4ebeb4bda9b364f4db469a2bc395b123, type: 3}
-  questInfoForPoint: {fileID: 11400000, guid: 6e59946b32ca0e34aa5b06deecf2ad8d, type: 2}
+  questInfoForPoint: {fileID: 11400000, guid: 82a854e57cbd530489b93f7f44afa7d0, type: 2}
   startPoint: 1
   finishPoint: 1
 --- !u!65 &39425408
@@ -4949,7 +4949,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -226.08679, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -5831,7 +5831,7 @@ MonoBehaviour:
   dialogueKnotName: GoToTavernStart
   npcName: Shroom
   npcImage: {fileID: -891306409, guid: 01963ed50a497964b82c3ed7a7caa325, type: 3}
-  questInfoForPoint: {fileID: 11400000, guid: 6e59946b32ca0e34aa5b06deecf2ad8d, type: 2}
+  questInfoForPoint: {fileID: 11400000, guid: 82a854e57cbd530489b93f7f44afa7d0, type: 2}
   startPoint: 1
   finishPoint: 0
 --- !u!65 &633177463
@@ -8409,6 +8409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fileName: data.game
+  mainPlayerDataSO: {fileID: 11400000, guid: cc454d63869f7a248b3d67d77525ac29, type: 2}
 --- !u!1 &1028386109
 GameObject:
   m_ObjectHideFlags: 0
@@ -9317,7 +9318,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -201.73901, w: -50.434692}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

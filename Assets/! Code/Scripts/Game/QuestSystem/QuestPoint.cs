@@ -50,33 +50,27 @@ public class QuestPoint : MonoBehaviour
         if (!playersIsNear)
             return;
 
-        // Je�li dialog jest ustawiony, uruchamiamy dialog
         if (!string.IsNullOrEmpty(dialogueKnotName))
         {
             GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName, npcName, npcImage);
 
-            // Sprawdzamy, czy stan questu jest odpowiedni do zako�czenia
             if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
             {
-                // Finiszowanie questa tylko po odpowiednim dialogu
                 GameEventManager.instance.questEvents.FinishQuest(questId);
             }
         }
         else
         {
-            // Warunki, by quest si� rozpocz��
             if (currentQuestState.Equals(QuestState.CAN_START) && startPoint)
             {
                 GameEventManager.instance.questEvents.StartQuest(questId);
             }
-            // Zako�czenie questu tylko je�li stan questu to CAN_FINISH
             else if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
             {
                 GameEventManager.instance.questEvents.FinishQuest(questId);
             }
         }
     }
-
 
     private void OnTriggerEnter(Collider other)
     {

@@ -15,6 +15,7 @@ MonoBehaviour:
   icon: {fileID: 1837811115, guid: 6dfc4b4c3287ccc489d35913251800c9, type: 3}
   itemName: Mikstura
   description: "Przywraca 50 punkt\xF3w zdrowia!"
+  itemAssetID: fbed4b24-6be9-4aec-96f9-c07688211648
   positionOffset: {x: -0.019, y: 0.012}
   scale: 0.09
   zRotation: 0

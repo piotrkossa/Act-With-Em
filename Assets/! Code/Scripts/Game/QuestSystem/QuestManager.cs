@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestManager : MonoBehaviour, ISaveData // Dodajemy ISaveData
+public class QuestManager : MonoBehaviour, ISaveData
 {
     private Dictionary<string, Quest> questMapInternal;
     private Dictionary<string, QuestInfoSO> allQuestInfos;
@@ -14,7 +14,7 @@ public class QuestManager : MonoBehaviour, ISaveData // Dodajemy ISaveData
         {
             if (allQuestInfos.ContainsKey(questInfo.id))
             {
-                // Debug.LogWarning("Duplicate QuestInfoSO ID found: " + questInfo.id);
+                Debug.LogWarning("Duplicate QuestInfoSO ID found: " + questInfo.id);
             }
             else
             {
