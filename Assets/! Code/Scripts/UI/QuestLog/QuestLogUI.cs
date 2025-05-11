@@ -83,7 +83,7 @@ public class QuestLogUI : MonoBehaviour
         questDisplayNameText.text = quest.info.displayName;
 
         // status
-        //questStatusText.text = quest.GetFullStatusText();
+        questStatusText.text = quest.GetFullStatusText();
 
     }
 }

@@ -70,25 +70,6 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    // public void LoadData(GameData data)
-    // {
-
-    // }
-
-    // public void SaveData(ref GameData data)
-    // {
-    //     try
-    //     {
-    //         Quest quest;
-    //         data = quest.GetQuestData();
-    //         string serializedData = JsonUtility.ToJson(questData);
-    //     }
-    //     catch (System.Exception e)
-    //     {
-    //         Debug.LogError("Failed to save quest with id " + quest.info.id + ": " + e);
-    //     }
-    // }
-
     private void StartQuest(string id)
     {
         Quest quest = GetQuestById(id);
@@ -156,17 +137,4 @@ public class QuestManager : MonoBehaviour
         }
         return quest;
     }
-
-    // private void SaveQuest(Quest quest)
-    // {
-    //     try
-    //     {
-    //         QuestData questData = quest.GetQuestData();
-    //         string serializedData = JsonUtility.ToJson(questData);
-    //     }
-    //     catch (System.Exception e)
-    //     {
-    //         Debug.LogError("Failed to save quest with id " + quest.info.id + ": " + e);
-    //     }
-    // }
 }
