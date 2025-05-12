@@ -3,6 +3,8 @@ using Ink.Runtime;
 
 public class InkExternalFunctions
 {
+    private PlayerDataSO playerData;
+
     public void Bind(Story story)
     {
         story.BindExternalFunction("StartQuest", (string questId) => StartQuest(questId));
