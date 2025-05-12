@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 [CreateAssetMenu(fileName = "PlayerDataSO", menuName = "Scriptable Objects/PlayerDataSO")]
 public class PlayerDataSO : ScriptableObject, ISaveData
@@ -31,7 +33,7 @@ public class PlayerDataSO : ScriptableObject, ISaveData
         }
         else
         {
-            // Jeœli tablica ju¿ istnieje, upewnij siê, ¿e jest pusta, jeœli to OnEnable bez LoadData
+            // Jeï¿½li tablica juï¿½ istnieje, upewnij siï¿½, ï¿½e jest pusta, jeï¿½li to OnEnable bez LoadData
             Array.Clear(items, 0, items.Length);
         }
         currentHeldItem = null;
@@ -67,10 +69,10 @@ public class PlayerDataSO : ScriptableObject, ISaveData
 
     public void LoadData(GameData data)
     {
-        if (data == null) // Jeœli nie ma danych zapisu (np. nowa gra)
+        if (data == null) // Jeï¿½li nie ma danych zapisu (np. nowa gra)
         {
             this.Health = this.maxHealth;
-            // Ustaw domyœlny rozmiar ekwipunku i wyczyœæ go
+            // Ustaw domyï¿½lny rozmiar ekwipunku i wyczyï¿½ï¿½ go
             if (this.items == null || this.items.Length != this.initialInventorySize)
             {
                 this.items = new Item[this.initialInventorySize];
@@ -81,11 +83,11 @@ public class PlayerDataSO : ScriptableObject, ISaveData
             }
             this.currentHeldItem = null;
         }
-        else // Jeœli s¹ dane zapisu
+        else // Jeï¿½li sï¿½ dane zapisu
         {
             this.Health = data.savedPlayerHealth;
 
-            // Okreœl rozmiar na podstawie zapisanych danych lub domyœlnego, jeœli brak zapisanych ID
+            // Okreï¿½l rozmiar na podstawie zapisanych danych lub domyï¿½lnego, jeï¿½li brak zapisanych ID
             int targetInventorySize = (data.inventoryItemIDs != null && data.inventoryItemIDs.Length > 0)
                                       ? data.inventoryItemIDs.Length
                                       : this.initialInventorySize;
@@ -95,16 +97,16 @@ public class PlayerDataSO : ScriptableObject, ISaveData
                 this.items = new Item[targetInventorySize];
             }
 
-            // Wype³nij ekwipunek
+            // Wypeï¿½nij ekwipunek
             if (data.inventoryItemIDs != null)
             {
                 for (int i = 0; i < this.items.Length; i++) // Iteruj po aktualnym rozmiarze this.items
                 {
-                    // Jeœli zapisane dane maj¹ mniej itemów ni¿ obecny rozmiar tablicy, reszta bêdzie null
+                    // Jeï¿½li zapisane dane majï¿½ mniej itemï¿½w niï¿½ obecny rozmiar tablicy, reszta bï¿½dzie null
                     this.items[i] = (i < data.inventoryItemIDs.Length) ? FindItemByID(data.inventoryItemIDs[i]) : null;
                 }
             }
-            else // Jeœli data.inventoryItemIDs jest null, ale this.items istnieje (po ustaleniu targetInventorySize), wyczyœæ
+            else // Jeï¿½li data.inventoryItemIDs jest null, ale this.items istnieje (po ustaleniu targetInventorySize), wyczyï¿½ï¿½
             {
                 Array.Clear(this.items, 0, this.items.Length);
             }
@@ -112,7 +114,7 @@ public class PlayerDataSO : ScriptableObject, ISaveData
             this.currentHeldItem = FindItemByID(data.currentHeldItemID);
         }
 
-        // Wywo³aj eventy DOPIERO po ca³kowitym zaktualizowaniu wewnêtrznego stanu
+        // Wywoï¿½aj eventy DOPIERO po caï¿½kowitym zaktualizowaniu wewnï¿½trznego stanu
         HealthUpdated?.Invoke();
         onInvUpdated?.Invoke();
         onHeldItemChanged?.Invoke();
@@ -182,6 +184,8 @@ public class PlayerDataSO : ScriptableObject, ISaveData
     {
         Health = Mathf.Clamp(Health + healthPoints, 0, maxHealth);
         HealthUpdated?.Invoke();
+
+        Task death = Death();
     }
 
     public void SetHeldItem(Item item)
@@ -199,5 +203,15 @@ public class PlayerDataSO : ScriptableObject, ISaveData
     public void NotifyInventoryUpdated()
     {
         onInvUpdated?.Invoke();
+    }
+
+    private bool isRunning = false;
+    private async Task Death() {
+        if (isRunning) return;
+        isRunning = true;
+        GameManager.SetState(GameStates.Other);
+        await TransitionManager.Instance.StartTransiiton();
+        SceneManager.LoadScene("DeathScreen");
+        isRunning = false;
     }
 }
