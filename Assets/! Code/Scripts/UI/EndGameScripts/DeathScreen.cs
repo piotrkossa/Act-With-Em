@@ -5,13 +5,12 @@ using UnityEngine.SceneManagement;
 public class DeathScreen : MonoBehaviour
 {
     public void NewGame() {
+        SaveDataManager.instance.NewGame();
         Task task = ChangeSceneToMainGame();
-        Time.timeScale = 1f;
     }
 
     public void LoadGame() {
         Task task = ChangeSceneToMainGame();
-        Time.timeScale = 1f;
     }
 
     public void Exit() {
@@ -22,6 +21,7 @@ public class DeathScreen : MonoBehaviour
         await TransitionManager.Instance.StartTransiiton();
 
         GameManager.SetState(GameStates.Player);
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainGame");
     }
 }
