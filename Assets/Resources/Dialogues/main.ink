@@ -17,3 +17,4 @@ INCLUDE KrukDialog.ink
 INCLUDE GrzybekPianino.ink
 INCLUDE spiacygrzybdialog.ink
 INCLUDE JeffGada.ink
+INCLUDE LewcDialogue.ink

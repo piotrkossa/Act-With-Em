@@ -9,6 +9,8 @@ public class InkExternalFunctions
         story.BindExternalFunction("AdvanceQuest", (string questId) => AdvanceQuest(questId));
         story.BindExternalFunction("FinishQuest", (string questId) => FinishQuest(questId));
         story.BindExternalFunction("StartCupGame", () => StartCupGame());
+        story.BindExternalFunction("FinishGameBadEnding", () => FinishGameBadEnding());
+        story.BindExternalFunction("FinishGameGoodEnding", () => FinishGameGoodEnding());
     }
 
     public void Unbind(Story story)
@@ -17,6 +19,8 @@ public class InkExternalFunctions
         story.UnbindExternalFunction("AdvanceQuest");
         story.UnbindExternalFunction("FinishQuest");
         story.UnbindExternalFunction("StartCupGame");
+        story.UnbindExternalFunction("FinishGameBadEnding");
+        story.UnbindExternalFunction("FinishGameGoodEnding");
     }
 
     private void StartQuest(string questId)
@@ -37,5 +41,15 @@ public class InkExternalFunctions
     private void StartCupGame()
     {
         CupGameManager.StartCupGame();
+    }
+
+    private void FinishGameBadEnding()
+    {
+
+    }
+
+    private void FinishGameGoodEnding()
+    {
+
     }
 }

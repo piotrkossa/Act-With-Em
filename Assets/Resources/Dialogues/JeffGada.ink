@@ -29,7 +29,7 @@ NIEWIARYGODNE
  
 URUCHOMIŁEŚ JE
 
-Zawiadom o tym Corvusa a dostaniesz ogromną nagrodę
+Zawiadom o tym naszego byłego Generała - Lewca. Może po tym odzyska nadzieję...
 -> END
 
 =finished
