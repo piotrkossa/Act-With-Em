@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour, ISaveData
     private Vector2 inputDirection = Vector2.zero;
 
 
-    private void Start()
+    private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
         playerStateMachine = this.GetComponent<PlayerStateMachine>();
