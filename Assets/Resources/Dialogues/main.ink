@@ -2,6 +2,8 @@ EXTERNAL StartQuest(questId)
 EXTERNAL AdvanceQuest(questId)
 EXTERNAL FinishQuest(questId)
 EXTERNAL StartCupGame()
+EXTERNAL FinishGameBadEnding()
+EXTERNAL FinishGameGoodEnding()
 
 //quest names
 VAR PoczatekPrzygodyID = "PoczatekPrzygodyQuest"  

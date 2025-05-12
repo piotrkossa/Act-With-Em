@@ -1,5 +1,6 @@
 using UnityEngine;
 using Ink.Runtime;
+using UnityEngine.SceneManagement;
 
 public class InkExternalFunctions
 {
@@ -47,11 +48,11 @@ public class InkExternalFunctions
 
     private void FinishGameBadEnding()
     {
-
+        SceneManager.LoadScene("BadEnding");
     }
 
     private void FinishGameGoodEnding()
     {
-
+        SceneManager.LoadScene("GoodEnding");
     }
 }

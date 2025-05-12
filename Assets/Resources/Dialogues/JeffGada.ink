@@ -29,7 +29,7 @@ NIEWIARYGODNE
  
 URUCHOMIŁEŚ JE
 
-Zawiadom o tym naszego byłego Generała - Lewca. Może po tym odzyska nadzieję...
+Zawiadom o tym naszego byłego Generała - Lewca. Może po tym odzyska nadzieję... Znajdziesz go w karczmie.
 -> END
 
 =finished
