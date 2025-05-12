@@ -13,6 +13,11 @@ public class Menu : MonoBehaviour
         Task task = LoadGame();
     }
 
+    public void NewGame() {
+        SaveDataManager.instance.NewGame();
+        Task task = LoadGame();
+    }
+
     public void Settings() {
         menu.SetActive(false);
         settings.SetActive(true);
