@@ -188,7 +188,6 @@ GameObject:
   - component: {fileID: 7915098555605050916}
   - component: {fileID: 5904766766928159672}
   - component: {fileID: 5221762950225334281}
-  - component: {fileID: 4044957844073321703}
   - component: {fileID: 9166251455442927580}
   - component: {fileID: 422498331992274790}
   - component: {fileID: 7934281937604336971}
@@ -208,8 +207,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6206474172634809099}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.452534, y: 18.021498, z: -18.715836}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -700, y: 1.3, z: -65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -238,10 +237,10 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 116
+  m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!65 &588376405562110631
 BoxCollider:
@@ -274,7 +273,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_SortAtRoot: 0
 --- !u!114 &5904766766928159672
 MonoBehaviour:
@@ -289,6 +288,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7.5
+  dashForce: 20
+  dashTime: 0.3
 --- !u!114 &5221762950225334281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,26 +303,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 1.6
-  attackDamage: 25
   enemyLayers:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &4044957844073321703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6206474172634809099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68142a07e5bb1bf40b4f2db0d13d084d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dashDistance: 5
-  dashCooldown: 5
-  dashDuration: 0.2
-  dashKey: 32
+  playerData: {fileID: 11400000, guid: cc454d63869f7a248b3d67d77525ac29, type: 2}
 --- !u!114 &9166251455442927580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +361,7 @@ MonoBehaviour:
   onStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isFacingRight: 1
 --- !u!1 &6497595493689316230
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +474,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 5e640b3c55f2dfe41ba916d7a171c3e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -545,14 +531,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8871053739289544020}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.03583331, w: 0.9993578}
   m_LocalPosition: {x: 0.397, y: -0.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4926094151816784994}
   m_Father: {fileID: 1962070881390855087}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -4.107}
 --- !u!114 &3683274018116560544
 MonoBehaviour:
   m_ObjectHideFlags: 0

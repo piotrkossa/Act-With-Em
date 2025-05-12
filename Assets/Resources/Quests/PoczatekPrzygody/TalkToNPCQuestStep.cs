@@ -1,17 +1,14 @@
 using UnityEngine;
-// using Ink.Runtime; // Dodaj, jeœli u¿ywasz typów Ink bezpoœrednio tutaj
+// using Ink.Runtime; // Prawdopodobnie niepotrzebne, jeœli nie u¿ywasz typów Ink bezpoœrednio tutaj
 
 public class TalkToNPCQuestStep : QuestStep
 {
     [Header("NPC Configuration")]
     [SerializeField] private string npcIdToTalkTo;
     [SerializeField] private string initialStatusMessage = "Porozmawiaj z postaci¹.";
-    [SerializeField] private string completedStatusMessage = "Rozmowa zakoñczona.";
-    [SerializeField] private string internalStateOnComplete = "talked_to_npc";
+    [SerializeField] private string statusOnEnterDialogue = "Rozpocz¹³eœ rozmowê.";
+    [SerializeField] private string internalStateOnEnter = "dialogue_initiated";
 
-    private static string activeDialogueNPCId = null; // Rozwa¿ zmianê na nie-statyczne, jeœli masz problemy z wieloma instancjami
-
-    // Poprawiona sygnatura, aby pasowa³a do QuestStep.cs (4 argumenty)
     public override void InitializeQuestStep(string questId, int stepIndex, QuestStepState initialStepState, string inkVarNameForQuestSteps)
     {
         base.InitializeQuestStep(questId, stepIndex, initialStepState, inkVarNameForQuestSteps);
@@ -22,17 +19,14 @@ public class TalkToNPCQuestStep : QuestStep
         ChangeState("", initialStatusMessage);
     }
 
-    // ApplySavedState jest ju¿ w klasie bazowej, nadpisz tylko jeœli potrzebujesz specjalnej logiki
-    // protected override void ApplySavedState(QuestStepState savedState)
-    // {
-    //     base.ApplySavedState(savedState);
-    // }
+    protected override void ApplySavedState(QuestStepState savedState)
+    {
+    }
 
     private void OnEnable()
     {
         if (GameEventManager.instance?.dialogueEvents != null)
         {
-            GameEventManager.instance.dialogueEvents.onDialogueFinished += HandleDialogueSystemFinished;
             GameEventManager.instance.dialogueEvents.onEnterDialogue += HandleEnterDialogue;
         }
     }
@@ -41,16 +35,7 @@ public class TalkToNPCQuestStep : QuestStep
     {
         if (GameEventManager.instance?.dialogueEvents != null)
         {
-            GameEventManager.instance.dialogueEvents.onDialogueFinished -= HandleDialogueSystemFinished;
             GameEventManager.instance.dialogueEvents.onEnterDialogue -= HandleEnterDialogue;
-        }
-        // Resetowanie statycznej zmiennej w OnDisable mo¿e byæ problematyczne, jeœli wiele instancji tego skryptu istnieje.
-        // Jeœli tylko jedna instancja TalkToNPCQuestStep jest aktywna naraz dla danego NPC, to mo¿e byæ OK.
-        // Lepszym podejœciem by³oby, gdyby DialogueManager informowa³, który dialog siê zakoñczy³.
-        // Na razie zostawiam, ale miej to na uwadze.
-        if (activeDialogueNPCId == npcIdToTalkTo) // Resetuj tylko jeœli ten krok by³ aktywnym dialogiem
-        {
-            activeDialogueNPCId = null;
         }
     }
 
@@ -58,26 +43,8 @@ public class TalkToNPCQuestStep : QuestStep
     {
         if (this.gameObject.activeInHierarchy && characterName == this.npcIdToTalkTo)
         {
-            activeDialogueNPCId = characterName;
-        }
-    }
+            ChangeState(internalStateOnEnter, statusOnEnterDialogue);
 
-    private void HandleDialogueSystemFinished()
-    {
-        if (this == null || !this.gameObject.activeInHierarchy) return;
-
-        if (activeDialogueNPCId == this.npcIdToTalkTo)
-        {
-            activeDialogueNPCId = null;
-
-            if (!string.IsNullOrEmpty(completedStatusMessage) && completedStatusMessage != initialStatusMessage)
-            {
-                ChangeState(internalStateOnComplete, completedStatusMessage);
-            }
-            else
-            {
-                ChangeState(internalStateOnComplete, initialStatusMessage);
-            }
             FinishQuestStep();
         }
     }
