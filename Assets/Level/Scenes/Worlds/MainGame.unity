@@ -635,7 +635,7 @@ MonoBehaviour:
   npcName: Kruk
   npcImage: {fileID: 344752660, guid: 4ebeb4bda9b364f4db469a2bc395b123, type: 3}
   questInfoForPoint: {fileID: 11400000, guid: 82a854e57cbd530489b93f7f44afa7d0, type: 2}
-  startPoint: 1
+  startPoint: 0
   finishPoint: 1
 --- !u!65 &39425408
 BoxCollider:
@@ -8521,6 +8521,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fileName: data.game
   mainPlayerDataSO: {fileID: 11400000, guid: cc454d63869f7a248b3d67d77525ac29, type: 2}
+  enableAutoSave: 1
+  autoSaveIntervalSeconds: 60
 --- !u!1 &1028386109
 GameObject:
   m_ObjectHideFlags: 0

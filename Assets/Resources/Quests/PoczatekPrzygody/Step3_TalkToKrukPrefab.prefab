@@ -45,6 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcIdToTalkTo: Kruk
-  initialStatusMessage: "Porozmawiaj z postaci\u0105."
-  completedStatusMessage: "Rozmowa zako\u0144czona."
+  initialStatusMessage: Porozmawiaj z Krukiem.
+  completedStatusMessage: Rozmowa z krukiem odbyta!
   internalStateOnComplete: talked_to_npc
