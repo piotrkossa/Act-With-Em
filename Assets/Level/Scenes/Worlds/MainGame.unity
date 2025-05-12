@@ -15663,6 +15663,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4800018057584342333, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -379621520, guid: b3f8d694dfbae014f981678b240c8b82, type: 3}
+    - target: {fileID: 4800018057584342333, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
+      propertyPath: m_SpriteTileMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5292213555173874152, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
       propertyPath: m_Name
       value: Tavern1
@@ -15683,6 +15691,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 3.9395
       objectReference: {fileID: 0}
+    - target: {fileID: 9138724856906879108, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1754534695, guid: b95e51ad692247641958e62473b93ebc, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
