@@ -637,6 +637,8 @@ MonoBehaviour:
   questInfoForPoint: {fileID: 11400000, guid: 82a854e57cbd530489b93f7f44afa7d0, type: 2}
   startPoint: 0
   finishPoint: 1
+  item: {fileID: 0}
+  playerData: {fileID: 0}
 --- !u!65 &39425408
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5875,7 +5877,7 @@ Transform:
   m_GameObject: {fileID: 633177454}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.03, y: 0, z: 0}
   m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5992,6 +5994,8 @@ MonoBehaviour:
   questInfoForPoint: {fileID: 11400000, guid: 82a854e57cbd530489b93f7f44afa7d0, type: 2}
   startPoint: 1
   finishPoint: 0
+  item: {fileID: 11400000, guid: bb7e146dcce454f46947d218a0ddd154, type: 2}
+  playerData: {fileID: 11400000, guid: cc454d63869f7a248b3d67d77525ac29, type: 2}
 --- !u!65 &633177463
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6296,6 +6300,8 @@ MonoBehaviour:
   questInfoForPoint: {fileID: 11400000, guid: eede9fe538fd9b44a84642f6db98136c, type: 2}
   startPoint: 1
   finishPoint: 0
+  item: {fileID: 0}
+  playerData: {fileID: 0}
 --- !u!212 &660087356
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9400,6 +9406,8 @@ MonoBehaviour:
   questInfoForPoint: {fileID: 11400000, guid: eede9fe538fd9b44a84642f6db98136c, type: 2}
   startPoint: 0
   finishPoint: 1
+  item: {fileID: 0}
+  playerData: {fileID: 0}
 --- !u!1 &1191217248
 GameObject:
   m_ObjectHideFlags: 0
