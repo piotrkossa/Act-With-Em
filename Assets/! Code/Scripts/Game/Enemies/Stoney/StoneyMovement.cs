@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using LitMotion;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class StoneyMovement : MonoBehaviour
     [SerializeField] private float dashTime;
     [SerializeField] private float jumpDistance;
     [SerializeField] private float damageDistance;
-    [SerializeField] private int damage;
+    public int damage;
     [SerializeField] private float knockForce;
 
     // Stoney RigidBody
@@ -32,6 +33,10 @@ public class StoneyMovement : MonoBehaviour
     private bool stopMovement = false;
     private bool isJumping = false;
     public bool isKnocked = false;
+
+    private bool isFacingRight = false;
+    [SerializeField] private Transform visual;
+
 
     private void Start()
     {
@@ -100,6 +105,8 @@ public class StoneyMovement : MonoBehaviour
             return;
         }
         rb.linearVelocity = direction * speed;
+        
+        SetVisualDirection(direction);
     }
 
     private IEnumerator DashIntoPlayer() {
@@ -112,6 +119,8 @@ public class StoneyMovement : MonoBehaviour
             yield break;
         }
         var direction = targetPosition - this.transform.position;
+        
+        SetVisualDirection(direction);
 
         var tween = LMotion.Create(this.transform.position, targetPosition, dashTime)
             .WithEase(Ease.InCubic)
@@ -145,5 +154,24 @@ public class StoneyMovement : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(this.transform.position, jumpDistance);
+    }
+
+    private void SetVisualDirection(Vector3 direction) {
+        if (isFacingRight) {
+            if (direction.x < 0) {
+                isFacingRight = false;
+                var newScale = visual.localScale;
+                newScale.x = Mathf.Abs(visual.localScale.x);
+                visual.localScale = newScale;
+            }
+        }
+        else {
+            if (direction.x > 0) {
+                isFacingRight = true;
+                var newScale = visual.localScale;
+                newScale.x = -Mathf.Abs(visual.localScale.x);
+                visual.localScale = newScale;
+            }
+        }
     }
 }

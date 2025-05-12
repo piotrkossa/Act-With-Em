@@ -57,7 +57,12 @@ public class CupGameManager : MonoBehaviour
         GameManager.SetState(GameStates.Dialogue);
 
         playerData.AddItem(prize);
-        
+
+        StoneyMovement stoney = GameObject.Find("BigStone").GetComponent<StoneyMovement>();
+        if (stoney != null) {
+            stoney.damage = 25;
+        }
+        Debug.Log("nga");
         Destroy(this.gameObject);
     }
 

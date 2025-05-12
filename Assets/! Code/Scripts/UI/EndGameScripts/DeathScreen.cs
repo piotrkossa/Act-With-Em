@@ -6,10 +6,12 @@ public class DeathScreen : MonoBehaviour
 {
     public void NewGame() {
         Task task = ChangeSceneToMainGame();
+        Time.timeScale = 1f;
     }
 
     public void LoadGame() {
         Task task = ChangeSceneToMainGame();
+        Time.timeScale = 1f;
     }
 
     public void Exit() {

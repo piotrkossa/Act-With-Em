@@ -8,6 +8,7 @@ public class GameData
     public string[] inventoryItemIDs;
     public string currentHeldItemID;
     public int savedPlayerHealth;
+    public bool hasReceivedStartingItem;
 
     public SerializableDictionary<string, QuestData> questDataMap;
 
@@ -19,6 +20,8 @@ public class GameData
         inventoryItemIDs = new string[0];
         currentHeldItemID = null;
         savedPlayerHealth = 100;
+
+        hasReceivedStartingItem = false;
 
         questDataMap = new SerializableDictionary<string, QuestData>();
     }
