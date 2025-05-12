@@ -9319,6 +9319,67 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 739732573306371825, guid: 2d8ff08b9bcdde6468d4612f94cb1fc6, type: 3}
   m_PrefabInstance: {fileID: 1163528723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1163884644 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4298193705479277316, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
+  m_PrefabInstance: {fileID: 1946873709}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1163884648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163884644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6835234f978ca174eb0d8723d47c398e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicatorPrefab: {fileID: 9068906076991216280, guid: 67f3894fe99175e4eadb0a3c6882f484, type: 3}
+  interactiveCollider: {fileID: 1163884649}
+  interactiveObject: {fileID: 1163884644}
+  interactionText: Porozmawiaj (E)
+  yOffset: 2
+--- !u!65 &1163884649
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163884644}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 31.57, y: 12.1, z: 10.71}
+  m_Center: {x: 0, y: 0.0000076293945, z: 0}
+--- !u!114 &1163884650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163884644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ee0640a6c914eb4884b64d3d272cfb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueKnotName: Lewc
+  npcName: Lewc
+  npcImage: {fileID: 0}
+  questInfoForPoint: {fileID: 11400000, guid: eede9fe538fd9b44a84642f6db98136c, type: 2}
+  startPoint: 0
+  finishPoint: 1
 --- !u!1 &1191217248
 GameObject:
   m_ObjectHideFlags: 0
@@ -15901,6 +15962,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7187465965718569875, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 348737025}
+    - targetCorrespondingSourceObject: {fileID: 4298193705479277316, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1163884650}
+    - targetCorrespondingSourceObject: {fileID: 4298193705479277316, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1163884649}
+    - targetCorrespondingSourceObject: {fileID: 4298193705479277316, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1163884648}
   m_SourcePrefab: {fileID: 100100000, guid: ff6fd54d25c3230448be818b097e19a0, type: 3}
 --- !u!1 &1969529497
 GameObject:
