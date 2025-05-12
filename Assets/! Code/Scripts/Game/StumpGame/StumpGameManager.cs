@@ -8,151 +8,224 @@ using UnityEngine;
 [SelectionBase]
 public class StumpGameManager : MonoBehaviour, IInteractable
 {
-    public static StumpGameManager Instance {get; private set;}
+    public static StumpGameManager Instance { get; private set; }
+    public static event System.Action OnStumpGameCompleted;
 
     [SerializeField] private CinemachineCamera cinemachineCamera;
-
-    private HashSet<String> completed = new();
-
+    private HashSet<String> completed = new HashSet<string>();
     private Stump[] stumps;
-
     private int clickedStump = -1;
+    private bool havePlayed = false;
 
-    private void Start() {
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
         Instance = this;
-        stumps = this.transform.Find("Stumps").GetComponentsInChildren<Stump>();
     }
 
-    private bool havePlayed = false;
+    private void Start()
+    {
+        Transform stumpsParent = this.transform.Find("Stumps");
+        if (stumpsParent != null)
+        {
+            stumps = stumpsParent.GetComponentsInChildren<Stump>();
+        }
+        else
+        {
+            stumps = new Stump[0];
+        }
+    }
+
     public void Interact()
     {
         if (havePlayed) return;
-
         GameSetup();
         StartCoroutine(PerformGame());
-
-        havePlayed = true;
     }
 
-
-    private IEnumerator PerformGame() {
-        foreach (var stump in stumps) {
-            if (stump.IsRune) stump.CanBeInteracted = true;
+    private IEnumerator PerformGame()
+    {
+        if (stumps == null || stumps.Length == 0)
+        {
+            PlayerSetup();
+            yield break;
         }
+        havePlayed = true;
+        foreach (var stump in stumps)
+        {
+            if (stump != null && stump.IsRune) stump.CanBeInteracted = true;
+        }
+        while (true)
+        {
+            clickedStump = -1;
+            yield return new WaitUntil(() => clickedStump != -1 &&
+                                           stumps != null &&
+                                           clickedStump >= 0 && clickedStump < stumps.Length &&
+                                           stumps[clickedStump] != null &&
+                                           stumps[clickedStump].IsRune);
 
-        while (true) {
-            yield return new WaitUntil(() => clickedStump != -1 && stumps[clickedStump].IsRune);
-
+            if (clickedStump == -1 || stumps == null || clickedStump < 0 || clickedStump >= stumps.Length || stumps[clickedStump] == null)
+            {
+                continue;
+            }
             yield return StartCoroutine(StartPath(stumps[clickedStump].ColorMaterial));
-
-            if (completed.Count == 4) {
+            if (completed.Count == 4)
+            {
+                OnStumpGameCompleted?.Invoke();
                 break;
             }
         }
-
         PlayerSetup();
-        foreach (var stump in stumps) {
-            stump.CanBeInteracted = false;
+        foreach (var stump in stumps)
+        {
+            if (stump != null) stump.CanBeInteracted = false;
         }
     }
 
-    private IEnumerator StartPath(Material pathMaterial) {
+    private IEnumerator StartPath(Material pathMaterial)
+    {
+        if (pathMaterial == null || stumps == null) yield break;
         ClearPath(pathMaterial);
-        if (completed.Contains(pathMaterial.name)) {
-            completed.Remove(pathMaterial.name);
-        }
 
-        var start = clickedStump;
-        
-        while (true) {
-            var neighbors = GetNeighbors(clickedStump, pathMaterial);
-            foreach (int n in neighbors) {
-                stumps[n].CanBeInteracted = true;
+        int startNodeIndex = clickedStump;
+        int currentPathNodeIndex = startNodeIndex;
+
+        if (stumps[startNodeIndex].IsRune) { }
+        else { stumps[startNodeIndex].ColorMaterial = pathMaterial; }
+
+        while (true)
+        {
+            List<int> neighbors = GetNeighbors(currentPathNodeIndex, pathMaterial);
+            foreach (int n_idx in neighbors)
+            {
+                if (n_idx >= 0 && n_idx < stumps.Length && stumps[n_idx] != null)
+                    stumps[n_idx].CanBeInteracted = true;
             }
             clickedStump = -1;
+            yield return new WaitUntil(() => clickedStump != -1);
 
-            yield return new WaitUntil(() => neighbors.Contains(clickedStump) || (clickedStump != -1 && stumps[clickedStump].IsRune));
-
-            DisableAllInteractables();
-
-            if (stumps[clickedStump].IsRune) {
-                if (stumps[clickedStump].ColorMaterial.name == pathMaterial.name && clickedStump != start && neighbors.Contains(clickedStump)) {
-                    completed.Add(pathMaterial.name);
-                    clickedStump = -1;
-                }
-                else {
-                    ClearPath(pathMaterial);
-                    if (completed.Contains(pathMaterial.name)) {
-                        completed.Remove(pathMaterial.name);
-                    }
-                }
+            if (stumps == null || clickedStump < 0 || clickedStump >= stumps.Length || stumps[clickedStump] == null)
+            {
+                ClearPath(pathMaterial);
+                DisableAllInteractablesExceptRunes();
                 yield break;
             }
-            else {
+            bool clickedIsRune = stumps[clickedStump].IsRune;
+            bool clickedIsValidNeighbor = neighbors.Contains(clickedStump);
+            DisableAllInteractablesExceptRunes();
+
+            if (clickedIsRune)
+            {
+                if (stumps[clickedStump].ColorMaterial.name == pathMaterial.name && clickedStump != startNodeIndex && clickedIsValidNeighbor)
+                {
+                    completed.Add(pathMaterial.name);
+                }
+                else
+                {
+                    ClearPath(pathMaterial);
+                }
+                clickedStump = -1;
+                yield break;
+            }
+            else if (clickedIsValidNeighbor)
+            {
                 stumps[clickedStump].ColorMaterial = pathMaterial;
+                currentPathNodeIndex = clickedStump;
+            }
+            else
+            {
+                ClearPath(pathMaterial);
+                yield break;
             }
         }
     }
 
-    public void StumpClicked(int index) {
+    public void StumpClicked(int index)
+    {
         clickedStump = index;
     }
 
-    private void DisableAllInteractables() {
-        foreach (var stump in stumps) {
-            if (!stump.IsRune) {
+    private void DisableAllInteractablesExceptRunes()
+    {
+        if (stumps == null) return;
+        foreach (var stump in stumps)
+        {
+            if (stump != null && !stump.IsRune)
+            {
                 stump.CanBeInteracted = false;
             }
         }
     }
 
-    private void ClearPath(Material material) {
-        foreach (var stump in stumps) {
-            if (stump.ColorMaterial == null) continue;
-            if (stump.ColorMaterial.name == material.name && !stump.IsRune) {
+    private void ClearPath(Material material)
+    {
+        if (stumps == null || material == null) return;
+        foreach (var stump in stumps)
+        {
+            if (stump != null && stump.ColorMaterial != null && stump.ColorMaterial.name == material.name && !stump.IsRune)
+            {
                 stump.ColorMaterial = null;
             }
         }
     }
 
-    private int[] GetNeighbors(int index, Material pathMaterial) {
-        List<int> neighbors = new();
-        if (index % 4 != 0) {
-            neighbors.Add(index-1);
-        }
-        if (index % 4 != 3) {
-            neighbors.Add(index+1);
-        }
-        if (index - 4 >= 0) {
-            neighbors.Add(index-4);
-        }
-        if (index + 4 <= 15) {
-            neighbors.Add(index+4);
-        }
+    private List<int> GetNeighbors(int index, Material pathMaterial)
+    {
+        List<int> neighbors = new List<int>();
+        if (stumps == null || index < 0 || index >= stumps.Length) return neighbors;
+        int row = index / 4;
+        int col = index % 4;
+        int[] dr = { -1, 1, 0, 0 };
+        int[] dc = { 0, 0, -1, 1 };
 
-        var corrected = new List<int>();
-
-        foreach (var n in neighbors) {
-            if (stumps[n].ColorMaterial == null || (stumps[n].IsRune && stumps[n].ColorMaterial.name == pathMaterial.name)) {
-                corrected.Add(n);
+        for (int i = 0; i < 4; i++)
+        {
+            int nr = row + dr[i];
+            int nc = col + dc[i];
+            int neighborIndex = nr * 4 + nc;
+            if (nr >= 0 && nr < 4 && nc >= 0 && nc < 4)
+            {
+                if (stumps[neighborIndex] != null &&
+                    (stumps[neighborIndex].ColorMaterial == null ||
+                    (stumps[neighborIndex].IsRune && stumps[neighborIndex].ColorMaterial.name == pathMaterial.name)))
+                {
+                    neighbors.Add(neighborIndex);
+                }
             }
         }
-
-        return corrected.ToArray();
+        return neighbors;
     }
 
-
-    private void GameSetup() {
-        cinemachineCamera.Follow = this.transform;
-        cinemachineCamera.GetComponent<CinemachineRotationComposer>().TargetOffset.y = -1;
-        GameManager.SetState(GameStates.MiniGame);
-        GameObject.FindGameObjectWithTag("Player").transform.localScale = Vector3.zero;
+    private void GameSetup()
+    {
+        if (cinemachineCamera != null)
+        {
+            cinemachineCamera.Follow = this.transform;
+            var rotationComposer = cinemachineCamera.GetComponent<CinemachineRotationComposer>();
+            if (rotationComposer != null) rotationComposer.TargetOffset.y = -1;
+        }
+        if (GameManager.Instance != null) GameManager.SetState(GameStates.MiniGame);
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null) playerObject.transform.localScale = Vector3.zero;
     }
 
-    private void PlayerSetup() {
-        GameObject.FindGameObjectWithTag("Player").transform.localScale = Vector3.one;
-        cinemachineCamera.Follow = GameObject.FindGameObjectWithTag("Player").transform;
-        cinemachineCamera.GetComponent<CinemachineRotationComposer>().TargetOffset.y = 0;
-        GameManager.SetState(GameStates.Player);
+    private void PlayerSetup()
+    {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+        {
+            playerObject.transform.localScale = Vector3.one;
+            if (cinemachineCamera != null) cinemachineCamera.Follow = playerObject.transform;
+        }
+        if (cinemachineCamera != null)
+        {
+            var rotationComposer = cinemachineCamera.GetComponent<CinemachineRotationComposer>();
+            if (rotationComposer != null) rotationComposer.TargetOffset.y = 0;
+        }
+        if (GameManager.Instance != null) GameManager.SetState(GameStates.Player);
     }
 }

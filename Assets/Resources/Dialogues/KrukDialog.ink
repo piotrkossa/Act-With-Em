@@ -50,11 +50,12 @@ Ho ho, jeszcze jak!
 -> dalszarozmowa
 
 = dalszarozmowa
+~ FinishQuest(PoczatekPrzygodyID)
 Niemożliwe!
 Jeszcze nigdy wcześniej nie przegrałem!
 W końcu jakieś wyzwanie!
 Wpadnij kiedyś, jak będę miał inne gry. A na razie masz ode mnie nagrodę za uczciwą wygraną, powodzenia!
-~ FinishQuest(PoczatekPrzygodyID)
+~ StartQuest(TajemniczeRuinyID)
 -> END
 
 = finished

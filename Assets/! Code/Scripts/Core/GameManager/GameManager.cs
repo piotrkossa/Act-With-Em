@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public enum GameStates {
+public enum GameStates
+{
     Player,
     Dialogue,
     Pause,
@@ -9,73 +10,104 @@ public enum GameStates {
     Other
 }
 
-public class GameManager: MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     private GameStates GameState = GameStates.Player;
-
     private static GameManager _instance;
-
-    private static GameManager Instance {
-        get {
-            if (_instance == null) {
-                _instance = new GameObject("GameManager").AddComponent<GameManager>();
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject go = new GameObject("GameManager");
+                _instance = go.AddComponent<GameManager>();
             }
             return _instance;
         }
     }
 
-    private void SetPlayer() {
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void SetPlayer()
+    {
         GameState = GameStates.Player;
-        InputManager.Instance.SetPlayerInput();
+        if (InputManager.Instance != null) InputManager.Instance.SetPlayerInput();
     }
 
-    private void SetPause() {
+    private void SetPause()
+    {
         GameState = GameStates.Pause;
-        InputManager.Instance.SetUIInput();
+        if (InputManager.Instance != null) InputManager.Instance.SetUIInput();
     }
 
-    private void SetDialogue() {
+    private void SetDialogue()
+    {
         GameState = GameStates.Dialogue;
-        InputManager.Instance.SetDialogueInput();
+        if (InputManager.Instance != null) InputManager.Instance.SetDialogueInput();
     }
 
-    private void SetInventory() {
+    private void SetInventory()
+    {
         GameState = GameStates.Inventory;
-        InputManager.Instance.SetInventoryInput();
+        if (InputManager.Instance != null) InputManager.Instance.SetInventoryInput();
     }
 
-    private void SetMiniGame() {
+    private void SetMiniGame()
+    {
         GameState = GameStates.MiniGame;
-        InputManager.Instance.SetMiniGameInput();
+        if (InputManager.Instance != null) InputManager.Instance.SetMiniGameInput();
     }
 
-    private void SetOther() {
+    private void SetOther()
+    {
         GameState = GameStates.Other;
-        InputManager.Instance.DisableAll();
+        if (InputManager.Instance != null) InputManager.Instance.DisableAll();
     }
 
-    public static void SetPreviousState() {
-        SetState(Instance.previousState);
+    public static void SetPreviousState()
+    {
+        if (Instance != null)
+        {
+            SetState(Instance.previousState);
+        }
     }
 
     private GameStates previousState;
 
-    public static void SetState(GameStates gameState) {
-        Instance.previousState = Instance.GameState;
+    public static void SetState(GameStates gameState)
+    {
+        if (Instance == null)
+        {
+            Debug.LogError("[GameManager] Instance is null. Cannot set state.");
+            return;
+        }
 
-        switch (gameState) {
+        Instance.previousState = Instance.GameState;
+        Instance.GameState = gameState;
+
+        switch (gameState)
+        {
             case GameStates.Player:
                 Instance.SetPlayer();
                 break;
-
             case GameStates.Dialogue:
                 Instance.SetDialogue();
                 break;
-
             case GameStates.Pause:
                 Instance.SetPause();
                 break;
-                
             case GameStates.Inventory:
                 Instance.SetInventory();
                 break;
@@ -88,7 +120,13 @@ public class GameManager: MonoBehaviour
         }
     }
 
-    public static GameStates GetGameState() {
+    public static GameStates GetGameState()
+    {
+        if (Instance == null)
+        {
+            Debug.LogWarning("[GameManager] Instance is null when trying to GetGameState. Returning default (Player).");
+            return GameStates.Player;
+        }
         return Instance.GameState;
     }
 }
