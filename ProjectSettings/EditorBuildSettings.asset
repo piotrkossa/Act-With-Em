@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Level/Scenes/UI/DeathScreen.unity
     guid: 1b1f4108fadeaeb49908896bd6bf8047
+  - enabled: 1
+    path: Assets/Level/Scenes/UI/GoodEnding.unity
+    guid: 0a801c728e456df4586bcf17ee04a7bf
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

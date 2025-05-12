@@ -8412,7 +8412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &986854116
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9402,7 +9402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueKnotName: Lewc
   npcName: Lewc
-  npcImage: {fileID: 0}
+  npcImage: {fileID: -1922120122, guid: 9241081a4f4c3cd489d46b759f9c53ff, type: 3}
   questInfoForPoint: {fileID: 11400000, guid: eede9fe538fd9b44a84642f6db98136c, type: 2}
   startPoint: 0
   finishPoint: 1
@@ -10955,8 +10955,8 @@ RectTransform:
   m_GameObject: {fileID: 1364741435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.69, y: 1.69, z: 1.69}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1530178512}
   m_Father: {fileID: 994497084}
@@ -12759,6 +12759,22 @@ PrefabInstance:
     - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_fontSize
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.w
+      value: 28.597168
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.x
+      value: 29.583252
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.y
+      value: 20.708267
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.z
+      value: 30.569458
       objectReference: {fileID: 0}
     - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_fontColor.b
@@ -15034,8 +15050,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Poruszanie si\u0119 - WASD\r\nDash - SPACE\r\nEkwipunek - TAB\r\nInterakcje
-    - E\r\nPauza - ESC\nAtak - Lewy Mysz"
+  m_text: "Poruszanie si\u0119 - WASD\r\nDash - SPACE\r\nEkwipunek - TAB\nQuestLog
+    - Q\r\nInterakcje - E\r\nPauza - ESC\nAtak - Lewy Mysz"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -15062,10 +15078,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
+  m_fontSize: 24.7
   m_fontSizeBase: 28
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -15100,7 +15116,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 30.637085, z: 0, w: 30.637024}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -17584,6 +17600,22 @@ PrefabInstance:
       value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.w
+      value: 24.652771
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.x
+      value: 31.555481
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.y
+      value: 17.749954
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
+      propertyPath: m_margin.z
+      value: 27.611023
+      objectReference: {fileID: 0}
+    - target: {fileID: 8684197420302269492, guid: 071f0d892ee7e1e46b45b0933da3fb85, type: 3}
       propertyPath: m_fontStyle
       value: 0
       objectReference: {fileID: 0}
@@ -17798,6 +17830,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1562635343}
     m_Modifications:
+    - target: {fileID: 5904766766928159672, guid: c6a1f460927118f488c875d39535aefc, type: 3}
+      propertyPath: dashTime
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 6206474172634809099, guid: c6a1f460927118f488c875d39535aefc, type: 3}
       propertyPath: m_Name
       value: Player
