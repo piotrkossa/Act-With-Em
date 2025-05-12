@@ -14,10 +14,12 @@ public class QuestPoint : MonoBehaviour
     [Header("Config")]
     [SerializeField] private bool startPoint = true;
     [SerializeField] private bool finishPoint = true;
+    [SerializeField] private Item item;
 
     private bool playersIsNear = false;
     private string questId;
     private QuestState currentQuestState;
+    [SerializeField] private PlayerDataSO playerData;
 
     private void Awake()
     {
@@ -63,6 +65,10 @@ public class QuestPoint : MonoBehaviour
         {
             if (currentQuestState.Equals(QuestState.CAN_START) && startPoint)
             {
+                if (item != null && playerData != null)
+                {
+                    playerData.AddItem(item);
+                }
                 GameEventManager.instance.questEvents.StartQuest(questId);
             }
             else if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
