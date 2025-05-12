@@ -5349,6 +5349,7 @@ MonoBehaviour:
   damage: 10
   knockForce: 10
   isKnocked: 0
+  visual: {fileID: 1571118365514904138}
 --- !u!114 &6523284906670967290
 MonoBehaviour:
   m_ObjectHideFlags: 0

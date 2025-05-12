@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class HudPromptManager : MonoBehaviour
 {
-    public Item testItem;
-
     [SerializeField] private PlayerDataSO playerData;
 
     [SerializeField] private float distanceBetweenPrompts;
@@ -47,17 +45,10 @@ public class HudPromptManager : MonoBehaviour
     private void Awake()
     {
         playerData.onItemAdded += CreateItemPrompt;
-
-        StartCoroutine(itemTest());
     }
 
     private void OnDestroy()
     {
         playerData.onItemAdded -= CreateItemPrompt;
-    }
-
-    private IEnumerator itemTest() {
-        yield return new WaitForSeconds(1f);
-        playerData.AddItem(testItem);
     }
 }
