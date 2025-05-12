@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -37,7 +39,11 @@ public class PauseMenu : MonoBehaviour
     }
     
     public void ExitGame() {
-        Debug.Log("exit");
-        Application.Quit();
+        Task task = BackToMainMenu();
+    }
+
+    private async Task BackToMainMenu() {
+        await TransitionManager.Instance.StartTransiiton();
+        SceneManager.LoadScene("MainMenu");
     }
 }

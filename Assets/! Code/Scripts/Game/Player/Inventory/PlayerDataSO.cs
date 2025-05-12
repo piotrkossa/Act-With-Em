@@ -185,7 +185,9 @@ public class PlayerDataSO : ScriptableObject, ISaveData
         Health = Mathf.Clamp(Health + healthPoints, 0, maxHealth);
         HealthUpdated?.Invoke();
 
-        Task death = Death();
+        if (Health == 0) {
+            Task death = Death();
+        }
     }
 
     public void SetHeldItem(Item item)

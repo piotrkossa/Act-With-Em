@@ -10,7 +10,8 @@ public class HudManager : MonoBehaviour
         playerData.HealthUpdated += UpdateHealth;
 
         InputManager.HotBar.OnHotBarItemChoosen.AddListener(UpdateHeldItem);
-
+        UpdateHealth();
+        UpdateHotBar();
     }
 
     private void OnEnable() {
