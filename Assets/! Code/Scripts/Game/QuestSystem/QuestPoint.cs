@@ -54,6 +54,10 @@ public class QuestPoint : MonoBehaviour
 
         if (!string.IsNullOrEmpty(dialogueKnotName))
         {
+            if (item != null && playerData != null)
+            {
+                playerData.AddItem(item);
+            }
             GameEventManager.instance.dialogueEvents.EnterDialogue(dialogueKnotName, npcName, npcImage);
 
             if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
@@ -65,14 +69,10 @@ public class QuestPoint : MonoBehaviour
         {
             if (currentQuestState.Equals(QuestState.CAN_START) && startPoint)
             {
-                if (item != null && playerData != null)
-                {
-                    playerData.AddItem(item);
-                }
                 GameEventManager.instance.questEvents.StartQuest(questId);
             }
             else if (currentQuestState.Equals(QuestState.CAN_FINISH) && finishPoint)
-            {
+            {   
                 GameEventManager.instance.questEvents.FinishQuest(questId);
             }
         }
